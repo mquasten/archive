@@ -2,6 +2,7 @@ package de.mq.archive.web;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import de.mq.archive.web.search.SearchPage;
 
@@ -29,5 +30,7 @@ public class WicketApplication extends WebApplication
 	public void init()
 	{
 		super.init();
+		 super.getComponentInstantiationListeners().add((new SpringComponentInjector(this)));
+		
 	}
 }
