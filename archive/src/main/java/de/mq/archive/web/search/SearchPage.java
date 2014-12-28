@@ -1,4 +1,4 @@
-package com.mycompany;
+package de.mq.archive.web.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.WebPage;
 
 
-public class HomePage extends WebPage {
+public class SearchPage extends WebPage {
 	private static final long serialVersionUID = 1L;
 
-	public HomePage(final PageParameters parameters) {
+	public SearchPage(final PageParameters parameters) {
 	
 		Form<String> form = new Form<String>("form"); 
 		
@@ -34,7 +34,7 @@ public class HomePage extends WebPage {
 		      item.add(new Radio<String>("radio", item.getModel()));
 		      item.add(new Label("name", item.getModelObject().toString()));
 		      item.add(new Label("lastName", item.getModelObject().toString() ));
-		    System.out.println("***");
+		 
 		    };
 		};
 
