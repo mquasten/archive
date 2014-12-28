@@ -8,5 +8,6 @@
 		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.2.xsd
 		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository-1.6.xsd">
 
+<context:component-scan base-package="de.mq.archive.domain.support" />
 
 </beans>
