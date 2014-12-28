@@ -1,13 +1,15 @@
-package com.mycompany;
+package de.mq.archive.web;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+
+import de.mq.archive.web.search.SearchPage;
 
 /**
  * Application object for your web application.
  * If you want to run this application without deploying, run the Start class.
  * 
- * @see com.mycompany.Start#main(String[])
+ * @see de.mq.archive.web.Start#main(String[])
  */
 public class WicketApplication extends WebApplication
 {
@@ -17,7 +19,7 @@ public class WicketApplication extends WebApplication
 	@Override
 	public Class<? extends WebPage> getHomePage()
 	{
-		return HomePage.class;
+		return SearchPage.class;
 	}
 
 	/**
