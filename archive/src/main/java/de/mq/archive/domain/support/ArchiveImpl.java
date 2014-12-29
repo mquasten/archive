@@ -20,16 +20,19 @@ public class ArchiveImpl implements Archive {
 	
 	private Set<String> relatedPersons; 
 	
+	private String archiveId;
+	
 	private String id;
 	
-	public ArchiveImpl(final String name, final Category category, final Date documentDate) {
-		this(name, category,documentDate, null);
+	public ArchiveImpl(final String name, final Category category, final Date documentDate, final String archiveId) {
+		this(name, category,documentDate,archiveId, null);
 	}
 	
-	public ArchiveImpl(final String name, final Category category, final Date documentDate, final String text ) {
+	public ArchiveImpl(final String name, final Category category, final Date documentDate, final String archiveId, final String text ) {
 		this.name=name;
 		this.category=category;
 		this.documentDate=documentDate;
+		this.archiveId=archiveId;
 		this.text=text;
 	}
 	
@@ -81,6 +84,13 @@ public class ArchiveImpl implements Archive {
 		return relatedPersons;
 	}
 
+	/* (non-Javadoc)
+	 * @see de.mq.archive.domain.support.Archive#archiveId()
+	 */
+	@Override
+	public String archiveId() {
+		return archiveId;
+	}
 
 
 }

@@ -4,31 +4,38 @@
 
 </head>
 <body>
+
+<h1><span wicket:id="applicationHeadline"/> </h1>
+
+<h2><span wicket:id="pageHeadline"/> </h2>
+
 <form wicket:id="form">
 
 	<div wicket:id="group">
-	<table >
-      
-           
-           
-                 
+	<h3><span wicket:id="searchTableHeadline"/></h3>
+	<table style="border: 2px dotted #fc0; padding: 5px;">
                     <tr>
-                        <td><b>Select</b></td>
-                        <td><b>First Name</b></td>
-                        <td><b>Last Name</b></td>
+                        <td></td>
+                        <td><b><span wicket:id="nameHeader"/></b></td>
+                        <td><b><span wicket:id="categoryHeader"/></b></td>
+                        <td><b><span wicket:id="archiveIdHeader"/></b></td>
+                        <td><b><span wicket:id="dateHeader"/></b></td>
                     </tr>
                     <tr wicket:id="documents">
                         <td><input type="radio" wicket:id="document"/></td>
-                        <td><span wicket:id="name">[this is where name will be]</span></td>
-                        <td><span wicket:id="category">[this is where category will be]</span></td>
+                        <td><span wicket:id="name"/></td>
+                        <td><span wicket:id="category" /></td>
+                        <td><span wicket:id="archiveId" /></td>
+                        <td><span wicket:id="documentDate" /></td>
                     </tr>
                  <tr>
-              <td colspan="2" align="center">
-              <input type="submit" value="submit" />
+              <td colspan="5" align="center">
+              <input type="submit"    wicket:id="newButton"/>
+              <input type="submit"    wicket:id="changeButton"/>
+              <input type="submit"    wicket:id="showButton"/>
               </td>
              </tr>
-           
-       
+          
    </table>
    </div>
    

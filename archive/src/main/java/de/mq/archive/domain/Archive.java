@@ -18,4 +18,6 @@ public interface Archive  extends Serializable{
 
 	Set<String> relatedPersons();
 
+	String archiveId();
+
 }
