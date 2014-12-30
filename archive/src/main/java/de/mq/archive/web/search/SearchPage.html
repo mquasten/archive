@@ -9,6 +9,36 @@
 
 <h2><span wicket:id="pageHeadline"/> </h2>
 
+
+
+<h3><span wicket:id="searchCriteriaHeadline"/></h3>
+<form wicket:id="searchForm">
+
+        <table style="border: 2px dotted #fc0;  padding: 5px;">
+        
+        <tr>
+        <td><span wicket:id="searchNameLabel"/> </td>
+        <td><span wicket:id="searchCategoryLabel"/></td>
+        <td><span wicket:id="searchArchiveLabel"/></td>
+        </tr>
+         <tr>
+         
+          <td><input type="text" wicket:id="searchName" /></td>
+          <td> <select wicket:id="searchCategrory"/></td>
+          <td><input type="text" wicket:id="searchArchive" /></td>
+         </tr>
+      
+      	<tr>
+      		 <td colspan="3" align="center">
+      		 	 <input type="submit"    wicket:id="searchButton"/>
+      		 </td>
+      	</tr>
+        </table>
+</form>
+
+
+
+
 <form wicket:id="form">
 
 	<div wicket:id="group">
