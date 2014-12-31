@@ -28,6 +28,12 @@ public class ArchiveImpl implements Archive {
 		this(name, category,documentDate,archiveId, null);
 	}
 	
+	@SuppressWarnings("unused")
+	private ArchiveImpl() {
+		this(null,null,null,null);
+	}
+			
+	
 	public ArchiveImpl(final String name, final Category category, final Date documentDate, final String archiveId, final String text ) {
 		this.name=name;
 		this.category=category;

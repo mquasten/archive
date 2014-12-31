@@ -34,13 +34,14 @@ public class SearchPage extends WebPage {
 	@Inject
 	private MessageSource messageSource;
 
+	private final EnumModel<Archive> archiveModel = new ArchiveModelImpl();
 
 	private final Model<String> searchNameLabelModel = new Model<>();
 	private final Model<String> searchCategoryLabelModel = new Model<>();
 	private final Model<String> searchArchiveLabelModel = new Model<>();
 	
-	private final Model<Category> searchCategoryModel = new Model<>();
-	private final Model<String> searchArchiveModel = new Model<>();
+	//private final Model<Category> searchCategoryModel = new Model<>();
+	//private final Model<String> searchArchiveModel = new Model<>();
 	private final Model<String> searchCriteriaHeadlineModel = new Model<>();
 	
 	
@@ -57,7 +58,7 @@ public class SearchPage extends WebPage {
 	private final Model<String> applicationHeadlineModel = new Model<>();
 	private final Model<String> pageHeadlineModel = new Model<>();
 	
-	private final Model<String> nameSearchModel = new Model<>(); 
+	//private final Model<String> nameSearchModel = new Model<>(); 
 	
 	public SearchPage(final PageParameters parameters) {
 		
@@ -68,17 +69,17 @@ public class SearchPage extends WebPage {
 		add(searchForm);
 		add(new Label("searchCriteriaHeadline", searchCriteriaHeadlineModel));
 	
-		searchForm.add(new TextField<String>("searchName", nameSearchModel));
+		searchForm.add(new TextField<>("searchName", archiveModel.part(ArchiveModelImpl.Parts.Name, String.class)));
 		searchForm.add(new Label("searchNameLabel" , searchNameLabelModel));
 		
 		
 		
-		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory", searchCategoryModel, Arrays.asList(Category.values()));
+		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory",    archiveModel.part(ArchiveModelImpl.Parts.Category, Category.class), Arrays.asList(Category.values()));
 		dropDownChoice.setNullValid(true);
 	   searchForm.add(dropDownChoice);
 		searchForm.add(new Label("searchCategoryLabel" , searchCategoryLabelModel));
 		
-		searchForm.add(new TextField<String>("searchArchive", searchArchiveModel));
+		searchForm.add(new TextField<>("searchArchive",  archiveModel.part(ArchiveModelImpl.Parts.ArchiveId, String.class)));
 		searchForm.add(new Label("searchArchiveLabel" , searchArchiveLabelModel));
 		
 		
@@ -88,9 +89,11 @@ public class SearchPage extends WebPage {
 
 			@Override
 			public void onSubmit() {
-				System.out.println(nameSearchModel.getObject());
-				System.out.println(searchCategoryModel.getObject());
-				System.out.println(searchArchiveModel.getObject());
+				final Archive search = archiveModel.toDomain();
+				System.out.println(search.name());
+				System.out.println(search.category());
+				System.out.println(search.archiveId());
+				System.out.println(search.id());
 				super.onSubmit();
 			}
 			
