@@ -1,11 +1,13 @@
 package de.mq.archive.web.search;
 
+import java.util.Arrays;
+
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.support.ArchiveImpl;
 
 public class ArchiveModelImpl extends  BasicEnumModelImpl<Archive>  {
 
-	enum Parts {
+	enum Parts  {
 		Id,
 
 		Name,
@@ -19,10 +21,11 @@ public class ArchiveModelImpl extends  BasicEnumModelImpl<Archive>  {
 		RelatedPersons(),
 
 		ArchiveId;
+
 	}
 	
 	protected ArchiveModelImpl() {
-		super(Parts.values(), ArchiveImpl.class);
+		super(Arrays.asList(Parts.values()), ArchiveImpl.class);
 		
 	}
 

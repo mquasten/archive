@@ -35,30 +35,12 @@ public class SearchPage extends WebPage {
 	private MessageSource messageSource;
 
 	private final EnumModel<Archive> archiveModel = new ArchiveModelImpl();
+	
+	private OneWayStringMapping<MessageSource, Enum<?>> labelModel = new I18NSearchPageModelImpl();
 
-	private final Model<String> searchNameLabelModel = new Model<>();
-	private final Model<String> searchCategoryLabelModel = new Model<>();
-	private final Model<String> searchArchiveLabelModel = new Model<>();
-	
-	//private final Model<Category> searchCategoryModel = new Model<>();
-	//private final Model<String> searchArchiveModel = new Model<>();
-	private final Model<String> searchCriteriaHeadlineModel = new Model<>();
 	
 	
-	private final Model<String> nameHeaderLabelModel = new Model<>();
-	private final Model<String> categoryHeaderLabelModel = new Model<>();
-	private final Model<String> dateHeaderLabelModel = new Model<>();
-	private final Model<String> archiveIdHeaderLabelModel = new Model<>();
-	private final Model<String> newButtonModel = new Model<>();
-	private final Model<String> changeButtonModel = new Model<>();
-	private final Model<String> showButtonModel = new Model<>();
-	private final Model<String> searchButtonModel = new Model<>();
-	private final Model<String> searchTableHeadlineModel = new Model<>();
 	
-	private final Model<String> applicationHeadlineModel = new Model<>();
-	private final Model<String> pageHeadlineModel = new Model<>();
-	
-	//private final Model<String> nameSearchModel = new Model<>(); 
 	
 	public SearchPage(final PageParameters parameters) {
 		
@@ -67,23 +49,23 @@ public class SearchPage extends WebPage {
 		final Form<String> searchForm = new Form<>("searchForm");
 		
 		add(searchForm);
-		add(new Label("searchCriteriaHeadline", searchCriteriaHeadlineModel));
+		add(new Label("searchCriteriaHeadline", labelModel.part(I18NSearchPageModelImpl.Parts.SearchCriteriaHeadline)));
 	
 		searchForm.add(new TextField<>("searchName", archiveModel.part(ArchiveModelImpl.Parts.Name, String.class)));
-		searchForm.add(new Label("searchNameLabel" , searchNameLabelModel));
+		searchForm.add(new Label("searchNameLabel" ,  labelModel.part(I18NSearchPageModelImpl.Parts.SearchNameLabel)));
 		
 		
 		
 		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory",    archiveModel.part(ArchiveModelImpl.Parts.Category, Category.class), Arrays.asList(Category.values()));
 		dropDownChoice.setNullValid(true);
 	   searchForm.add(dropDownChoice);
-		searchForm.add(new Label("searchCategoryLabel" , searchCategoryLabelModel));
+		searchForm.add(new Label("searchCategoryLabel" , labelModel.part(I18NSearchPageModelImpl.Parts.SearchCategoryLabel)));
 		
 		searchForm.add(new TextField<>("searchArchive",  archiveModel.part(ArchiveModelImpl.Parts.ArchiveId, String.class)));
-		searchForm.add(new Label("searchArchiveLabel" , searchArchiveLabelModel));
+		searchForm.add(new Label("searchArchiveLabel" , labelModel.part(I18NSearchPageModelImpl.Parts.SearchArchiveLabel)));
 		
 		
-		searchForm.add(new Button("searchButton", searchButtonModel) {
+		searchForm.add(new Button("searchButton", labelModel.part(I18NSearchPageModelImpl.Parts.SearchButton)) {
 
 			private static final long serialVersionUID = 1L;
 
@@ -102,17 +84,17 @@ public class SearchPage extends WebPage {
 		
 		final RadioGroup<Archive> group=new RadioGroup<Archive>("group", new Model<Archive>());
 		final Form<Archive> form = new Form<Archive>("form");
-		final Button newButton = new Button("newButton", newButtonModel);
-		final Button changeButton = new Button("changeButton", changeButtonModel);		
-		final Button showButton = new Button("showButton", showButtonModel);				
+		final Button newButton = new Button("newButton", labelModel.part(I18NSearchPageModelImpl.Parts.NewButton));
+		final Button changeButton = new Button("changeButton", labelModel.part(I18NSearchPageModelImpl.Parts.ChangeButton));		
+		final Button showButton = new Button("showButton", labelModel.part(I18NSearchPageModelImpl.Parts.ShowButton));				
 		add(form);
-		add(new Label("applicationHeadline", applicationHeadlineModel));
-		add(new Label("pageHeadline", pageHeadlineModel));
+		add(new Label("applicationHeadline", labelModel.part(I18NSearchPageModelImpl.Parts.ApplicationHeadline)));
+		add(new Label("pageHeadline", labelModel.part(I18NSearchPageModelImpl.Parts.PageHeadline)));
 		form.add(group);
 		group.add(newButton);
 		group.add(changeButton);
 		group.add(showButton);
-		group.add(new Label("searchTableHeadline", searchTableHeadlineModel));
+		group.add(new Label("searchTableHeadline", labelModel.part(I18NSearchPageModelImpl.Parts.SearchTableHeadline)));
 		
 		
 		   final ListView<Archive> persons = new ListView<Archive>("documents", archiveService.archives(null)) {
@@ -130,10 +112,10 @@ public class SearchPage extends WebPage {
 		};
 
 	
-		group.add(new Label("nameHeader", nameHeaderLabelModel));
-		group.add(new Label("categoryHeader", categoryHeaderLabelModel));
-		group.add(new Label("dateHeader", dateHeaderLabelModel));
-		group.add(new Label("archiveIdHeader", archiveIdHeaderLabelModel));
+		group.add(new Label("nameHeader", labelModel.part(I18NSearchPageModelImpl.Parts.NameHeaderLabel)));
+		group.add(new Label("categoryHeader", labelModel.part(I18NSearchPageModelImpl.Parts.CategoryHeaderLabel)));
+		group.add(new Label("dateHeader", labelModel.part(I18NSearchPageModelImpl.Parts.DateHeaderLabel)));
+		group.add(new Label("archiveIdHeader", labelModel.part(I18NSearchPageModelImpl.Parts.ArchiveIdHeaderLabel)));
 		group.add(persons);
     }
 	
@@ -147,30 +129,7 @@ public class SearchPage extends WebPage {
 	@Override
 	protected void onBeforeRender() {
 		
-		searchCriteriaHeadlineModel.setObject(string("archive_search_search_headline"));
-		searchNameLabelModel.setObject(string("archive_search_search_name"));
-		
-		searchCategoryLabelModel.setObject(string("archive_search_search_category"));
-		
-		searchArchiveLabelModel.setObject(string("archive_search_search_archive"));
-		
-		searchButtonModel.setObject(string("archive_search_search_button"));
-		
-		nameHeaderLabelModel.setObject(string("archive_search_header_name"));
-		
-		categoryHeaderLabelModel.setObject(string("archive_search_header_category"));
-		dateHeaderLabelModel.setObject(string("archive_search_header_date"));
-		archiveIdHeaderLabelModel.setObject(string("archive_search_header_archive"));
-		
-		
-		newButtonModel.setObject(string("archive_search_button_new"));
-		changeButtonModel.setObject(string("archive_search_button_change"));
-		showButtonModel.setObject(string("archive_search_button_show"));
-		
-		searchTableHeadlineModel.setObject(string("archive_search_table_headline"));
-		
-		applicationHeadlineModel.setObject(string("archive_headline"));
-		pageHeadlineModel.setObject(string("archive_search_headline"));
+		labelModel.intoWeb(messageSource);
 		super.onBeforeRender();
 	}
 
@@ -181,7 +140,5 @@ public class SearchPage extends WebPage {
 
 
 
-	private String string(final String key){
-		return messageSource.getMessage(key, null, getLocale());
-	}
+	
 }

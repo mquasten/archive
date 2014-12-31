@@ -1,14 +1,12 @@
 package de.mq.archive.web.search;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -21,15 +19,13 @@ class BasicEnumModelImpl<Domain> implements TwoWayMapping<Domain, Enum<?>>, Enum
 	
 	private Class<? extends Domain> clazz;
 	
-	protected BasicEnumModelImpl(final Enum<?>[] values, final Class<? extends Domain> clazz) {
-		Arrays.asList(values).forEach( part ->  models.put(part, new Model<>()));
+	protected BasicEnumModelImpl(final List<Enum<?>> values, final Class<? extends Domain> clazz) {
+		values.forEach( part ->  models.put(part, new Model<>()));
 		this.clazz=clazz;
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.ArchiveModel#intoWeb(de.mq.archive.domain.Archive)
-	 */
+	
 	
 	
 	/* (non-Javadoc)
@@ -45,15 +41,13 @@ class BasicEnumModelImpl<Domain> implements TwoWayMapping<Domain, Enum<?>>, Enum
 			field.setAccessible(true);
 			
 			final IModel<Object> model = part(part, Object.class);
-			model.setObject(ReflectionUtils.getField(field, source));
+			final Object value = ReflectionUtils.getField(field, source);
+			model.setObject(value);
 		} );
 	
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.ArchiveModel#toDomain(java.util.Map)
-	 */
 	
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.search.EnumModel#toDomain()
