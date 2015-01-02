@@ -6,33 +6,14 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.BasicEnumModelImpl;
 
-public class ArchiveModelImpl extends  BasicEnumModelImpl<Archive>  {
+	class ArchiveModelImpl extends BasicEnumModelImpl<Archive> implements ArchiveModel {
 
-	enum Parts  {
-		Id,
+		public ArchiveModelImpl() {
+			super(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
+			
+		}
 
-		Name,
-
-		Category,
-
-		Text,
-
-		DocumentDate,
-
-		RelatedPersons(),
-
-		ArchiveId;
-
-	}
-	
-	protected ArchiveModelImpl() {
-		super(Arrays.asList(Parts.values()), ArchiveImpl.class);
+		private static final long serialVersionUID = 1L;
 		
-	}
-
-	private static final long serialVersionUID = 1L;
-
-	
-	
 
 }

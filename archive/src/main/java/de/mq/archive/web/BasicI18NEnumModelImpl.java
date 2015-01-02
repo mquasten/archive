@@ -12,20 +12,22 @@ import org.apache.wicket.model.Model;
 import org.springframework.context.MessageSource;
 import org.springframework.util.Assert;
 
-public class BasicI18NEnumModelImpl implements OneWayStringMapping<MessageSource, Enum<?>> {
+public class BasicI18NEnumModelImpl implements OneWayStringMapping<Locale, Enum<?>> {
 
 	
 	private static final long serialVersionUID = 1L;
 	private  final Map<Enum<?>, Entry<String,IModel<String>>> models = new HashMap<>();
 	
+	private final MessageSource messageSource; 
 	
-	protected BasicI18NEnumModelImpl(final List<Enum<?>> values, final List<String>keys) {
+	public BasicI18NEnumModelImpl(final MessageSource messageSource, final List<Enum<?>> values, final List<String>keys) {
+		this.messageSource=messageSource;
 		values.forEach( part -> models.put(part,  new AbstractMap.SimpleEntry<>(keys.get(part.ordinal()), new Model<>())));
 	}
 	
 	@Override
-	public void intoWeb(final MessageSource source) {
-		models.values().forEach(entry -> entry.getValue().setObject(source.getMessage(entry.getKey(), null, Locale.GERMAN)));
+	public void intoWeb(final Locale locale) {
+		models.values().forEach(entry -> entry.getValue().setObject(messageSource.getMessage(entry.getKey(), null, locale)));
 		
 		
 	}

@@ -1,16 +1,9 @@
 package de.mq.archive.web.search;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
-import de.mq.archive.web.BasicI18NEnumModelImpl;
 
-public class I18NSearchPageModelImpl  extends BasicI18NEnumModelImpl{
 
-	
-	private static final long serialVersionUID = 1L;
-
-	enum Parts {
+	enum I18NSearchPageModelParts {
 		SearchCriteriaHeadline("archive_search_search_headline"),
 		SearchNameLabel("archive_search_search_name"),
 		
@@ -37,14 +30,9 @@ public class I18NSearchPageModelImpl  extends BasicI18NEnumModelImpl{
 		PageHeadline("archive_search_headline");
 		
 		final String key;
-		Parts(final String key) {
+		I18NSearchPageModelParts(final String key) {
 			this.key=key;
 		}
 	}
 	
-	protected I18NSearchPageModelImpl() {
-		
-		super(Arrays.asList(Parts.values()),   Arrays.asList(Parts.values()).stream().map( value -> value.key.toString()).collect(Collectors.toList()));
-	}
-
-}
+	

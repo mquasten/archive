@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-public class BasicEnumModelImpl<Domain> implements TwoWayMapping<Domain, Enum<?>>, EnumModel<Domain> {
+public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
 	
 	private static final long serialVersionUID = 1L;
 	private  final Map<Enum<?>,IModel<?>> models = new HashMap<>();
