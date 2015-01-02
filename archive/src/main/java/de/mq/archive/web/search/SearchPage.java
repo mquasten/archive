@@ -23,6 +23,8 @@ import org.springframework.context.MessageSource;
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.Category;
+import de.mq.archive.web.EnumModel;
+import de.mq.archive.web.OneWayStringMapping;
 
 
 public class SearchPage extends WebPage {

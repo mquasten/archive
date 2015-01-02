@@ -1,5 +1,6 @@
 package de.mq.archive.domain.support;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -10,6 +11,9 @@ import javax.inject.Named;
 
 
 import javax.inject.Singleton;
+
+import org.springframework.util.ReflectionUtils;
+
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.Category;
@@ -26,6 +30,10 @@ public class ArchiveServiceImpl implements ArchiveService {
 		final List<Archive> documents = new ArrayList<>(); 
 		documents.add(new ArchiveImpl("Kontoauszug Dezember" , Category.Statement, new GregorianCalendar(2014,11,1).getTime(), "ordner1/4711" ));
 		documents.add(new ArchiveImpl("Gehaltsabrechnung Dezember" , Category.SalaryPrintout, new GregorianCalendar(2014,11,1).getTime(), "ordner2/4712" ));
+		final Field field = ReflectionUtils.findField(ArchiveImpl.class, "id");
+		field.setAccessible(true);
+		documents.forEach(doc -> ReflectionUtils.setField(field, doc, String.valueOf((long)Math.random()*1e12)));
+		
 		return Collections.unmodifiableList(documents);
 	}
 

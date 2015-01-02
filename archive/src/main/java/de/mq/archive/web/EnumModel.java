@@ -1,8 +1,8 @@
-package de.mq.archive.web.search;
+package de.mq.archive.web;
 
 import org.apache.wicket.model.IModel;
 
-interface EnumModel<Domain> {
+public interface EnumModel<Domain> {
 
 	void intoWeb(Domain source);
 

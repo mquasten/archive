@@ -3,6 +3,8 @@ package de.mq.archive.web.search;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import de.mq.archive.web.BasicI18NEnumModelImpl;
+
 public class I18NSearchPageModelImpl  extends BasicI18NEnumModelImpl{
 
 	

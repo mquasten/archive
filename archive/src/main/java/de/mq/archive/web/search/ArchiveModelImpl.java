@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.support.ArchiveImpl;
+import de.mq.archive.web.BasicEnumModelImpl;
 
 public class ArchiveModelImpl extends  BasicEnumModelImpl<Archive>  {
 

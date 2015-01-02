@@ -1,4 +1,4 @@
-package de.mq.archive.web.search;
+package de.mq.archive.web;
 
 import java.util.AbstractMap;
 import java.util.HashMap;

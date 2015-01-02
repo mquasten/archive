@@ -1,4 +1,4 @@
-package de.mq.archive.web.search;
+package de.mq.archive.web;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-class BasicEnumModelImpl<Domain> implements TwoWayMapping<Domain, Enum<?>>, EnumModel<Domain> {
+public class BasicEnumModelImpl<Domain> implements TwoWayMapping<Domain, Enum<?>>, EnumModel<Domain> {
 	
 	private static final long serialVersionUID = 1L;
 	private  final Map<Enum<?>,IModel<?>> models = new HashMap<>();
