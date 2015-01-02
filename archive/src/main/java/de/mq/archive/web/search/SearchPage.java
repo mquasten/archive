@@ -4,11 +4,13 @@ package de.mq.archive.web.search;
 
 import java.util.Arrays;
 import java.util.List;
+
+
 import java.util.Locale;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebPage;
@@ -19,6 +21,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
+
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -27,26 +30,23 @@ import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.Category;
-import de.mq.archive.web.OneWayStringMapping;
+
 
 
 
 public class SearchPage extends WebPage {
 	private static final long serialVersionUID = 1L;
 	
-	@Inject
-	private ArchiveService archiveService;
-	
+	@Inject()
+	private SearchPageController serachPageController;
 	
 	
 	@Inject()
 	private ArchiveModel searchcriteria; 
 
 	@Inject()
-	@Named()
-	private OneWayStringMapping<Locale, Enum<?>> labelModel;
+	private I18NSearchPageModel labelModel;
 
 	
 	 private final IModel<List<Archive>> archives = new ListModel<>();
@@ -87,11 +87,8 @@ public class SearchPage extends WebPage {
 
 			@Override
 			public void onSubmit() {
-				final Archive search = searchcriteria.toDomain();
-				System.out.println(search.name());
-				System.out.println(search.category());
-				System.out.println(search.archiveId());
-				System.out.println(search.id());
+			
+				archives.setObject(serachPageController.archives(searchcriteria.toDomain()));
 				super.onSubmit();
 			}
 			
@@ -172,23 +169,13 @@ public class SearchPage extends WebPage {
 		group.add(new Label("dateHeader", labelModel.part(I18NSearchPageModelParts.DateHeaderLabel)));
 		group.add(new Label("archiveIdHeader", labelModel.part(I18NSearchPageModelParts.ArchiveIdHeaderLabel)));
 		group.add(persons);
+		//Session.get().setLocale(Locale.ENGLISH);
+		enableButtons();
+		labelModel.intoWeb(getLocale());
+		
     }
 	
 	
-	
-	
-	
-
-
-
-	@Override
-	protected void onBeforeRender() {
-		enableButtons();
-		labelModel.intoWeb(getLocale());
-		archives.setObject(archiveService.archives(null));
-		super.onBeforeRender();
-	}
-
 
 
 
