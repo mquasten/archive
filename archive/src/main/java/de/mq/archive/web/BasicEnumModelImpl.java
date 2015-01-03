@@ -19,7 +19,7 @@ public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
 	
 	private Class<? extends Domain> clazz;
 	
-	protected BasicEnumModelImpl(final List<Enum<?>> values, final Class<? extends Domain> clazz) {
+	public BasicEnumModelImpl(final List<Enum<?>> values, final Class<? extends Domain> clazz) {
 		values.forEach( part ->  models.put(part, new Model<>()));
 		this.clazz=clazz;
 		

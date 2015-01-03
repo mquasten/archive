@@ -1,11 +1,16 @@
 package de.mq.archive.web.search;
 
-import java.util.List;
+
 
 import de.mq.archive.domain.Archive;
+import de.mq.archive.web.EnumModel;
 
 interface SearchPageController {
 
-	List<Archive> archives(final Archive archive);
+
+	void search(final SearchPageModel model);
+	
+	
+	EnumModel<Archive> newWebModel(final Archive archive);
 
 }

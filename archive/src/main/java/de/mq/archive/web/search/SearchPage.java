@@ -3,14 +3,11 @@ package de.mq.archive.web.search;
 
 
 import java.util.Arrays;
-import java.util.List;
-
-
-import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.wicket.Session;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebPage;
@@ -21,16 +18,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
-
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
+import de.mq.archive.web.ActionButton;
+import de.mq.archive.web.ActionListener;
+import de.mq.archive.web.EnumModel;
+
 
 
 
@@ -39,19 +36,19 @@ public class SearchPage extends WebPage {
 	private static final long serialVersionUID = 1L;
 	
 	@Inject()
-	private SearchPageController serachPageController;
+	private SearchPageController searchPageController;
 	
 	
 	@Inject()
-	private ArchiveModel searchcriteria; 
+	private SearchPageModel searchPageModel; 
 
 	@Inject()
 	private I18NSearchPageModel labelModel;
 
+	@Inject()
+	@Named("searchActionListener")
+	private ActionListener actionListener;
 	
-	 private final IModel<List<Archive>> archives = new ListModel<>();
-	 
-	 private final IModel<String> selectedArchive = new Model<>();
 	 
 	 
 	 private final Button changeButton;
@@ -67,36 +64,27 @@ public class SearchPage extends WebPage {
 		add(searchForm);
 		add(new Label("searchCriteriaHeadline", labelModel.part(I18NSearchPageModelParts.SearchCriteriaHeadline)));
 	
-		searchForm.add(new TextField<>("searchName", searchcriteria.part(ArchiveModelParts.Name, String.class)));
+		searchForm.add(new TextField<>("searchName", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Name, String.class)));
 		searchForm.add(new Label("searchNameLabel" ,  labelModel.part(I18NSearchPageModelParts.SearchNameLabel)));
 		
 		
 		
-		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory",    searchcriteria.part(ArchiveModelParts.Category, Category.class), Arrays.asList(Category.values()));
+		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory",    searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Category, Category.class), Arrays.asList(Category.values()));
 		dropDownChoice.setNullValid(true);
 	   searchForm.add(dropDownChoice);
 		searchForm.add(new Label("searchCategoryLabel" , labelModel.part(I18NSearchPageModelParts.SearchCategoryLabel)));
 		
-		searchForm.add(new TextField<>("searchArchive",  searchcriteria.part(ArchiveModelParts.ArchiveId, String.class)));
+		searchForm.add(new TextField<>("searchArchive",  searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.ArchiveId, String.class)));
 		searchForm.add(new Label("searchArchiveLabel" , labelModel.part(I18NSearchPageModelParts.SearchArchiveLabel)));
 		
 		
-		searchForm.add(new Button("searchButton", labelModel.part(I18NSearchPageModelParts.SearchButton)) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onSubmit() {
-			
-				archives.setObject(serachPageController.archives(searchcriteria.toDomain()));
-				super.onSubmit();
-			}
-			
-			
-		});
+		final ActionButton searchButton = new ActionButton("searchButton", labelModel.part(I18NSearchPageModelParts.SearchButton));
+		
+		searchButton.addActionListener(actionListener);
+		searchForm.add((Component) searchButton);
 		
 	
-		final RadioGroup<String> group=new RadioGroup<String>("group", selectedArchive);
+		final RadioGroup<String> group=new RadioGroup<String>("group", searchPageModel.getSelectedArchiveWeb());
 		group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 
 		
@@ -118,21 +106,7 @@ public class SearchPage extends WebPage {
 		
 		final Form<Archive> form = new Form<Archive>("form");
 		final Button newButton = new Button("newButton", labelModel.part(I18NSearchPageModelParts.NewButton));
-		changeButton = new Button("changeButton", labelModel.part(I18NSearchPageModelParts.ChangeButton)) {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onSubmit() {
-				System.out.println(">>>>" + group.getModel().getObject());
-				super.onSubmit();
-			}
-
-		
-			
-			
-			
-		};
+		changeButton = new Button("changeButton", labelModel.part(I18NSearchPageModelParts.ChangeButton)) ;
 		showButton = new Button("showButton", labelModel.part(I18NSearchPageModelParts.ShowButton));				
 		add(form);
 		add(new Label("applicationHeadline", labelModel.part(I18NSearchPageModelParts.ApplicationHeadline)));
@@ -144,15 +118,13 @@ public class SearchPage extends WebPage {
 		group.add(new Label("searchTableHeadline", labelModel.part(I18NSearchPageModelParts.SearchTableHeadline)));
 		
 		
-		   final ListView<Archive> persons = new ListView<Archive>("documents", archives) {
+		   final ListView<Archive> persons = new ListView<Archive>("documents", searchPageModel.getArchivesWeb()) {
 		  
 		   
 			private static final long serialVersionUID = 1L;
 
 			protected void populateItem(final ListItem<Archive> item) {
-				
-				final  ArchiveModel currentRow = new  ArchiveModelImpl();
-				currentRow.intoWeb(item.getModelObject());
+				final EnumModel<Archive> currentRow = searchPageController.newWebModel(item.getModelObject());
 				item.add(new Radio<String>("document", currentRow.part(ArchiveModelParts.Id, String.class)));
 				
 		      item.add(new Label("name", currentRow.part(ArchiveModelParts.Name, String.class)));
@@ -173,6 +145,7 @@ public class SearchPage extends WebPage {
 		enableButtons();
 		labelModel.intoWeb(getLocale());
 		
+		
     }
 	
 	
@@ -184,8 +157,8 @@ public class SearchPage extends WebPage {
 
 
 	private void enableButtons() {
-		changeButton.setEnabled(selectedArchive.getObject()!=null);
-		showButton.setEnabled(selectedArchive.getObject()!=null);
+		changeButton.setEnabled(searchPageModel.getSelectedArchiveId() !=null);
+		showButton.setEnabled(searchPageModel.getSelectedArchiveId()!=null);
 	}
 
 

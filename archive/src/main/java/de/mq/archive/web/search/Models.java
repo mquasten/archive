@@ -2,12 +2,15 @@ package de.mq.archive.web.search;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import de.mq.archive.domain.ArchiveService;
+import de.mq.archive.web.ActionListener;
+import de.mq.archive.web.SimpleParameterInjectionActionListenerImpl;
 
 @Configuration
 class Models {
@@ -16,11 +19,13 @@ class Models {
 	
 	@Inject
 	private  ArchiveService archiveService; 
+	@Inject
+	private BeanFactory beanFactory;
 	
 	 @Bean()
-	 @Scope("request")
-	 ArchiveModel searchCriteria() {
-		return new ArchiveModelImpl();
+	 @Scope("session")
+	 SearchPageModel searchCriteria() {
+		return new SearchPageModelImpl();
 	 }
 	 
 	 @Bean()
@@ -37,6 +42,11 @@ class Models {
 		 
 	 }
 	 
+	 @Bean(name="searchActionListener")
+	 @Scope("singleton")
+	 public ActionListener searchActionListener() {
+		 return new SimpleParameterInjectionActionListenerImpl(beanFactory, SearchPageController.class);
+	 }
 	 
 
 }
