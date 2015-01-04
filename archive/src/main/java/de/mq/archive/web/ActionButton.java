@@ -12,7 +12,7 @@ public class ActionButton extends Button  {
 
 	private static final long serialVersionUID = 1L;
 	
-	private transient final List<ActionListener> listeners = new ArrayList<>();
+	private final List<ActionListener> listeners = new ArrayList<>();
 	
 	public ActionButton(final String id) {
 		super(id);

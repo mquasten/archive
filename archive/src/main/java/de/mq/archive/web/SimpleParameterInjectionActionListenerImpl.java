@@ -15,6 +15,9 @@ import org.springframework.util.ReflectionUtils;
 
 public class SimpleParameterInjectionActionListenerImpl implements ActionListener{
 
+	
+	private static final long serialVersionUID = 1L;
+
 	private final Object controller; 
 	
 	private final BeanFactory beanFactory;

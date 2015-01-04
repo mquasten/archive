@@ -3,9 +3,13 @@ package de.mq.archive.domain.support;
 import java.util.Date;
 import java.util.Set;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 
+@Document(collection="Archive")
 public class ArchiveImpl implements Archive {
 	
 	private static final long serialVersionUID = 1L;
@@ -22,6 +26,7 @@ public class ArchiveImpl implements Archive {
 	
 	private String archiveId;
 	
+	@Id
 	private String id;
 	
 	public ArchiveImpl(final String name, final Category category, final Date documentDate, final String archiveId) {
