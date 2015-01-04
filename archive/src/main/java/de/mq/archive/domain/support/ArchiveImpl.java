@@ -29,6 +29,7 @@ public class ArchiveImpl implements Archive {
 	@Id
 	private String id;
 	
+	
 	public ArchiveImpl(final String name, final Category category, final Date documentDate, final String archiveId) {
 		this(name, category,documentDate,archiveId, null);
 	}
