@@ -3,9 +3,10 @@ package de.mq.archive.domain.support;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -13,11 +14,13 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 
 @Named
+@Profile("db")
 class ArchiveMongoRepositoryImpl implements ArchiveRepository {
 
 	private static final String ARCHIVE_ID_FIELD = "archiveId";
@@ -25,7 +28,7 @@ class ArchiveMongoRepositoryImpl implements ArchiveRepository {
 	private static final String NAME_FIELD = "name";
 	private final MongoOperations mongoOperations;
 	
-	@Inject
+	@Autowired
 	ArchiveMongoRepositoryImpl(final MongoOperations mongoOperations){
 		this.mongoOperations=mongoOperations;
 	}
