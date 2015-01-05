@@ -52,7 +52,6 @@ class ArchiveMongoRepositoryImpl implements ArchiveRepository {
 		return mongoOperations.count(query(archive), ArchiveImpl.class);
 	}
 
-
 	private Query query(final Archive archive) {
 		final Query query = new Query();
 		
