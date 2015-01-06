@@ -7,6 +7,7 @@ import javax.inject.Named;
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.support.ArchiveImpl;
+import de.mq.archive.domain.support.Paging;
 import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.EnumModel;
 
@@ -24,7 +25,8 @@ class SearchPageControllerImpl implements SearchPageController {
 	@Named("searchButton")
 	@Override
 	public final void search(final SearchPageModel model) {
-		model.setArchivesWeb(archiveService.archives(model.getSearchCriteria()));
+		final Paging paging = archiveService.paging(model.getSearchCriteria(), Integer.MAX_VALUE);
+		model.setArchivesWeb(archiveService.archives(model.getSearchCriteria(), paging));
 	}
 
 	@Override
