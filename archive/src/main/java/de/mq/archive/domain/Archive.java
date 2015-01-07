@@ -2,7 +2,7 @@ package de.mq.archive.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 public interface Archive  extends Serializable{
 
@@ -16,8 +16,12 @@ public interface Archive  extends Serializable{
 
 	Date documentDate();
 
-	Set<String> relatedPersons();
+	List<String> relatedPersons();
 
 	String archiveId();
+
+	void assign(final String person);
+
+	void remove(final String person);
 
 }

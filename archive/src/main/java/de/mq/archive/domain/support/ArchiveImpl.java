@@ -1,6 +1,11 @@
 package de.mq.archive.domain.support;
 
+import java.util.ArrayList;
+
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -52,7 +57,7 @@ public class ArchiveImpl implements Archive {
 	 * @see de.mq.archive.domain.support.Archive#id()
 	 */
 	@Override
-	public String id() {
+	public final String id() {
 		return id;
 	}
 
@@ -60,7 +65,7 @@ public class ArchiveImpl implements Archive {
 	 * @see de.mq.archive.domain.support.Archive#name()
 	 */
 	@Override
-	public String name() {
+	public final String name() {
 		return name;
 	}
 
@@ -68,7 +73,7 @@ public class ArchiveImpl implements Archive {
 	 * @see de.mq.archive.domain.support.Archive#category()
 	 */
 	@Override
-	public Category category() {
+	public final Category category() {
 		return category;
 	}
 
@@ -76,7 +81,7 @@ public class ArchiveImpl implements Archive {
 	 * @see de.mq.archive.domain.support.Archive#text()
 	 */
 	@Override
-	public String text() {
+	public final String text() {
 		return text;
 	}
 
@@ -84,7 +89,7 @@ public class ArchiveImpl implements Archive {
 	 * @see de.mq.archive.domain.support.Archive#documentDate()
 	 */
 	@Override
-	public Date documentDate() {
+	public final Date documentDate() {
 		return documentDate;
 	}
 
@@ -92,16 +97,38 @@ public class ArchiveImpl implements Archive {
 	 * @see de.mq.archive.domain.support.Archive#relatedPersons()
 	 */
 	@Override
-	public Set<String> relatedPersons() {
-		return relatedPersons;
+	public final List<String> relatedPersons() {
+		final List<String> results = new ArrayList<>();
+		if(relatedPersons == null){
+			return Collections.unmodifiableList(results);
+		}
+		results.addAll(relatedPersons);
+		Collections.sort( results, (p1, p2) ->  p2.compareToIgnoreCase(p2) );
+		return Collections.unmodifiableList(results);
 	}
 
 	/* (non-Javadoc)
 	 * @see de.mq.archive.domain.support.Archive#archiveId()
 	 */
 	@Override
-	public String archiveId() {
+	public final  String archiveId() {
 		return archiveId;
+	}
+	
+	@Override
+	public final void assign(final String person){
+		if(this.relatedPersons==null){
+			relatedPersons=new HashSet<>();
+		}
+		relatedPersons.add(person);
+	}
+	
+	@Override
+	public final void remove(final String person){
+		if(this.relatedPersons==null){
+			return;
+		}
+		relatedPersons.remove(person);
 	}
 
 
