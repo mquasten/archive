@@ -23,26 +23,28 @@ import de.mq.archive.domain.Category;
 @Profile("mock")
 public class ArchiveRepositoryMock implements ArchiveRepository {
 
-	private final Map<String, Archive> storedValues = new HashMap<>();
+	static final ArchiveImpl ARCHIVE_02 = new ArchiveImpl("Gehaltsabrechnung Dezember", Category.SalaryPrintout, new GregorianCalendar(2014, 11, 1).getTime(), "4712");
+	static final ArchiveImpl ARCHIVE_01 = new ArchiveImpl("Kontoauszug Dezember", Category.Statement, new GregorianCalendar(2014, 11, 1).getTime(), "4711");
+	private final Map<String, Archive> archives = new HashMap<>();
 
 	@PostConstruct
 	void init() {
 		final List<Archive> documents = new ArrayList<>();
 
-		documents.add(new ArchiveImpl("Kontoauszug Dezember", Category.Statement, new GregorianCalendar(2014, 11, 1).getTime(), "4711"));
-		documents.add(new ArchiveImpl("Gehaltsabrechnung Dezember", Category.SalaryPrintout, new GregorianCalendar(2014, 11, 1).getTime(), "4712"));
+		documents.add(ARCHIVE_01);
+		documents.add(ARCHIVE_02);
 		final Field field = ReflectionUtils.findField(ArchiveImpl.class, "id");
 		field.setAccessible(true);
 		documents.forEach(doc -> {
 			ReflectionUtils.setField(field, doc, String.valueOf(UUID.nameUUIDFromBytes(doc.name().getBytes())));
-			storedValues.put(doc.id(), doc);
+			archives.put(doc.id(), doc);
 		});
 	}
 
 	@Override
-	public List<Archive> forCriterias(Archive archive, final Paging paging) {
+	public List<Archive> forCriterias(final Archive archive, final Paging paging) {
 		final List<Archive> allResults = new ArrayList<>();
-		storedValues.values().stream().filter(doc -> match(doc, archive)).forEach(doc -> allResults.add(doc));
+		archives.values().stream().filter(doc -> match(doc, archive)).forEach(doc -> allResults.add(doc));
 		
 		Collections.sort(allResults, (doc1, doc2) -> doc1.name().compareTo(doc2.name()));
 		return Collections.unmodifiableList(new ArrayList<>(allResults.subList(paging.firstRow().intValue(), Math.min(allResults.size(), paging.firstRow().intValue() + paging.pageSize().intValue()))));

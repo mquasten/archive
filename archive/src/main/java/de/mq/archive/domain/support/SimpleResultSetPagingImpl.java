@@ -2,7 +2,7 @@ package de.mq.archive.domain.support;
 
 
 
-public class SimpleResultSetPagingImpl implements ModifyablePaging {
+class SimpleResultSetPagingImpl implements ModifyablePaging {
 
 	private final Number pageSize;
 

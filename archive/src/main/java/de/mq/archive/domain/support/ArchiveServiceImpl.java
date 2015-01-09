@@ -29,7 +29,7 @@ public class ArchiveServiceImpl implements ArchiveService {
 	 */
 	@Override
 	public final List<Archive> archives(final Archive archive, final Paging paging) {
-		return Collections.unmodifiableList(archiveRepository.forCriterias(archive, new SimpleResultSetPagingImpl(Integer.MAX_VALUE, Integer.MAX_VALUE)));
+		return Collections.unmodifiableList(archiveRepository.forCriterias(archive, paging));
 	}
 	
 	@Override
@@ -37,5 +37,6 @@ public class ArchiveServiceImpl implements ArchiveService {
 		final Number counter = archiveRepository.countForCriteria(archive);
 		return new SimpleResultSetPagingImpl(pageSize, counter.longValue());
 	}
+	
 
 }
