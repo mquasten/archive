@@ -1,32 +1,32 @@
 package de.mq.archive.web.search;
 
-import java.util.Arrays;
 import java.util.List;
 
-
-
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.domain.support.ArchiveImpl;
-import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.EnumModel;
 
 class SearchPageModelImpl implements SearchPageModel {
 	
-	private final EnumModel<Archive> searchCriteria = new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
-
-	private final IModel<List<Archive>> archives = new ListModel<>();
+	private final EnumModel<Archive> searchCriteria; 
+	private final IModel<List<Archive>> archives;
+	private final IModel<String> selectedArchive; 
+	private final IModel<Number> pageSize; 
 	
-	private final IModel<String> selectedArchive = new Model<>();
-	
-	SearchPageModelImpl() {
-		
+	SearchPageModelImpl(final EnumModel<Archive> searchCriteria, final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
+		this.searchCriteria = searchCriteria;
+		this.archives = archives;
+		this.selectedArchive = selectedArchive;
+		this.pageSize = pageSize;
 	}
 	
 	
+	
+	
+
+
+
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.search.SearchPageModel#getSearchCriteria()
 	 */
@@ -43,15 +43,23 @@ class SearchPageModelImpl implements SearchPageModel {
 		return selectedArchive.getObject();
 	}
 	
-	
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.search.SearchPageModel#setArchivesWeb(java.util.Collection)
 	 */
 	@Override
-	public final void setArchivesWeb(final List<Archive> archives) {
+	public final void setArchives(final List<Archive> archives) {
 		this.archives.setObject(archives);
 		
 	}
+	
+	@Override
+	public final Number getPageSize() {
+		return pageSize.getObject();
+	}
+	
+	
+	
+	
 
 	
 	/* (non-Javadoc)
@@ -77,6 +85,13 @@ class SearchPageModelImpl implements SearchPageModel {
 	public final IModel<String> getSelectedArchiveWeb() {
 		return selectedArchive;
 	}
+
+
+	@Override
+	public final IModel<Number> getPageSizeWeb() {
+		return pageSize;
+	}
+
 
 	
 	

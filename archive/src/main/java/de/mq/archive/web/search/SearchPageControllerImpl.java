@@ -25,8 +25,8 @@ class SearchPageControllerImpl implements SearchPageController {
 	@Named("searchButton")
 	@Override
 	public final void search(final SearchPageModel model) {
-		final Paging paging = archiveService.paging(model.getSearchCriteria(), Integer.MAX_VALUE);
-		model.setArchivesWeb(archiveService.archives(model.getSearchCriteria(), paging));
+		final Paging paging = archiveService.paging(model.getSearchCriteria(), model.getPageSize().intValue());
+		model.setArchives(archiveService.archives(model.getSearchCriteria(), paging));
 	}
 
 	@Override

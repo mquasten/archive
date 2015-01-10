@@ -14,7 +14,9 @@ interface SearchPageModel {
 
 	String getSelectedArchiveId();
 
-	void setArchivesWeb(final List<Archive> archives);
+	void setArchives(final List<Archive> archives);
+	
+	Number getPageSize();
 	
 
 	EnumModel<Archive> getSearchCriteriaWeb();
@@ -22,5 +24,7 @@ interface SearchPageModel {
 	IModel<List<Archive>> getArchivesWeb();
 
 	IModel<String> getSelectedArchiveWeb();
+
+	IModel<Number> getPageSizeWeb();
 
 }

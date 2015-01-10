@@ -10,7 +10,11 @@ import java.util.Map;
 
 import javax.inject.Named;
 
+
+
+
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 public class SimpleParameterInjectionActionListenerImpl implements ActionListener{
@@ -25,6 +29,7 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 	final Map<String, Method> methods = new HashMap<>();
 	public SimpleParameterInjectionActionListenerImpl(final BeanFactory beanfactory, final Class<?> controllerClass) {
 		this.controller=beanfactory.getBean(controllerClass);
+		Assert.notNull(controller, String.format("ControllerBean not found for class %s", controllerClass));
 		this.beanFactory=beanfactory;
 		ReflectionUtils.doWithMethods(controller.getClass(), m-> methods.put(m.getAnnotation(Named.class).value().trim().isEmpty() ? m.getName() : m.getAnnotation(Named.class).value(), m), m -> m.isAnnotationPresent(Named.class)  );
 	}

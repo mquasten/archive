@@ -1,15 +1,22 @@
 package de.mq.archive.web.search;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
 
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
+import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.ActionListener;
+import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.SimpleParameterInjectionActionListenerImpl;
 
 @Configuration
@@ -24,13 +31,13 @@ class Models {
 	
 	 @Bean()
 	 @Scope("session")
-	 SearchPageModel searchCriteria() {
-		return new SearchPageModelImpl();
+	 SearchPageModel searchPageModel() {
+		return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new ListModel<>(), new Model<>(), new Model<>(Integer.MAX_VALUE) );
 	 }
 	 
 	 @Bean()
 	 @Scope("session")
-	 I18NSearchPageModel i18NSearchPageModelParts() {
+	 I18NSearchPageModel i18NSearchPageModel() {
 		return new I18NSearchPageModelImpl(messageSource);
 		 
 	 }
