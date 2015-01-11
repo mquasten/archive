@@ -31,7 +31,7 @@ class Models {
 	
 	 @Bean()
 	 @Scope("session")
-	 SearchPageModel searchPageModel() {
+	 SearchPageModelImpl searchPageModel() {
 		return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new ListModel<>(), new Model<>(), new Model<>(Integer.MAX_VALUE) );
 	 }
 	 

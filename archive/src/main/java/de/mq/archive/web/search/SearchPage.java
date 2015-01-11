@@ -40,7 +40,7 @@ public class SearchPage extends WebPage {
 	
 	
 	@Inject()
-	private SearchPageModel searchPageModel; 
+	private SearchPageModelWeb searchPageModel; 
 
 	@Inject()
 	private I18NSearchPageModel labelModel;
@@ -157,8 +157,8 @@ public class SearchPage extends WebPage {
 
 
 	private void enableButtons() {
-		changeButton.setEnabled(searchPageModel.getSelectedArchiveId() !=null);
-		showButton.setEnabled(searchPageModel.getSelectedArchiveId()!=null);
+		changeButton.setEnabled(searchPageModel.getSelectedArchiveWeb().getObject() !=null);
+		showButton.setEnabled(searchPageModel.getSelectedArchiveWeb().getObject() !=null);
 	}
 
 

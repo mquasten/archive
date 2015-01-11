@@ -1,13 +1,16 @@
 package de.mq.archive.web.search;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.model.IModel;
+import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
 
-class SearchPageModelImpl implements SearchPageModel {
+class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
 	private final EnumModel<Archive> searchCriteria; 
 	private final IModel<List<Archive>> archives;
@@ -20,36 +23,41 @@ class SearchPageModelImpl implements SearchPageModel {
 		this.selectedArchive = selectedArchive;
 		this.pageSize = pageSize;
 	}
-	
-	
-	
-	
 
-
-
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.SearchPageModel#getSearchCriteria()
-	 */
+	
 	@Override
 	public final Archive getSearchCriteria() {
 		return searchCriteria.toDomain();
 	}
 
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.SearchPageModel#getSelectedArchiveId()
-	 */
+	
 	@Override
 	public final String getSelectedArchiveId() {
+		if ( StringUtils.isEmpty(selectedArchive.getObject())) {
+			return "";
+		}
 		return selectedArchive.getObject();
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.SearchPageModel#setArchivesWeb(java.util.Collection)
-	 */
+	final List<Archive> getArchives() {
+		if( archives.getObject() ==null) {
+			return Collections.unmodifiableList(new ArrayList<>());
+		}
+		return Collections.unmodifiableList(archives.getObject());
+	}
+	
 	@Override
 	public final void setArchives(final List<Archive> archives) {
 		this.archives.setObject(archives);
+		unSelectIfNotInResult();
+	}
+	
+	private final void unSelectIfNotInResult() {
 		
+		if( getArchives().stream().filter(archive -> archive.id().equals(getSelectedArchiveId())).findFirst().isPresent() ){
+			return;
+		}
+		selectedArchive.setObject(null);
 	}
 	
 	@Override
@@ -58,29 +66,17 @@ class SearchPageModelImpl implements SearchPageModel {
 	}
 	
 	
-	
-	
-
-	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.SearchPageModel#getSearchCriteriaWeb()
-	 */
 	@Override
 	public final EnumModel<Archive> getSearchCriteriaWeb() {
 		return searchCriteria;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.SearchPageModel#getArchivesWeb()
-	 */
 	@Override
 	public final IModel<List<Archive>> getArchivesWeb() {
 		return archives;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.search.SearchPageModel#getSelectedArchiveWeb()
-	 */
+
 	@Override
 	public final IModel<String> getSelectedArchiveWeb() {
 		return selectedArchive;

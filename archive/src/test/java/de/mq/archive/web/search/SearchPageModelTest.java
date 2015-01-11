@@ -2,12 +2,14 @@ package de.mq.archive.web.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
@@ -25,6 +27,7 @@ public class SearchPageModelTest {
 	@SuppressWarnings("unchecked")
 	private final IModel<Number> pageSizeWeb = Mockito.mock(IModel.class);
 	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, listModel, selectedArchiveIdWeb, pageSizeWeb);
+	private final SearchPageModelWeb modelWeb = (SearchPageModelWeb) model; 
 	private final Archive archive = Mockito.mock(Archive.class);
 
 	@Test
@@ -39,15 +42,56 @@ public class SearchPageModelTest {
 		Assert.assertEquals(ID, model.getSelectedArchiveId());
 
 	}
+	@Test
+	public final void getSelectedArchiveIdDefaultValue() {
+		Assert.assertFalse(StringUtils.hasText(model.getSelectedArchiveId()));
+	}
+	@Test
+	public final void getArchives() {
+		final List<Archive> archives = new ArrayList<>();
+		Mockito.when(archive.id()).thenReturn(ID);
+		archives.add(archive);
+		Mockito.when(listModel.getObject()).thenReturn(archives);
+		final List<Archive> results = ((SearchPageModelImpl)model).getArchives();
+		Assert.assertEquals(archives, results);
+	}
+	
+	@Test
+	public final void getArchivesDefault() {
+		final List<Archive> results = ((SearchPageModelImpl)model).getArchives();
+		Assert.assertNotNull(results);
+		Assert.assertTrue(results.isEmpty());
+	}
 
 	@Test
-	public final void setArchives() {
+	public final void setArchivesKeepSelection() {
 		final List<Archive> archives = new ArrayList<>();
+		Mockito.when(archive.id()).thenReturn(ID);
 		archives.add(archive);
+		Mockito.when(selectedArchiveIdWeb.getObject()).thenReturn(ID);
+		Mockito.when(listModel.getObject()).thenReturn(archives);
 		model.setArchives(archives);
 
 		Mockito.verify(listModel).setObject(archives);
+		Mockito.verify(selectedArchiveIdWeb, Mockito.times(0)).setObject(null);
+		
+		
 	}
+	
+	@Test
+	public final void setArchivesResetSelection() {
+		final List<Archive> archives = new ArrayList<>();
+		Mockito.when(archive.id()).thenReturn(ID);
+		archives.add(archive);
+		Mockito.when(selectedArchiveIdWeb.getObject()).thenReturn(UUID.randomUUID().toString());
+		Mockito.when(listModel.getObject()).thenReturn(archives);
+		model.setArchives(archives);
+		
+		Mockito.verify(listModel).setObject(archives);
+		Mockito.verify(selectedArchiveIdWeb, Mockito.times(1)).setObject(null);
+	}
+	
+	
 
 	@Test
 	public final void getPageSize() {
@@ -57,22 +101,22 @@ public class SearchPageModelTest {
 
 	@Test
 	public final void getSearchCriteriaWeb() {
-		Assert.assertEquals(archiveWeb, model.getSearchCriteriaWeb());
+		Assert.assertEquals(archiveWeb, modelWeb.getSearchCriteriaWeb());
 	}
 
 	@Test
 	public final void getArchivesWeb() {
-		Assert.assertEquals(listModel, model.getArchivesWeb());
+		Assert.assertEquals(listModel, modelWeb.getArchivesWeb());
 	}
 
 	@Test
 	public final void getSelectedArchiveWeb() {
-		Assert.assertEquals(selectedArchiveIdWeb, model.getSelectedArchiveWeb());
+		Assert.assertEquals(selectedArchiveIdWeb, modelWeb.getSelectedArchiveWeb());
 	}
 
 	@Test
 	public final void getPageSizeWeb() {
-		Assert.assertEquals(pageSizeWeb, model.getPageSizeWeb());
+		Assert.assertEquals(pageSizeWeb, modelWeb.getPageSizeWeb());
 	}
 
 }

@@ -43,7 +43,7 @@ public class ModelsTest {
 	
 	@Test
 	public final void searchPageModel() {
-		final SearchPageModel model = models.searchPageModel();
+		final SearchPageModelWeb model = models.searchPageModel();
 		Assert.assertTrue(model instanceof SearchPageModelImpl);;
 		
 		Assert.assertNotNull(model.getSearchCriteriaWeb());
