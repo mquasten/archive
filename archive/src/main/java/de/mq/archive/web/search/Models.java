@@ -1,6 +1,7 @@
 package de.mq.archive.web.search;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -17,6 +18,7 @@ import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.BasicEnumModelImpl;
+import de.mq.archive.web.BasicI18NEnumModelImpl;
 import de.mq.archive.web.SimpleParameterInjectionActionListenerImpl;
 
 @Configuration
@@ -32,14 +34,7 @@ class Models {
 	 @Bean()
 	 @Scope("session")
 	 SearchPageModelImpl searchPageModel() {
-		return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new ListModel<>(), new Model<>(), new Model<>(Integer.MAX_VALUE) );
-	 }
-	 
-	 @Bean()
-	 @Scope("session")
-	 I18NSearchPageModel i18NSearchPageModel() {
-		return new I18NSearchPageModelImpl(messageSource);
-		 
+		 return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new BasicI18NEnumModelImpl(messageSource,  Arrays.asList(I18NSearchPageModelParts.values()), Arrays.asList(I18NSearchPageModelParts.values()).stream().map( part -> part.key).collect(Collectors.toList())), new ListModel<>(), new Model<>(), new Model<>(Integer.MAX_VALUE) );
 	 }
 	 
 	 @Bean()

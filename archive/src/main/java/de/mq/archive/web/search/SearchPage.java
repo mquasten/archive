@@ -3,11 +3,13 @@ package de.mq.archive.web.search;
 
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebPage;
@@ -42,8 +44,7 @@ public class SearchPage extends WebPage {
 	@Inject()
 	private SearchPageModelWeb searchPageModel; 
 
-	@Inject()
-	private I18NSearchPageModel labelModel;
+	
 
 	@Inject()
 	@Named("searchActionListener")
@@ -51,8 +52,8 @@ public class SearchPage extends WebPage {
 	
 	 
 	 
-	 private final Button changeButton;
-	 private final Button showButton;
+	private final Button changeButton;
+	private final Button showButton;
 	
 
 	public SearchPage(final PageParameters parameters) {
@@ -62,25 +63,28 @@ public class SearchPage extends WebPage {
 		final Form<String> searchForm = new Form<>("searchForm");
 		
 		add(searchForm);
-		add(new Label("searchCriteriaHeadline", labelModel.part(I18NSearchPageModelParts.SearchCriteriaHeadline)));
+		
+		add(new Label("searchCriteriaHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchCriteriaHeadline)));
 	
 		searchForm.add(new TextField<>("searchName", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Name, String.class)));
-		searchForm.add(new Label("searchNameLabel" ,  labelModel.part(I18NSearchPageModelParts.SearchNameLabel)));
+		searchForm.add(new Label("searchNameLabel" ,  searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchNameLabel)));
 		
 		
 		
 		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory",    searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Category, Category.class), Arrays.asList(Category.values()));
 		dropDownChoice.setNullValid(true);
 	   searchForm.add(dropDownChoice);
-		searchForm.add(new Label("searchCategoryLabel" , labelModel.part(I18NSearchPageModelParts.SearchCategoryLabel)));
+		searchForm.add(new Label("searchCategoryLabel" , searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchCategoryLabel)));
 		
 		searchForm.add(new TextField<>("searchArchive",  searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.ArchiveId, String.class)));
-		searchForm.add(new Label("searchArchiveLabel" , labelModel.part(I18NSearchPageModelParts.SearchArchiveLabel)));
+		searchForm.add(new Label("searchArchiveLabel" , searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchArchiveLabel)));
 		
 		
-		final ActionButton searchButton = new ActionButton("searchButton", labelModel.part(I18NSearchPageModelParts.SearchButton));
+		final ActionButton searchButton = new ActionButton("searchButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchButton));
 		
 		searchButton.addActionListener(actionListener);
+		
+		searchButton.addActionListener(action -> enableButtons());
 		searchForm.add((Component) searchButton);
 		
 	
@@ -95,7 +99,7 @@ public class SearchPage extends WebPage {
 				enableButtons();
 				target.add(changeButton);
 				target.add(showButton);
-			
+				
 				
 			}
 
@@ -105,17 +109,17 @@ public class SearchPage extends WebPage {
 		
 		
 		final Form<Archive> form = new Form<Archive>("form");
-		final Button newButton = new Button("newButton", labelModel.part(I18NSearchPageModelParts.NewButton));
-		changeButton = new Button("changeButton", labelModel.part(I18NSearchPageModelParts.ChangeButton)) ;
-		showButton = new Button("showButton", labelModel.part(I18NSearchPageModelParts.ShowButton));				
+		final Button newButton = new Button("newButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.NewButton));
+		changeButton = new Button("changeButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ChangeButton)) ;
+		showButton = new Button("showButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ShowButton));				
 		add(form);
-		add(new Label("applicationHeadline", labelModel.part(I18NSearchPageModelParts.ApplicationHeadline)));
-		add(new Label("pageHeadline", labelModel.part(I18NSearchPageModelParts.PageHeadline)));
+		add(new Label("applicationHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ApplicationHeadline)));
+		add(new Label("pageHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.PageHeadline)));
 		form.add(group);
 		group.add(newButton);
 		group.add(changeButton);
 		group.add(showButton);
-		group.add(new Label("searchTableHeadline", labelModel.part(I18NSearchPageModelParts.SearchTableHeadline)));
+		group.add(new Label("searchTableHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchTableHeadline)));
 		
 		
 		   final ListView<Archive> persons = new ListView<Archive>("documents", searchPageModel.getArchivesWeb()) {
@@ -136,14 +140,14 @@ public class SearchPage extends WebPage {
 		};
 
 	
-		group.add(new Label("nameHeader", labelModel.part(I18NSearchPageModelParts.NameHeaderLabel)));
-		group.add(new Label("categoryHeader", labelModel.part(I18NSearchPageModelParts.CategoryHeaderLabel)));
-		group.add(new Label("dateHeader", labelModel.part(I18NSearchPageModelParts.DateHeaderLabel)));
-		group.add(new Label("archiveIdHeader", labelModel.part(I18NSearchPageModelParts.ArchiveIdHeaderLabel)));
+		group.add(new Label("nameHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.NameHeaderLabel)));
+		group.add(new Label("categoryHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.CategoryHeaderLabel)));
+		group.add(new Label("dateHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.DateHeaderLabel)));
+		group.add(new Label("archiveIdHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ArchiveIdHeaderLabel)));
 		group.add(persons);
-		//Session.get().setLocale(Locale.ENGLISH);
+		Session.get().setLocale(Locale.ENGLISH);
 		enableButtons();
-		labelModel.intoWeb(getLocale());
+		searchPageModel.getI18NLabels().intoWeb(getLocale());
 		
 		
     }
@@ -157,8 +161,8 @@ public class SearchPage extends WebPage {
 
 
 	private void enableButtons() {
-		changeButton.setEnabled(searchPageModel.getSelectedArchiveWeb().getObject() !=null);
-		showButton.setEnabled(searchPageModel.getSelectedArchiveWeb().getObject() !=null);
+		changeButton.setEnabled(searchPageModel.isSelected());
+		showButton.setEnabled(searchPageModel.isSelected());
 	}
 
 

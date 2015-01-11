@@ -3,12 +3,14 @@ package de.mq.archive.web.search;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.wicket.model.IModel;
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
+import de.mq.archive.web.OneWayStringMapping;
 
 class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
@@ -17,8 +19,11 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	private final IModel<String> selectedArchive; 
 	private final IModel<Number> pageSize; 
 	
-	SearchPageModelImpl(final EnumModel<Archive> searchCriteria, final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
+	private final OneWayStringMapping<Locale, Enum<?>>  labels; 
+	
+	SearchPageModelImpl(final EnumModel<Archive> searchCriteria, final OneWayStringMapping<Locale, Enum<?>>  labels,  final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
 		this.searchCriteria = searchCriteria;
+		this.labels=labels;
 		this.archives = archives;
 		this.selectedArchive = selectedArchive;
 		this.pageSize = pageSize;
@@ -88,10 +93,15 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 		return pageSize;
 	}
 
-
+	@Override
+	public final boolean isSelected() {
+		return StringUtils.hasText(getSelectedArchiveWeb().getObject());
+	}
 	
-	
-	
+	@Override
+	public  final OneWayStringMapping<Locale, Enum<?>>  getI18NLabels() {
+		return labels;
+	}
 	
 	
 	

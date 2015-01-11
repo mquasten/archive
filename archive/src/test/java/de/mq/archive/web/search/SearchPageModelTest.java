@@ -2,6 +2,7 @@ package de.mq.archive.web.search;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.wicket.model.IModel;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
+import de.mq.archive.web.OneWayStringMapping;
 
 public class SearchPageModelTest {
 
@@ -26,7 +28,11 @@ public class SearchPageModelTest {
 	private final IModel<String> selectedArchiveIdWeb = Mockito.mock(IModel.class);
 	@SuppressWarnings("unchecked")
 	private final IModel<Number> pageSizeWeb = Mockito.mock(IModel.class);
-	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, listModel, selectedArchiveIdWeb, pageSizeWeb);
+	
+	 @SuppressWarnings("unchecked")
+	final OneWayStringMapping<Locale, Enum<?>>  labelsModel = Mockito.mock(OneWayStringMapping.class);
+	
+	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, labelsModel, listModel, selectedArchiveIdWeb, pageSizeWeb);
 	private final SearchPageModelWeb modelWeb = (SearchPageModelWeb) model; 
 	private final Archive archive = Mockito.mock(Archive.class);
 
@@ -117,6 +123,20 @@ public class SearchPageModelTest {
 	@Test
 	public final void getPageSizeWeb() {
 		Assert.assertEquals(pageSizeWeb, modelWeb.getPageSizeWeb());
+	}
+	
+	@Test
+	public final void  isSeelected() {
+		Mockito.when(selectedArchiveIdWeb.getObject()).thenReturn(ID);
+		Assert.assertTrue(modelWeb.isSelected());
+		
+		Mockito.when(selectedArchiveIdWeb.getObject()).thenReturn(null);
+		Assert.assertFalse(modelWeb.isSelected());
+	}
+	
+	@Test
+	public final void getI18NLabels() {
+		Assert.assertEquals(labelsModel, modelWeb.getI18NLabels());
 	}
 
 }

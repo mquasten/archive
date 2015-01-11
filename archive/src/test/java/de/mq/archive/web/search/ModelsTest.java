@@ -3,6 +3,11 @@ package de.mq.archive.web.search;
 
 
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
@@ -17,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.ActionListener;
+import de.mq.archive.web.BasicI18NEnumModelImpl;
+import de.mq.archive.web.OneWayStringMapping;
 
 public class ModelsTest {
 	private static final String BEAN_FACTORY_FIELD = "beanFactory";
@@ -53,14 +60,24 @@ public class ModelsTest {
 		Assert.assertTrue(model.getSearchCriteriaWeb().toDomain() instanceof ArchiveImpl);
 		
 		Arrays.stream(ArchiveModelParts.values()).forEach(part ->  Assert.assertTrue(model.getSearchCriteriaWeb().part(part, Object.class) instanceof IModel ));
+		
+		
+		
+		final OneWayStringMapping<Locale, Enum<?>> i18n =  model.getI18NLabels();
+		Assert.assertTrue(i18n instanceof BasicI18NEnumModelImpl);
+		Assert.assertEquals(messageSource, ReflectionTestUtils.getField(i18n, MESSAGE_SOURCE_FIELD));
+		
+		
+		
+		
+		@SuppressWarnings("unchecked")
+		final Map<I18NSearchPageModelParts,Entry<String, IModel<String>>> models = (Map<I18NSearchPageModelParts, Entry<String, IModel<String>>>) ReflectionTestUtils.getField(i18n, "models");
+	
+		Assert.assertEquals(Stream.of(I18NSearchPageModelParts.values()).collect(Collectors.toSet()),models.keySet());
+		models.keySet().forEach(key -> Assert.assertEquals(key.key, models.get(key).getKey()));
+		models.keySet().forEach(key -> Assert.assertTrue(models.get(key).getValue() instanceof IModel));
 	}
 	
-	@Test
-	public final void  i18NSearchPageModelParts() {
-		final I18NSearchPageModel model =  models.i18NSearchPageModel();
-		Assert.assertTrue(model instanceof I18NSearchPageModel);
-		Assert.assertEquals(messageSource, ReflectionTestUtils.getField(model, MESSAGE_SOURCE_FIELD));
-	}
 	
 	
 	@Test
