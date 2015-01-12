@@ -7,7 +7,9 @@ import de.mq.archive.web.EnumModel;
 
 interface SearchPageController {
 
-
+	
+	static final String SEARCH_ACTION = "search";
+	
 	void search(final SearchPageModel model);
 	
 	

@@ -1,18 +1,18 @@
 package de.mq.archive.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.IModel;
 
-public class ActionButton extends Button  {
+public class ActionButton<T> extends Button  {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final List<ActionListener> listeners = new ArrayList<>();
+	private final Map<T,ActionListener<T>> listeners = new HashMap<>();
 	
 	public ActionButton(final String id) {
 		super(id);
@@ -23,24 +23,33 @@ public class ActionButton extends Button  {
 	}
 
 	
-	public final void addActionListener(final ActionListener actionEvent) {
-		listeners.add(actionEvent);
+	public final void addActionListener(final T key, final ActionListener<T> actionListener) {
+		listeners.put(key, actionListener);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public final void addActionListener(final ActionListener<T> actionListener) {
+		listeners.put((T) getId(), actionListener);
 	}
 	
 	
-	public final void removeActionListener(final ActionListener actionEvent) {
-		listeners.add(actionEvent);
+	public final void removeActionListener(final ActionListener<T> actionListener) {
+		listeners.entrySet().stream().filter(entry  -> entry.getValue().equals(actionListener)).map(entry -> entry.getKey()).collect(Collectors.toSet()).forEach(key -> listeners.remove(key));
+	}
+	
+	public final void removeActionListener(T key) {
+		listeners.remove(key);
 	}
 	
 	
-	public final Collection<ActionListener> getActionListeners() {
-		return Collections.unmodifiableList(listeners);
+	public final Map<T, ActionListener<T>> getActionListeners() {
+		return Collections.unmodifiableMap(listeners);
 	}
 
 
 	@Override
 	public void onSubmit() {
-		listeners.forEach(listener -> listener.process(getId()));
+		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process(e.getKey()));
 		super.onSubmit();
 	}
 	

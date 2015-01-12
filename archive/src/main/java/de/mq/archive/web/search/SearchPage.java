@@ -48,7 +48,7 @@ public class SearchPage extends WebPage {
 
 	@Inject()
 	@Named("searchActionListener")
-	private ActionListener actionListener;
+	private ActionListener<String> actionListener;
 	
 	 
 	 
@@ -80,9 +80,9 @@ public class SearchPage extends WebPage {
 		searchForm.add(new Label("searchArchiveLabel" , searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchArchiveLabel)));
 		
 		
-		final ActionButton searchButton = new ActionButton("searchButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchButton));
+		final ActionButton<String> searchButton = new ActionButton<>("searchButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchButton));
 		
-		searchButton.addActionListener(actionListener);
+		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
 		
 		searchButton.addActionListener(action -> enableButtons());
 		searchForm.add((Component) searchButton);

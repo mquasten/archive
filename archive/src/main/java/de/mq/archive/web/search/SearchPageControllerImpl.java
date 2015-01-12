@@ -13,6 +13,7 @@ import de.mq.archive.web.EnumModel;
 
 class SearchPageControllerImpl implements SearchPageController {
 	
+	
 	private final ArchiveService archiveService;
 	
 	SearchPageControllerImpl(final ArchiveService archiveService) {
@@ -22,7 +23,7 @@ class SearchPageControllerImpl implements SearchPageController {
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.search.SerachpageController#archives(de.mq.archive.domain.Archive)
 	 */
-	@Named("searchButton")
+	@Named(SEARCH_ACTION)
 	@Override
 	public final void search(final SearchPageModel model) {
 		final Paging paging = archiveService.paging(model.getSearchCriteria(), model.getPageSize().intValue());

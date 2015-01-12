@@ -3,8 +3,8 @@ package de.mq.archive.web;
 import java.io.Serializable;
 
 @FunctionalInterface
-public interface ActionListener extends Serializable {
+public interface ActionListener<T> extends Serializable {
 	
-	void process(final String id);
+	void process(final T id);
 
 }
