@@ -2,7 +2,7 @@ package de.mq.archive.web.search;
 
 
 
-enum ArchiveModelParts  {
+public enum ArchiveModelParts  {
 		Id,
 
 		Name,
