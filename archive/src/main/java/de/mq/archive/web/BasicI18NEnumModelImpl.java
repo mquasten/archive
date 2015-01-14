@@ -28,8 +28,6 @@ public class BasicI18NEnumModelImpl implements OneWayStringMapping<Locale, Enum<
 	@Override
 	public void intoWeb(final Locale locale) {
 		models.values().forEach(entry -> entry.getValue().setObject(messageSource.getMessage(entry.getKey(), null, locale)));
-		
-		
 	}
 
 	@Override

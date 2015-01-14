@@ -1,6 +1,5 @@
 package de.mq.archive.web;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Named;
-
-
-
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.util.Assert;
@@ -44,12 +40,9 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 		method.setAccessible(true);
 		final List<Object> args = new ArrayList<>();
 		Arrays.asList(method.getParameters()).forEach(p ->args.add(beanFactory.getBean(p.getType())));
-		try {
-			
-			method.invoke(controller, args.toArray(new Object[args.size()]));
-		} catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-			throw new IllegalStateException(String.format("Error ececuting actions for %s", id), ex);
-		}
+	
+		ReflectionUtils.invokeMethod(method, controller,  args.toArray(new Object[args.size()]));
+		
 	}
 
 }

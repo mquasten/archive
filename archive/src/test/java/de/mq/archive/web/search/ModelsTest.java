@@ -74,7 +74,7 @@ public class ModelsTest {
 		final Map<I18NSearchPageModelParts,Entry<String, IModel<String>>> models = (Map<I18NSearchPageModelParts, Entry<String, IModel<String>>>) ReflectionTestUtils.getField(i18n, "models");
 	
 		Assert.assertEquals(Stream.of(I18NSearchPageModelParts.values()).collect(Collectors.toSet()),models.keySet());
-		models.keySet().forEach(key -> Assert.assertEquals(key.key, models.get(key).getKey()));
+		models.keySet().forEach(key -> Assert.assertEquals(key.key(), models.get(key).getKey()));
 		models.keySet().forEach(key -> Assert.assertTrue(models.get(key).getValue() instanceof IModel));
 	}
 	

@@ -34,7 +34,7 @@ class Models {
 	 @Bean()
 	 @Scope("session")
 	 SearchPageModelImpl searchPageModel() {
-		 return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new BasicI18NEnumModelImpl(messageSource,  Arrays.asList(I18NSearchPageModelParts.values()), Arrays.asList(I18NSearchPageModelParts.values()).stream().map( part -> part.key).collect(Collectors.toList())), new ListModel<>(), new Model<>(), new Model<>(Integer.MAX_VALUE) );
+		 return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new BasicI18NEnumModelImpl(messageSource,  Arrays.asList(I18NSearchPageModelParts.values()), Arrays.asList(I18NSearchPageModelParts.values()).stream().map( part -> part.key()).collect(Collectors.toList())), new ListModel<>(), new Model<>(), new Model<>(Integer.MAX_VALUE) );
 	 }
 	 
 	 @Bean()

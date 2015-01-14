@@ -3,7 +3,7 @@ package de.mq.archive.web.search;
 
 
 
-	enum I18NSearchPageModelParts {
+	public enum I18NSearchPageModelParts {
 		SearchCriteriaHeadline("archive_search_search_headline"),
 		SearchNameLabel("archive_search_search_name"),
 		
@@ -29,9 +29,13 @@ package de.mq.archive.web.search;
 		ApplicationHeadline("archive_headline"),
 		PageHeadline("archive_search_headline");
 		
-		final String key;
+		private final String key;
 		I18NSearchPageModelParts(final String key) {
 			this.key=key;
+		}
+		
+		public final String key() {
+			return key;
 		}
 	}
 	
