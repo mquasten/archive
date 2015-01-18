@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionButton;
@@ -37,8 +38,8 @@ import de.mq.archive.web.EnumModel;
 public class SearchPage extends WebPage {
 	private static final long serialVersionUID = 1L;
 	
-	@Inject()
-	private SearchPageController searchPageController;
+	@Inject
+	private  SearchPageController searchPageController;
 	
 	
 	@Inject()
@@ -57,14 +58,12 @@ public class SearchPage extends WebPage {
 	
 
 	public SearchPage(final PageParameters parameters) {
-		
-		
-		
-		final Form<String> searchForm = new Form<>("searchForm");
+final Form<String> searchForm = new Form<>("searchForm");
 		
 		add(searchForm);
-		
+	
 		add(new Label("searchCriteriaHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchCriteriaHeadline)));
+	
 	
 		searchForm.add(new TextField<>("searchName", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Name, String.class)));
 		searchForm.add(new Label("searchNameLabel" ,  searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchNameLabel)));
@@ -151,8 +150,7 @@ public class SearchPage extends WebPage {
 		
 		
     }
-	
-	
+
 
 
 

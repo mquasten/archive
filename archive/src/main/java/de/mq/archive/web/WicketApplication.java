@@ -14,6 +14,8 @@ import de.mq.archive.web.search.SearchPage;
  */
 public class WicketApplication extends WebApplication
 {
+	
+	
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
@@ -29,8 +31,6 @@ public class WicketApplication extends WebApplication
 	@Override
 	public void init()
 	{
-		super.init();
-		 super.getComponentInstantiationListeners().add((new SpringComponentInjector(this)));
-		
+		 super.getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 	}
 }
