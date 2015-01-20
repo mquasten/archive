@@ -13,11 +13,11 @@ package de.mq.archive.web.search;
 		
 		SearchButton("archive_search_search_button"),
 		
-		NameHeaderLabel("archive_search_header_name"), 
+		NameHeader("archive_search_header_name"), 
 		
-		CategoryHeaderLabel("archive_search_header_category"), 
-		DateHeaderLabel("archive_search_header_date"),
-		ArchiveIdHeaderLabel("archive_search_header_archive"),
+		CategoryHeader("archive_search_header_category"), 
+		DateHeader("archive_search_header_date"),
+		ArchiveIdHeader("archive_search_header_archive"),
 		
 		
 		NewButton("archive_search_button_new"),

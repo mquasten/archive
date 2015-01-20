@@ -63,10 +63,10 @@ final Form<String> searchForm = new Form<>("searchForm");
 		add(searchForm);
 	
 		add(new Label("searchCriteriaHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchCriteriaHeadline)));
-	
+
 	
 		searchForm.add(new TextField<>("searchName", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Name, String.class)));
-		searchForm.add(new Label("searchNameLabel" ,  searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchNameLabel)));
+		searchForm.add(new Label("searchNameLabel" ,searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchNameLabel)));
 		
 		
 		
@@ -139,10 +139,10 @@ final Form<String> searchForm = new Form<>("searchForm");
 		};
 
 	
-		group.add(new Label("nameHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.NameHeaderLabel)));
-		group.add(new Label("categoryHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.CategoryHeaderLabel)));
-		group.add(new Label("dateHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.DateHeaderLabel)));
-		group.add(new Label("archiveIdHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ArchiveIdHeaderLabel)));
+		group.add(new Label("nameHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.NameHeader)));
+		group.add(new Label("categoryHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.CategoryHeader)));
+		group.add(new Label("dateHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.DateHeader)));
+		group.add(new Label("archiveIdHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ArchiveIdHeader)));
 		group.add(persons);
 		Session.get().setLocale(Locale.ENGLISH);
 		enableButtons();
