@@ -1,5 +1,6 @@
 package de.mq.archive.web.search;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.FormTester;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.mq.archive.domain.Archive;
+import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayStringMapping;
@@ -70,10 +73,11 @@ public class SearchPageTest {
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 		
 		
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach( part -> Mockito.when(labels.part(part)).thenReturn(new Model<>(part.name()))) ;
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach( part -> Mockito.when(labels.part(part)).thenReturn(new Model<>(part.key()))) ;
 		
-		
-		
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Name, String.class)).thenReturn(new Model<String>());	
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Category, Category.class)).thenReturn(new Model<Category>());	
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId, String.class)).thenReturn(new Model<String>());	
 		
 		tester = new WicketTester(wicketApplication, ctx);
 		final SearchPage page = new SearchPage(null);
@@ -105,15 +109,41 @@ public class SearchPageTest {
 	@Test
 	public final void labels() {
 
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach( part -> Assert.assertEquals(part.name(),tester.getComponentFromLastRenderedPage(paths.get(part)).getDefaultModel().getObject()));		
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach( part -> Assert.assertEquals(part.key() ,tester.getComponentFromLastRenderedPage(paths.get(part)).getDefaultModel().getObject()));		
 
 	}
 
-	//@Test
+	@Test
 	public final void search() {
-		FormTester formTester = tester.newFormTester("searchForm");
+	
+		final FormTester formTester = tester.newFormTester("searchForm");
 		formTester.setValue("searchName", "kylie");
+		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
+	
+		final List<Archive> rows = new ArrayList<>();
+		Archive row = Mockito.mock(Archive.class);
+		rows.add(row);
+		Mockito.when(listModel.getObject()).thenReturn(rows);
+		
+		
+		final Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
+		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
+		Assert.assertFalse(showButton.isEnabled());
+		Assert.assertFalse(changeButton.isEnabled());
+		@SuppressWarnings("unchecked")
+		final EnumModel<Archive> currentRow = Mockito.mock(EnumModel.class);
+		Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
+		Arrays.stream(ArchiveModelParts.values()).forEach(part -> Mockito.when(currentRow.part(part, String.class)).thenReturn(new Model<String>(part.name())));
+		
 		formTester.submit("searchButton");
+	
+		Mockito.verify(actionListener).process(SearchPageController.SEARCH_ACTION);
+		Assert.assertTrue(showButton.isEnabled());
+		Assert.assertTrue(changeButton.isEnabled());
+		
+		
+		Arrays.stream(new ArchiveModelParts[] { ArchiveModelParts.Id,  ArchiveModelParts.ArchiveId, ArchiveModelParts.Name, ArchiveModelParts.Category, ArchiveModelParts.DocumentDate} ).forEach(part ->Assert.assertEquals( part.name(),  tester.getComponentFromLastRenderedPage(String.format("form:group:documents:0:%s" ,StringUtils.uncapitalize(part.name()))).getDefaultModel().getObject()));
+		
 	}
 
 }
