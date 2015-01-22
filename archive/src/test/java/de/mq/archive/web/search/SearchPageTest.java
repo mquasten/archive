@@ -8,7 +8,10 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.FormTester;
@@ -50,11 +53,14 @@ public class SearchPageTest {
 	private WicketApplication wicketApplication = new WicketApplication();
 
 	private Map<Class<?>, Object> beans = new HashMap<>();
-	
+
 	private Map<I18NSearchPageModelParts, String> paths = new HashMap<>();
 
+	@SuppressWarnings("unchecked")
+	private IModel<String> selectedArchive = Mockito.mock(IModel.class);
+
 	WicketTester tester;
-	
+
 	@SuppressWarnings("unchecked")
 	@Before
 	public final void setup() {
@@ -71,61 +77,57 @@ public class SearchPageTest {
 		beans.put(SearchPageController.class, searchPageController);
 		beans.put(ActionListener.class, actionListener);
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
-		
-		
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach( part -> Mockito.when(labels.part(part)).thenReturn(new Model<>(part.key()))) ;
-		
-		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Name, String.class)).thenReturn(new Model<String>());	
-		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Category, Category.class)).thenReturn(new Model<Category>());	
-		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId, String.class)).thenReturn(new Model<String>());	
-		
+
+		Mockito.when(searchPageModelWeb.getSelectedArchiveWeb()).thenReturn(selectedArchive);
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> Mockito.when(labels.part(part)).thenReturn(new Model<>(part.key())));
+
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Name, String.class)).thenReturn(new Model<String>());
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Category, Category.class)).thenReturn(new Model<Category>());
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId, String.class)).thenReturn(new Model<String>());
+
 		tester = new WicketTester(wicketApplication, ctx);
 		final SearchPage page = new SearchPage(null);
 		tester.startPage(page);
-		
-		paths.put(I18NSearchPageModelParts.SearchNameLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchNameLabel.name())) );
-		
-		paths.put(I18NSearchPageModelParts.SearchCategoryLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchCategoryLabel.name())) );
-		paths.put(I18NSearchPageModelParts.SearchArchiveLabel, String.format("searchForm:%s",StringUtils.uncapitalize( I18NSearchPageModelParts.SearchArchiveLabel.name())) );
-		paths.put(I18NSearchPageModelParts.SearchButton, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchButton.name())) );
-		paths.put(I18NSearchPageModelParts.SearchCriteriaHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.SearchCriteriaHeadline.name())) ;
-		paths.put(I18NSearchPageModelParts.ApplicationHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.ApplicationHeadline.name())) ;
-		paths.put(I18NSearchPageModelParts.PageHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.PageHeadline.name())) ;
-		
-		paths.put(I18NSearchPageModelParts.NewButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.NewButton.name())) );
-		paths.put(I18NSearchPageModelParts.ChangeButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ChangeButton.name())) );
-		paths.put(I18NSearchPageModelParts.ShowButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ShowButton.name())) );
-		paths.put(I18NSearchPageModelParts.SearchTableHeadline, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchTableHeadline.name())) );
-		paths.put(I18NSearchPageModelParts.NameHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.NameHeader.name())) );
-		paths.put(I18NSearchPageModelParts.CategoryHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.CategoryHeader.name())) );
-		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.DateHeader.name())) );
-		paths.put(I18NSearchPageModelParts.ArchiveIdHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ArchiveIdHeader.name())) );
-		
-		
-		
-		
+
+		paths.put(I18NSearchPageModelParts.SearchNameLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchNameLabel.name())));
+
+		paths.put(I18NSearchPageModelParts.SearchCategoryLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchCategoryLabel.name())));
+		paths.put(I18NSearchPageModelParts.SearchArchiveLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchArchiveLabel.name())));
+		paths.put(I18NSearchPageModelParts.SearchButton, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchButton.name())));
+		paths.put(I18NSearchPageModelParts.SearchCriteriaHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.SearchCriteriaHeadline.name()));
+		paths.put(I18NSearchPageModelParts.ApplicationHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.ApplicationHeadline.name()));
+		paths.put(I18NSearchPageModelParts.PageHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.PageHeadline.name()));
+
+		paths.put(I18NSearchPageModelParts.NewButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.NewButton.name())));
+		paths.put(I18NSearchPageModelParts.ChangeButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ChangeButton.name())));
+		paths.put(I18NSearchPageModelParts.ShowButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ShowButton.name())));
+		paths.put(I18NSearchPageModelParts.SearchTableHeadline, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchTableHeadline.name())));
+		paths.put(I18NSearchPageModelParts.NameHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.NameHeader.name())));
+		paths.put(I18NSearchPageModelParts.CategoryHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.CategoryHeader.name())));
+		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.DateHeader.name())));
+		paths.put(I18NSearchPageModelParts.ArchiveIdHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ArchiveIdHeader.name())));
+
 	}
 
 	@Test
 	public final void labels() {
 
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach( part -> Assert.assertEquals(part.key() ,tester.getComponentFromLastRenderedPage(paths.get(part)).getDefaultModel().getObject()));		
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> Assert.assertEquals(part.key(), tester.getComponentFromLastRenderedPage(paths.get(part)).getDefaultModel().getObject()));
 
 	}
 
 	@Test
 	public final void search() {
-	
+
 		final FormTester formTester = tester.newFormTester("searchForm");
 		formTester.setValue("searchName", "kylie");
 		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
-	
+
 		final List<Archive> rows = new ArrayList<>();
 		Archive row = Mockito.mock(Archive.class);
 		rows.add(row);
 		Mockito.when(listModel.getObject()).thenReturn(rows);
-		
-		
+
 		final Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
 		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertFalse(showButton.isEnabled());
@@ -134,15 +136,37 @@ public class SearchPageTest {
 		final EnumModel<Archive> currentRow = Mockito.mock(EnumModel.class);
 		Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
 		Arrays.stream(ArchiveModelParts.values()).forEach(part -> Mockito.when(currentRow.part(part, String.class)).thenReturn(new Model<String>(part.name())));
-		
+
 		formTester.submit("searchButton");
-	
+
 		Mockito.verify(actionListener).process(SearchPageController.SEARCH_ACTION);
 		Assert.assertTrue(showButton.isEnabled());
 		Assert.assertTrue(changeButton.isEnabled());
-		
-		
-		Arrays.stream(new ArchiveModelParts[] { ArchiveModelParts.Id,  ArchiveModelParts.ArchiveId, ArchiveModelParts.Name, ArchiveModelParts.Category, ArchiveModelParts.DocumentDate} ).forEach(part ->Assert.assertEquals( part.name(),  tester.getComponentFromLastRenderedPage(String.format("form:group:documents:0:%s" ,StringUtils.uncapitalize(part.name()))).getDefaultModel().getObject()));
+
+		Arrays.stream(new ArchiveModelParts[] { ArchiveModelParts.Id, ArchiveModelParts.ArchiveId, ArchiveModelParts.Name, ArchiveModelParts.Category, ArchiveModelParts.DocumentDate }).forEach(part -> Assert.assertEquals(part.name(), tester.getComponentFromLastRenderedPage(String.format("form:group:documents:0:%s", StringUtils.uncapitalize(part.name()))).getDefaultModel().getObject()));
+
+	}
+
+
+	
+	@Test
+	public final void ajaxListener() {
+
+		final Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
+		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
+		Assert.assertFalse(showButton.isEnabled());
+		Assert.assertFalse(changeButton.isEnabled());
+		@SuppressWarnings("unchecked")
+		final RadioGroup<String> radio = (RadioGroup<String>) tester.getComponentFromLastRenderedPage("form:group");
+		final Behavior behavior = radio.getBehaviors().iterator().next();
+
+		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
+		tester.executeBehavior((AbstractAjaxBehavior) behavior);
+
+		Assert.assertTrue(showButton.isEnabled());
+		Assert.assertTrue(changeButton.isEnabled());
+		tester.assertComponentOnAjaxResponse(changeButton);
+		tester.assertComponentOnAjaxResponse(showButton);
 		
 	}
 

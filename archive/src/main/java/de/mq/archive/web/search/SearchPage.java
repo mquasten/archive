@@ -76,6 +76,7 @@ public class SearchPage extends WebPage {
 
 			@Override
 			protected void onUpdate(final AjaxRequestTarget target) {
+			
 				enableButtons();
 				target.add(changeButton);
 				target.add(showButton);
