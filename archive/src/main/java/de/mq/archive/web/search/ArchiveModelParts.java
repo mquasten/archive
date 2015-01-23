@@ -1,5 +1,7 @@
 package de.mq.archive.web.search;
 
+import org.springframework.util.StringUtils;
+
 
 
 public enum ArchiveModelParts  {
@@ -16,5 +18,9 @@ public enum ArchiveModelParts  {
 		RelatedPersons,
 
 		ArchiveId;
+		
+		public final String wicketId() {
+			return StringUtils.uncapitalize(name());
+		}
 
 }

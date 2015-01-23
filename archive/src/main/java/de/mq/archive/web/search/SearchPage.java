@@ -49,20 +49,20 @@ public class SearchPage extends WebPage {
 
 		add(searchForm);
 
-		add(new Label("searchCriteriaHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchCriteriaHeadline)));
+		add(newLabel(I18NSearchPageModelParts.SearchCriteriaHeadline));
 
-		searchForm.add(new TextField<>("searchName", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Name, String.class)));
-		searchForm.add(new Label("searchNameLabel", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchNameLabel)));
+		searchForm.add(newTextField(ArchiveModelParts.Name));
+		searchForm.add(newLabel(I18NSearchPageModelParts.SearchNameLabel));
 
-		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>("searchCategrory", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Category, Category.class), Arrays.asList(Category.values()));
+		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<>(ArchiveModelParts.Category.wicketId(), searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Category, Category.class), Arrays.asList(Category.values()));
 		dropDownChoice.setNullValid(true);
 		searchForm.add(dropDownChoice);
-		searchForm.add(new Label("searchCategoryLabel", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchCategoryLabel)));
+		searchForm.add(newLabel(I18NSearchPageModelParts.SearchCategoryLabel));
 
-		searchForm.add(new TextField<>("searchArchive", searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.ArchiveId, String.class)));
-		searchForm.add(new Label("searchArchiveLabel", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchArchiveLabel)));
+		searchForm.add(newTextField(ArchiveModelParts.ArchiveId));
+		searchForm.add(newLabel(I18NSearchPageModelParts.SearchArchiveLabel));
 
-		final ActionButton<String> searchButton = new ActionButton<>("searchButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchButton));
+		final ActionButton<String> searchButton = newButton(I18NSearchPageModelParts.SearchButton);
 
 		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
 
@@ -86,17 +86,16 @@ public class SearchPage extends WebPage {
 		});
 
 		final Form<Archive> form = new Form<Archive>("form");
-		final Button newButton = new Button("newButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.NewButton));
-		changeButton = new Button("changeButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ChangeButton));
-		showButton = new Button("showButton", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ShowButton));
+		changeButton = newButton(I18NSearchPageModelParts.ChangeButton);
+		showButton = newButton(I18NSearchPageModelParts.ShowButton);
 		add(form);
-		add(new Label("applicationHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ApplicationHeadline)));
-		add(new Label("pageHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.PageHeadline)));
+		add(newLabel(I18NSearchPageModelParts.ApplicationHeadline));
+		add(newLabel(I18NSearchPageModelParts.PageHeadline));
 		form.add(group);
-		group.add(newButton);
+		group.add(newButton(I18NSearchPageModelParts.NewButton));
 		group.add(changeButton);
 		group.add(showButton);
-		group.add(new Label("searchTableHeadline", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.SearchTableHeadline)));
+		group.add(newLabel(I18NSearchPageModelParts.SearchTableHeadline));
 
 		final ListView<Archive> persons = new ListView<Archive>("documents", searchPageModel.getArchivesWeb()) {
 
@@ -108,28 +107,45 @@ public class SearchPage extends WebPage {
 
 				item.add(new Radio<String>("id", currentRow.part(ArchiveModelParts.Id, String.class)));
 
-				item.add(new Label("name", currentRow.part(ArchiveModelParts.Name, String.class)));
-				item.add(new Label("category", currentRow.part(ArchiveModelParts.Category, String.class)));
-				item.add(new Label("documentDate", currentRow.part(ArchiveModelParts.DocumentDate, String.class)));
-				item.add(new Label("archiveId", currentRow.part(ArchiveModelParts.ArchiveId, String.class)));
+				item.add(newLabel(currentRow, ArchiveModelParts.Name));
+				item.add(newLabel(currentRow, ArchiveModelParts.Category));
+				item.add(newLabel(currentRow, ArchiveModelParts.DocumentDate));
+				item.add(newLabel(currentRow, ArchiveModelParts.ArchiveId));
 
-			};
+			}
+
+			;
 		};
 
-		group.add(new Label("nameHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.NameHeader)));
-		group.add(new Label("categoryHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.CategoryHeader)));
-		group.add(new Label("dateHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.DateHeader)));
-		group.add(new Label("archiveIdHeader", searchPageModel.getI18NLabels().part(I18NSearchPageModelParts.ArchiveIdHeader)));
+		group.add(newLabel(I18NSearchPageModelParts.NameHeader));
+		group.add(newLabel(I18NSearchPageModelParts.CategoryHeader));
+		group.add(newLabel(I18NSearchPageModelParts.DateHeader));
+		group.add(newLabel(I18NSearchPageModelParts.ArchiveIdHeader));
 		group.add(persons);
-		Session.get().setLocale(Locale.ENGLISH);
+		Session.get().setLocale(Locale.GERMAN);
 		enableButtons();
 		searchPageModel.getI18NLabels().intoWeb(getLocale());
 
 	}
 
+	private TextField<String> newTextField(final ArchiveModelParts part) {
+		return new TextField<>(part.wicketId(), searchPageModel.getSearchCriteriaWeb().part(part, String.class));
+	}
+
+	private ActionButton<String> newButton(final I18NSearchPageModelParts part) {
+		return new ActionButton<>(part.wicketId(), searchPageModel.getI18NLabels().part(part));
+	}
+
+	private Label newLabel(final I18NSearchPageModelParts part) {
+		return new Label(part.wicketId(), searchPageModel.getI18NLabels().part(part));
+	}
+
 	private void enableButtons() {
 		changeButton.setEnabled(searchPageModel.isSelected());
 		showButton.setEnabled(searchPageModel.isSelected());
+	}
+	private Label newLabel(final EnumModel<Archive> currentRow, final ArchiveModelParts part) {
+		return new Label(part.wicketId(), currentRow.part(part, String.class));
 	}
 
 }

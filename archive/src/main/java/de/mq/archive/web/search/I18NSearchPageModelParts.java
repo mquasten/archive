@@ -1,5 +1,7 @@
 package de.mq.archive.web.search;
 
+import org.springframework.util.StringUtils;
+
 
 
 
@@ -36,6 +38,10 @@ package de.mq.archive.web.search;
 		
 		public final String key() {
 			return key;
+		}
+		
+		public final String wicketId() {
+			return StringUtils.uncapitalize(name());
 		}
 	}
 	

@@ -120,7 +120,7 @@ public class SearchPageTest {
 	public final void search() {
 
 		final FormTester formTester = tester.newFormTester("searchForm");
-		formTester.setValue("searchName", "kylie");
+		formTester.setValue("name", "kylie");
 		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
 
 		final List<Archive> rows = new ArrayList<>();
