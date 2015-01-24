@@ -7,7 +7,7 @@ import org.apache.wicket.model.IModel;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
-import de.mq.archive.web.OneWayStringMapping;
+import de.mq.archive.web.OneWayMapping;
 
 interface SearchPageModelWeb {
 	EnumModel<Archive> getSearchCriteriaWeb();
@@ -20,7 +20,7 @@ interface SearchPageModelWeb {
 
 	boolean isSelected();
 
-	OneWayStringMapping<Locale, Enum<?>> getI18NLabels();
+	OneWayMapping<Locale, Enum<?>> getI18NLabels();
 
 
 }

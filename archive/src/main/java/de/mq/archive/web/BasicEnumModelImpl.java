@@ -32,15 +32,14 @@ public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
 	 * @see de.mq.archive.web.search.EnumModel#intoWeb(Domain)
 	 */
 
+	
 	@Override
 	public void intoWeb(final Domain source) {
 		models.keySet().forEach( part -> { 
-		
 			final String fieldName = StringUtils.uncapitalize(part.name());
 			final Field field = ReflectionUtils.findField(source.getClass(), fieldName);
 			field.setAccessible(true);
-			
-			final IModel<Object> model = part(part, Object.class);
+			final IModel<Object>  model =   part(part, Object.class);
 			final Object value = ReflectionUtils.getField(field, source);
 			model.setObject(value);
 		} );
@@ -76,10 +75,10 @@ public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
 	 */
 	
 	@Override
-	public <T> IModel<T> part(Enum<?> part, Class<T> clazz) {
+	public  <T> IModel<T> part(final Enum<?> part, final Class<T> clazz ) {
 		Assert.notNull(part);
 		@SuppressWarnings("unchecked")
-		final IModel<T> model =   (IModel<T>) models.get(part);
+		final IModel<T> model =    (IModel<T>) models.get(part);
 		Assert.notNull( model, String.format("No part model defined for %s", part));
 		return model;
 	}

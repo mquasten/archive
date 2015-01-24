@@ -4,7 +4,7 @@ import org.springframework.util.StringUtils;
 
 
 
-public enum ArchiveModelParts  {
+public enum ArchiveModelParts implements WicketIdAware  {
 		Id,
 
 		Name,

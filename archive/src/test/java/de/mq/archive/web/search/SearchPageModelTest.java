@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
-import de.mq.archive.web.OneWayStringMapping;
+import de.mq.archive.web.OneWayMapping;
 
 public class SearchPageModelTest {
 
@@ -30,7 +30,7 @@ public class SearchPageModelTest {
 	private final IModel<Number> pageSizeWeb = Mockito.mock(IModel.class);
 	
 	 @SuppressWarnings("unchecked")
-	final OneWayStringMapping<Locale, Enum<?>>  labelsModel = Mockito.mock(OneWayStringMapping.class);
+	final OneWayMapping<Locale, Enum<?>>  labelsModel = Mockito.mock(OneWayMapping.class);
 	
 	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, labelsModel, listModel, selectedArchiveIdWeb, pageSizeWeb);
 	private final SearchPageModelWeb modelWeb = (SearchPageModelWeb) model; 

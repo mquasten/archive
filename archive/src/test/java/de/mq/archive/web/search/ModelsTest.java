@@ -23,7 +23,7 @@ import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.BasicI18NEnumModelImpl;
-import de.mq.archive.web.OneWayStringMapping;
+import de.mq.archive.web.OneWayMapping;
 
 public class ModelsTest {
 	private static final String BEAN_FACTORY_FIELD = "beanFactory";
@@ -63,7 +63,7 @@ public class ModelsTest {
 		
 		
 		
-		final OneWayStringMapping<Locale, Enum<?>> i18n =  model.getI18NLabels();
+		final OneWayMapping<Locale, Enum<?>> i18n =  model.getI18NLabels();
 		Assert.assertTrue(i18n instanceof BasicI18NEnumModelImpl);
 		Assert.assertEquals(messageSource, ReflectionTestUtils.getField(i18n, MESSAGE_SOURCE_FIELD));
 		

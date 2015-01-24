@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 import org.apache.wicket.model.IModel;
 
-public interface OneWayStringMapping<Domain,Part> extends Serializable {
+public interface OneWayMapping<Domain, Part> extends Serializable {
 
 	void intoWeb(final Domain source); 
 	
-	IModel<String> part(final Part part);
+	<T> IModel<T> part(final Part part, final Class<T> clazz);
 
+	
 }

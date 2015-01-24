@@ -12,7 +12,7 @@ import org.apache.wicket.model.Model;
 import org.springframework.context.MessageSource;
 import org.springframework.util.Assert;
 
-public class BasicI18NEnumModelImpl implements OneWayStringMapping<Locale, Enum<?>> {
+public class BasicI18NEnumModelImpl implements OneWayMapping<Locale, Enum<?>> {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -30,12 +30,17 @@ public class BasicI18NEnumModelImpl implements OneWayStringMapping<Locale, Enum<
 		models.values().forEach(entry -> entry.getValue().setObject(messageSource.getMessage(entry.getKey(), null, locale)));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public IModel<String> part(final Enum<?> part) {
+
+	public <T> IModel<T> part(final Enum<?> part, Class<T> clazz) {
 		Assert.notNull(part);
 		final Entry<String,IModel<String>> entry =    models.get(part);
 		Assert.notNull( entry, String.format("No part model defined for %s", part));
-		return entry.getValue();
+		return (IModel<T>) entry.getValue();
 	}
+
+
+	
 
 }

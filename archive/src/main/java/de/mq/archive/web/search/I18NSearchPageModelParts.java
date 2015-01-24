@@ -5,7 +5,7 @@ import org.springframework.util.StringUtils;
 
 
 
-	public enum I18NSearchPageModelParts {
+	public enum I18NSearchPageModelParts implements WicketIdAware  {
 		SearchCriteriaHeadline("archive_search_search_headline"),
 		SearchNameLabel("archive_search_search_name"),
 		

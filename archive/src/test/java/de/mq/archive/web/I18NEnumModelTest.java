@@ -20,7 +20,7 @@ public class I18NEnumModelTest {
 	private static final String MESSAGE_SOURCE_FIELD = "messageSource";
 	private static final String MODELS_FIELD = "models";
 	private final MessageSource messageSource = Mockito.mock(MessageSource.class);
-	final OneWayStringMapping<Locale, Enum<?>> oneWayMapping = new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NSearchPageModelParts.values()), Arrays.asList(I18NSearchPageModelParts.values()).stream().map(p -> p.key()).collect(Collectors.toList()));
+	final OneWayMapping<Locale, Enum<?>> oneWayMapping = new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NSearchPageModelParts.values()), Arrays.asList(I18NSearchPageModelParts.values()).stream().map(p -> p.key()).collect(Collectors.toList()));
 
 	@Test
 	public final void create() {
@@ -54,7 +54,7 @@ public class I18NEnumModelTest {
 		Arrays.asList(I18NSearchPageModelParts.values()).stream().forEach(part -> Mockito.when(messageSource.getMessage(part.key(), null, Locale.GERMAN)).thenReturn(part.key()));
 		oneWayMapping.intoWeb(Locale.GERMAN);
 
-		Arrays.asList(I18NSearchPageModelParts.values()).forEach(part -> Assert.assertEquals(part.key(), oneWayMapping.part(part).getObject()));
+		Arrays.asList(I18NSearchPageModelParts.values()).forEach(part -> Assert.assertEquals(part.key(), oneWayMapping.part(part,String.class).getObject()));
 
 	}
 

@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.EnumModel;
-import de.mq.archive.web.OneWayStringMapping;
+import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.WicketApplication;
 
 public class WicketApplicationTest {
@@ -35,7 +35,7 @@ public class WicketApplicationTest {
 	private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
 
 	@SuppressWarnings("rawtypes")
-	private final OneWayStringMapping labels = Mockito.mock(OneWayStringMapping.class);
+	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final EnumModel<Archive> searchCriteriaWeb = Mockito.mock(EnumModel.class);
 	@SuppressWarnings("unchecked")

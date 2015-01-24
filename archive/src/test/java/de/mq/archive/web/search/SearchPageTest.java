@@ -28,7 +28,7 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.EnumModel;
-import de.mq.archive.web.OneWayStringMapping;
+import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.WicketApplication;
 
 public class SearchPageTest {
@@ -42,7 +42,7 @@ public class SearchPageTest {
 	private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
 
 	@SuppressWarnings("rawtypes")
-	private final OneWayStringMapping labels = Mockito.mock(OneWayStringMapping.class);
+	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final EnumModel<Archive> searchCriteriaWeb = Mockito.mock(EnumModel.class);
 	@SuppressWarnings("unchecked")
@@ -79,7 +79,7 @@ public class SearchPageTest {
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
 		Mockito.when(searchPageModelWeb.getSelectedArchiveWeb()).thenReturn(selectedArchive);
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> Mockito.when(labels.part(part)).thenReturn(new Model<>(part.key())));
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> Mockito.when(labels.part(part, String.class)).thenReturn(new Model<>(part.key())));
 
 		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Name, String.class)).thenReturn(new Model<String>());
 		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Category, Category.class)).thenReturn(new Model<Category>());
@@ -89,23 +89,23 @@ public class SearchPageTest {
 		final SearchPage page = new SearchPage(null);
 		tester.startPage(page);
 
-		paths.put(I18NSearchPageModelParts.SearchNameLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchNameLabel.name())));
+		paths.put(I18NSearchPageModelParts.SearchNameLabel, String.format("searchForm:%s", I18NSearchPageModelParts.SearchNameLabel.wicketId()));
 
-		paths.put(I18NSearchPageModelParts.SearchCategoryLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchCategoryLabel.name())));
+		paths.put(I18NSearchPageModelParts.SearchCategoryLabel, String.format("searchForm:%s", I18NSearchPageModelParts.SearchCategoryLabel.wicketId()));
 		paths.put(I18NSearchPageModelParts.SearchArchiveLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchArchiveLabel.name())));
-		paths.put(I18NSearchPageModelParts.SearchButton, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchButton.name())));
-		paths.put(I18NSearchPageModelParts.SearchCriteriaHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.SearchCriteriaHeadline.name()));
-		paths.put(I18NSearchPageModelParts.ApplicationHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.ApplicationHeadline.name()));
-		paths.put(I18NSearchPageModelParts.PageHeadline, StringUtils.uncapitalize(I18NSearchPageModelParts.PageHeadline.name()));
+		paths.put(I18NSearchPageModelParts.SearchButton, String.format("searchForm:%s", I18NSearchPageModelParts.SearchButton.wicketId()));
+		paths.put(I18NSearchPageModelParts.SearchCriteriaHeadline, I18NSearchPageModelParts.SearchCriteriaHeadline.wicketId());
+		paths.put(I18NSearchPageModelParts.ApplicationHeadline, I18NSearchPageModelParts.ApplicationHeadline.wicketId());
+		paths.put(I18NSearchPageModelParts.PageHeadline, I18NSearchPageModelParts.PageHeadline.wicketId());
 
-		paths.put(I18NSearchPageModelParts.NewButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.NewButton.name())));
-		paths.put(I18NSearchPageModelParts.ChangeButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ChangeButton.name())));
-		paths.put(I18NSearchPageModelParts.ShowButton, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ShowButton.name())));
-		paths.put(I18NSearchPageModelParts.SearchTableHeadline, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchTableHeadline.name())));
-		paths.put(I18NSearchPageModelParts.NameHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.NameHeader.name())));
-		paths.put(I18NSearchPageModelParts.CategoryHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.CategoryHeader.name())));
-		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.DateHeader.name())));
-		paths.put(I18NSearchPageModelParts.ArchiveIdHeader, String.format("form:group:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.ArchiveIdHeader.name())));
+		paths.put(I18NSearchPageModelParts.NewButton, String.format("form:group:%s", I18NSearchPageModelParts.NewButton.wicketId()));
+		paths.put(I18NSearchPageModelParts.ChangeButton, String.format("form:group:%s", I18NSearchPageModelParts.ChangeButton.wicketId()));
+		paths.put(I18NSearchPageModelParts.ShowButton, String.format("form:group:%s", I18NSearchPageModelParts.ShowButton.wicketId()));
+		paths.put(I18NSearchPageModelParts.SearchTableHeadline, String.format("form:group:%s", I18NSearchPageModelParts.SearchTableHeadline.wicketId()));
+		paths.put(I18NSearchPageModelParts.NameHeader, String.format("form:group:%s",I18NSearchPageModelParts.NameHeader.wicketId()));
+		paths.put(I18NSearchPageModelParts.CategoryHeader, String.format("form:group:%s", I18NSearchPageModelParts.CategoryHeader.wicketId()));
+		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s",I18NSearchPageModelParts.DateHeader.wicketId()));
+		paths.put(I18NSearchPageModelParts.ArchiveIdHeader, String.format("form:group:%s", I18NSearchPageModelParts.ArchiveIdHeader.wicketId()));
 
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.EnumModel;
-import de.mq.archive.web.OneWayStringMapping;
+import de.mq.archive.web.OneWayMapping;
 
 class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
@@ -19,9 +19,9 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	private final IModel<String> selectedArchive; 
 	private final IModel<Number> pageSize; 
 	
-	private final OneWayStringMapping<Locale, Enum<?>>  labels; 
+	private final OneWayMapping<Locale, Enum<?>>  labels; 
 	
-	SearchPageModelImpl(final EnumModel<Archive> searchCriteria, final OneWayStringMapping<Locale, Enum<?>>  labels,  final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
+	SearchPageModelImpl(final EnumModel<Archive> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,  final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
 		this.searchCriteria = searchCriteria;
 		this.labels=labels;
 		this.archives = archives;
@@ -99,7 +99,7 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	}
 	
 	@Override
-	public  final OneWayStringMapping<Locale, Enum<?>>  getI18NLabels() {
+	public  final OneWayMapping<Locale, Enum<?>>  getI18NLabels() {
 		return labels;
 	}
 	
