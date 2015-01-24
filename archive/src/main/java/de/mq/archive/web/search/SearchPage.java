@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.beans.BeanUtils;
 
@@ -32,6 +33,8 @@ import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
 
 public class SearchPage extends WebPage {
+	private static final String WICKET_ID_GROUP = "group";
+
 	private static final long serialVersionUID = 1L;
 
 	@Inject
@@ -58,10 +61,8 @@ public class SearchPage extends WebPage {
 		searchForm.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchNameLabel, Label.class));
 
 		
-		final DropDownChoice<Category> dropDownChoice = new DropDownChoice<Category>(ArchiveModelParts.Category.wicketId(), (IModel<Category>) searchPageModel.getSearchCriteriaWeb().part(ArchiveModelParts.Category, Category.class), Arrays.asList(Category.values()));
-		
-		
-		
+		@SuppressWarnings("unchecked")
+		final DropDownChoice<Category> dropDownChoice = newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.Category, DropDownChoice.class, new ListModel<>(Arrays.asList(Category.values())));
 		
 		dropDownChoice.setNullValid(true);
 		searchForm.add(dropDownChoice);
@@ -78,7 +79,10 @@ public class SearchPage extends WebPage {
 		searchButton.addActionListener(action -> enableButtons());
 		searchForm.add((Component) searchButton);
 
-		final RadioGroup<String> group = new RadioGroup<String>("group", searchPageModel.getSelectedArchiveWeb());
+		@SuppressWarnings("unchecked")
+		final RadioGroup<String> group = newComponent(WICKET_ID_GROUP, searchPageModel.getSelectedArchiveWeb(), RadioGroup.class);
+				
+				
 	
 		group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 
@@ -115,7 +119,7 @@ public class SearchPage extends WebPage {
 
 				final EnumModel<Archive> currentRow = searchPageController.newWebModel(item.getModelObject());
 
-				item.add(new Radio<>("id", currentRow.part(ArchiveModelParts.Id, String.class)));
+				item.add(newComponent(currentRow, ArchiveModelParts.Id, Radio.class));
 
 				item.add(newComponent(currentRow, ArchiveModelParts.Name, Label.class));
 				item.add(newComponent(currentRow, ArchiveModelParts.Category, Label.class));
@@ -145,12 +149,28 @@ public class SearchPage extends WebPage {
 			return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part, Object.class) );
 	
 	   } catch (final Exception  ex) {
-			throw new IllegalStateException("Unable to create Component: ");
+			throw new IllegalStateException("Unable to create Component", ex);
 		}
 		
 	}
-
 	
+	private <T> T newComponent(final OneWayMapping<?,Enum<?> > model, final Enum<?> part, final Class<T> clazz , final IModel<?>valueModel ) {
+		 try {
+			  
+				return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part, Object.class), valueModel );
+		
+		   } catch (final Exception  ex) {
+				throw new IllegalStateException("Unable to create Component", ex);
+			}
+	}
+
+	private <T> T newComponent(String wicketId, final IModel<?> model, final Class<T> clazz) {
+		try {
+			return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class), wicketId,  model );
+		} catch (final Exception ex) {
+			throw new IllegalStateException("Unable to create Component", ex);
+		}
+	}
 	
 
 	
