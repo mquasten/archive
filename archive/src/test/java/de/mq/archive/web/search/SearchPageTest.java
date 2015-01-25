@@ -26,7 +26,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.ActionListener;
+import de.mq.archive.web.ComponentFactory;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TestConstants;
 import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.WicketApplication;
 
@@ -75,6 +77,7 @@ public class SearchPageTest {
 		beans.put(SearchPageModelWeb.class, searchPageModelWeb);
 		beans.put(SearchPageController.class, searchPageController);
 		beans.put(ActionListener.class, actionListener);
+		beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
 		Mockito.when(searchPageModelWeb.getSelectedArchiveWeb()).thenReturn(selectedArchive);

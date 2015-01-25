@@ -20,16 +20,14 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.springframework.beans.BeanUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionButton;
 import de.mq.archive.web.ActionListener;
-import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.ComponentFactory;
 import de.mq.archive.web.TwoWayMapping;
 
 public class SearchPage extends WebPage {
@@ -46,6 +44,9 @@ public class SearchPage extends WebPage {
 	@Inject()
 	@Named("searchActionListener")
 	private ActionListener<String> actionListener;
+	
+	@Inject()
+	private ComponentFactory componentFactory;
 
 	private final Button changeButton;
 	private final Button showButton;
@@ -55,24 +56,25 @@ public class SearchPage extends WebPage {
 
 		add(searchForm);
 
-		add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchCriteriaHeadline, Label.class));
+		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchCriteriaHeadline, Label.class));
 
-		searchForm.add(newComponent(searchPageModel.getSearchCriteriaWeb() , ArchiveModelParts.Name, TextField.class));
-		searchForm.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchNameLabel, Label.class));
+		searchForm.add(componentFactory.newComponent(searchPageModel.getSearchCriteriaWeb() , ArchiveModelParts.Name, TextField.class));
+		searchForm.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchNameLabel, Label.class));
 
 		
+	
 		@SuppressWarnings("unchecked")
-		final DropDownChoice<Category> dropDownChoice = newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.Category, DropDownChoice.class, new ListModel<>(Arrays.asList(Category.values())));
+		final DropDownChoice<Category> dropDownChoice = componentFactory.newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.Category, DropDownChoice.class, new ListModel<>(Arrays.asList(Category.values())));
 		
 		dropDownChoice.setNullValid(true);
 		searchForm.add(dropDownChoice);
-		searchForm.add(newComponent( searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchCategoryLabel, Label.class));
+		searchForm.add(componentFactory.newComponent( searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchCategoryLabel, Label.class));
 
-		searchForm.add(newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.ArchiveId, TextField.class));
-		searchForm.add(newComponent( searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchArchiveLabel, Label.class	));
+		searchForm.add(componentFactory.newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.ArchiveId, TextField.class));
+		searchForm.add(componentFactory.newComponent( searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchArchiveLabel, Label.class	));
 
 		@SuppressWarnings("unchecked")
-		final ActionButton<String> searchButton = newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
+		final ActionButton<String> searchButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
 
 		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
 
@@ -80,7 +82,7 @@ public class SearchPage extends WebPage {
 		searchForm.add((Component) searchButton);
 
 		@SuppressWarnings("unchecked")
-		final RadioGroup<String> group = newComponent(WICKET_ID_GROUP, searchPageModel.getSelectedArchiveWeb(), RadioGroup.class);
+		final RadioGroup<String> group = componentFactory.newComponent(WICKET_ID_GROUP, searchPageModel.getSelectedArchiveWeb(), RadioGroup.class);
 				
 				
 	
@@ -100,16 +102,16 @@ public class SearchPage extends WebPage {
 		});
 
 		final Form<Archive> form = new Form<Archive>("form");
-		changeButton = newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ChangeButton, ActionButton.class);
-		showButton = newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ShowButton,  ActionButton.class);
+		changeButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ChangeButton, ActionButton.class);
+		showButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ShowButton,  ActionButton.class);
 		add(form);
-		add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ApplicationHeadline, Label.class));
-		add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.PageHeadline, Label.class));
+		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ApplicationHeadline, Label.class));
+		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.PageHeadline, Label.class));
 		form.add(group);
-		group.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NewButton, ActionButton.class));
+		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NewButton, ActionButton.class));
 		group.add(changeButton);
 		group.add(showButton);
-		group.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchTableHeadline, Label.class));
+		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchTableHeadline, Label.class));
 
 		final ListView<Archive> persons = new ListView<Archive>("documents", searchPageModel.getArchivesWeb()) {
 
@@ -119,22 +121,22 @@ public class SearchPage extends WebPage {
 
 				final TwoWayMapping<Archive, Enum<?>> currentRow = searchPageController.newWebModel(item.getModelObject());
 
-				item.add(newComponent(currentRow, ArchiveModelParts.Id, Radio.class));
+				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.Id, Radio.class));
 
-				item.add(newComponent(currentRow, ArchiveModelParts.Name, Label.class));
-				item.add(newComponent(currentRow, ArchiveModelParts.Category, Label.class));
-				item.add(newComponent(currentRow, ArchiveModelParts.DocumentDate, Label.class));
-				item.add(newComponent(currentRow, ArchiveModelParts.ArchiveId, Label.class));
+				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.Name, Label.class));
+				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.Category, Label.class));
+				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.DocumentDate, Label.class));
+				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.ArchiveId, Label.class));
 
 			}
 
 			;
 		};
 
-		group.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NameHeader, Label.class));
-		group.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.CategoryHeader, Label.class));
-		group.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.DateHeader, Label.class));
-		group.add(newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ArchiveIdHeader, Label.class));
+		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NameHeader, Label.class));
+		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.CategoryHeader, Label.class));
+		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.DateHeader, Label.class));
+		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ArchiveIdHeader, Label.class));
 		group.add(persons);
 		Session.get().setLocale(Locale.GERMAN);
 		enableButtons();
@@ -142,35 +144,6 @@ public class SearchPage extends WebPage {
 
 	}
 
-	private <T> T newComponent(final OneWayMapping<?,Enum<?> > model, final Enum<?> part, final Class<T> clazz) {
-	
-	   try {
-	  
-			return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part) );
-	
-	   } catch (final Exception  ex) {
-			throw new IllegalStateException("Unable to create Component", ex);
-		}
-		
-	}
-	
-	private <T> T newComponent(final OneWayMapping<?,Enum<?> > model, final Enum<?> part, final Class<T> clazz , final IModel<?>valueModel ) {
-		 try {
-			  
-				return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part), valueModel );
-		
-		   } catch (final Exception  ex) {
-				throw new IllegalStateException("Unable to create Component", ex);
-			}
-	}
-
-	private <T> T newComponent(String wicketId, final IModel<?> model, final Class<T> clazz) {
-		try {
-			return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class), wicketId,  model );
-		} catch (final Exception ex) {
-			throw new IllegalStateException("Unable to create Component", ex);
-		}
-	}
 	
 
 	
