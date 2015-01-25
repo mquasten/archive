@@ -2,15 +2,14 @@ package de.mq.archive.web;
 
 import java.io.Serializable;
 
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import de.mq.archive.domain.Archive;
+import de.mq.archive.web.TestComponent.TestComponentInvalid;
 import de.mq.archive.web.search.ArchiveModelParts;
 
 public class ComponentFactoryTest {
@@ -69,10 +68,10 @@ public class ComponentFactoryTest {
 		 Assert.assertNull(result.values);
 	}
 	
-	@Test(expected=RuntimeException.class)
+	@Test(expected=IllegalStateException.class)
 	public final void withException() {
 	
-		componentFactory.newComponent(TestComponent.WICKET_ID_EXCEPTION,partModel,TestComponent.class);
+		componentFactory.newComponent(TestComponent.WICKET_ID_EXCEPTION,partModel,TestComponentInvalid.class);
 	}
 
 	
@@ -102,7 +101,9 @@ class TestComponent {
 		}
 	}
 	
-	
+	class TestComponentInvalid {
+		
+	}
 }
 
 
