@@ -9,19 +9,19 @@ import org.apache.wicket.model.IModel;
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TwoWayMapping;
 
 class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
-	private final EnumModel<Archive> searchCriteria; 
+	private final TwoWayMapping<Archive, Enum<?>> searchCriteria; 
 	private final IModel<List<Archive>> archives;
 	private final IModel<String> selectedArchive; 
 	private final IModel<Number> pageSize; 
 	
 	private final OneWayMapping<Locale, Enum<?>>  labels; 
 	
-	SearchPageModelImpl(final EnumModel<Archive> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,  final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
+	SearchPageModelImpl(final TwoWayMapping<Archive, Enum<?>> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,  final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
 		this.searchCriteria = searchCriteria;
 		this.labels=labels;
 		this.archives = archives;
@@ -72,7 +72,7 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
 	
 	@Override
-	public final EnumModel<Archive> getSearchCriteriaWeb() {
+	public final TwoWayMapping<Archive, Enum<?>> getSearchCriteriaWeb() {
 		return searchCriteria;
 	}
 

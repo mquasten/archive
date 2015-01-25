@@ -6,11 +6,11 @@ import java.util.Locale;
 import org.apache.wicket.model.IModel;
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TwoWayMapping;
 
 interface SearchPageModelWeb {
-	EnumModel<Archive> getSearchCriteriaWeb();
+	TwoWayMapping<Archive, Enum<?>> getSearchCriteriaWeb();
 
 	IModel<List<Archive>> getArchivesWeb();
 

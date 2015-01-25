@@ -3,7 +3,7 @@ package de.mq.archive.web.search;
 
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.web.EnumModel;
+import de.mq.archive.web.TwoWayMapping;
 
 interface SearchPageController {
 
@@ -13,6 +13,6 @@ interface SearchPageController {
 	void search(final SearchPageModel model);
 	
 	
-	EnumModel<Archive> newWebModel(final Archive archive);
+	TwoWayMapping<Archive, Enum<?>> newWebModel(final Archive archive);
 
 }

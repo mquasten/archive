@@ -29,8 +29,8 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionButton;
 import de.mq.archive.web.ActionListener;
-import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TwoWayMapping;
 
 public class SearchPage extends WebPage {
 	private static final String WICKET_ID_GROUP = "group";
@@ -117,7 +117,7 @@ public class SearchPage extends WebPage {
 
 			protected void populateItem(final ListItem<Archive> item) {
 
-				final EnumModel<Archive> currentRow = searchPageController.newWebModel(item.getModelObject());
+				final TwoWayMapping<Archive, Enum<?>> currentRow = searchPageController.newWebModel(item.getModelObject());
 
 				item.add(newComponent(currentRow, ArchiveModelParts.Id, Radio.class));
 
@@ -146,7 +146,7 @@ public class SearchPage extends WebPage {
 	
 	   try {
 	  
-			return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part, Object.class) );
+			return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part) );
 	
 	   } catch (final Exception  ex) {
 			throw new IllegalStateException("Unable to create Component", ex);
@@ -157,7 +157,7 @@ public class SearchPage extends WebPage {
 	private <T> T newComponent(final OneWayMapping<?,Enum<?> > model, final Enum<?> part, final Class<T> clazz , final IModel<?>valueModel ) {
 		 try {
 			  
-				return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part, Object.class), valueModel );
+				return BeanUtils.instantiateClass(clazz.getConstructor(String.class, IModel.class, IModel.class), ((WicketIdAware)part).wicketId(), model.part(part), valueModel );
 		
 		   } catch (final Exception  ex) {
 				throw new IllegalStateException("Unable to create Component", ex);

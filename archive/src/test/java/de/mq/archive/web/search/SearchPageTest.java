@@ -10,7 +10,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.IModel;
@@ -26,10 +25,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionListener;
-import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.WicketApplication;
 
 public class SearchPageTest {
@@ -45,7 +43,7 @@ public class SearchPageTest {
 	@SuppressWarnings("rawtypes")
 	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
-	private final EnumModel<Archive> searchCriteriaWeb = Mockito.mock(EnumModel.class);
+	private final TwoWayMapping<Archive,Enum<?>> searchCriteriaWeb = Mockito.mock(TwoWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final IModel<List<Archive>> listModel = Mockito.mock(IModel.class);
 
@@ -80,11 +78,11 @@ public class SearchPageTest {
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
 		Mockito.when(searchPageModelWeb.getSelectedArchiveWeb()).thenReturn(selectedArchive);
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> Mockito.when(labels.part(part, Object.class)).thenReturn(new Model<>(part.key())));
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> Mockito.when(labels.part(part)).thenReturn(new Model<>(part.key())));
 
-		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Name, Object.class)).thenReturn(new Model());
-		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Category, Object.class)).thenReturn(new Model());
-		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId, Object.class)).thenReturn(new Model());
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Name)).thenReturn(new Model<>());
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.Category)).thenReturn(new Model<>());
+		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId)).thenReturn(new Model<>());
 
 		tester = new WicketTester(wicketApplication, ctx);
 		final SearchPage page = new SearchPage(null);
@@ -142,9 +140,9 @@ public class SearchPageTest {
 		Assert.assertFalse(showButton.isEnabled());
 		Assert.assertFalse(changeButton.isEnabled());
 		@SuppressWarnings("unchecked")
-		final EnumModel<Archive> currentRow = Mockito.mock(EnumModel.class);
+		final TwoWayMapping<Archive,Enum<?>> currentRow = Mockito.mock(TwoWayMapping.class);
 		Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
-		Arrays.stream(ArchiveModelParts.values()).forEach(part -> Mockito.when(currentRow.part(part, Object.class)).thenReturn(new Model(part.name())));
+		Arrays.stream(ArchiveModelParts.values()).forEach(part -> Mockito.when(currentRow.part(part)).thenReturn(new Model<>(part.name())));
 
 		formTester.submit("searchButton");
 

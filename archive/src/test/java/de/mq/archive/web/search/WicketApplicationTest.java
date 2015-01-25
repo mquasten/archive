@@ -20,8 +20,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.ActionListener;
-import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.WicketApplication;
 
 public class WicketApplicationTest {
@@ -37,7 +37,7 @@ public class WicketApplicationTest {
 	@SuppressWarnings("rawtypes")
 	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
-	private final EnumModel<Archive> searchCriteriaWeb = Mockito.mock(EnumModel.class);
+	private final TwoWayMapping<Archive,Enum<?>> searchCriteriaWeb = Mockito.mock(TwoWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final IModel<List<Archive>> listModel = Mockito.mock(IModel.class);
 

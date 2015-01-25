@@ -8,7 +8,7 @@ public interface OneWayMapping<Domain, Part> extends Serializable {
 
 	void intoWeb(final Domain source); 
 	
-	<T> IModel<T> part(final Part part, final Class<T> clazz);
+	<T extends Serializable> IModel<T>  part(final Part part);
 
 	
 }

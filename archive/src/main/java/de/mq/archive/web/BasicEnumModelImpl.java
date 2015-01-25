@@ -1,5 +1,6 @@
 package de.mq.archive.web;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
+public class BasicEnumModelImpl<Domain> implements  TwoWayMapping<Domain, Enum<?>> {
 	
 	private static final long serialVersionUID = 1L;
 	private  final Map<Enum<?>,IModel<?>> models = new HashMap<>();
@@ -33,15 +34,17 @@ public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
 	 */
 
 	
+	
 	@Override
 	public void intoWeb(final Domain source) {
 		models.keySet().forEach( part -> { 
 			final String fieldName = StringUtils.uncapitalize(part.name());
 			final Field field = ReflectionUtils.findField(source.getClass(), fieldName);
 			field.setAccessible(true);
-			final IModel<Object>  model =   part(part, Object.class);
-			final Object value = ReflectionUtils.getField(field, source);
-			model.setObject(value);
+		
+			final IModel<Serializable>  model =    part(part);
+			final Serializable value = (Serializable) ReflectionUtils.getField(field, source);
+			model.setObject( value);
 		} );
 	
 		
@@ -74,13 +77,13 @@ public class BasicEnumModelImpl<Domain> implements  EnumModel<Domain> {
 	 * @see de.mq.archive.web.search.EnumModel#part(java.lang.Enum, java.lang.Class)
 	 */
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public  <T> IModel<T> part(final Enum<?> part, final Class<T> clazz ) {
+	public <T extends Serializable> IModel<T> part(final Enum<?> part) {
 		Assert.notNull(part);
-		@SuppressWarnings("unchecked")
-		final IModel<T> model =    (IModel<T>) models.get(part);
+		final IModel<?> model =     models.get(part);
 		Assert.notNull( model, String.format("No part model defined for %s", part));
-		return model;
+		return (IModel<T>) model;
 	}
 
 	

@@ -1,11 +1,11 @@
 package de.mq.archive.web;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.wicket.model.IModel;
 import org.junit.Assert;
@@ -31,7 +31,7 @@ public class EnumModelTest {
 	private static final Date DATE = new Date();
 	private static final String ARCHIVE_ID = "4711";
 	private static final String PERSON = "Kylie";
-	private final EnumModel<Archive> enumModel = new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
+	private final TwoWayMapping<Archive, Enum<?>> enumModel = new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
 
 	@Test
 	public final void values() {
@@ -53,13 +53,13 @@ public class EnumModelTest {
 	public final void toDomain() {
 		Collection<String> persons = new HashSet<>();
 		persons.add(PERSON);
-		 enumModel.part(ArchiveModelParts.ArchiveId, String.class  ).setObject(ARCHIVE_ID);
-		 enumModel.part(ArchiveModelParts.Category, Category.class  ).setObject(Category.Correspondence);
-		 enumModel.part(ArchiveModelParts.DocumentDate, Date.class  ).setObject(DATE);
-		 enumModel.part(ArchiveModelParts.Id,String.class  ).setObject(ID);
-		 enumModel.part(ArchiveModelParts.Name,String.class  ).setObject(NAME);
-		 enumModel.part(ArchiveModelParts.Text,String.class  ).setObject(TEXT);
-		 enumModel.part(ArchiveModelParts.RelatedPersons,Set.class  ).setObject((Set<?>) persons);
+		 enumModel.part(ArchiveModelParts.ArchiveId).setObject(ARCHIVE_ID);
+		 enumModel.part(ArchiveModelParts.Category).setObject(Category.Correspondence);
+		 enumModel.part(ArchiveModelParts.DocumentDate).setObject(DATE);
+		 enumModel.part(ArchiveModelParts.Id).setObject(ID);
+		 enumModel.part(ArchiveModelParts.Name).setObject(NAME);
+		 enumModel.part(ArchiveModelParts.Text).setObject(TEXT);
+		 enumModel.part(ArchiveModelParts.RelatedPersons).setObject( (Serializable) persons);
 		
 	
 		final Archive archive = enumModel.toDomain();
@@ -80,8 +80,8 @@ public class EnumModelTest {
 		
 		enumModel.intoWeb(archive);
 		
-		Arrays.asList(ArchiveModelParts.values()).stream().filter(part -> part != ArchiveModelParts.RelatedPersons).forEach(part -> Assert.assertEquals(ReflectionTestUtils.invokeGetterMethod(archive,  StringUtils.uncapitalize(part.name())) , enumModel.part(part, Object.class).getObject()));
-	   Assert.assertEquals(new HashSet<>(archive.relatedPersons()), enumModel.part(ArchiveModelParts.RelatedPersons, Collection.class).getObject());
+		Arrays.asList(ArchiveModelParts.values()).stream().filter(part -> part != ArchiveModelParts.RelatedPersons).forEach(part -> Assert.assertEquals(ReflectionTestUtils.invokeGetterMethod(archive,  StringUtils.uncapitalize(part.name())) , enumModel.part(part).getObject()));
+	   Assert.assertEquals(new HashSet<>(archive.relatedPersons()), enumModel.part(ArchiveModelParts.RelatedPersons).getObject());
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class EnumModelTest {
 		final IModel<String> model = Mockito.mock(IModel.class);
 		models().put(ArchiveModelParts.ArchiveId, model);
 		
-		Assert.assertEquals(model, enumModel.part(ArchiveModelParts.ArchiveId, String.class));
+		Assert.assertEquals(model, enumModel.part(ArchiveModelParts.ArchiveId));
 	}
 
 }

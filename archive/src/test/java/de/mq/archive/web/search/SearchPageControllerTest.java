@@ -14,7 +14,7 @@ import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.Category;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.domain.support.ModifyablePaging;
-import de.mq.archive.web.EnumModel;
+import de.mq.archive.web.TwoWayMapping;
 
 public class SearchPageControllerTest {
 
@@ -48,7 +48,7 @@ public class SearchPageControllerTest {
 	public final void newWebModel() {
 		final Archive archive = new ArchiveImpl(NAME, CATEGORY, DOCUMENT_DATE, ARCHIVE_ID);
 		ReflectionTestUtils.setField(archive, ID_FIELD, ID);
-		final EnumModel<Archive> results = searchPageController.newWebModel(archive);
+		final TwoWayMapping<Archive, Enum<?>>results = searchPageController.newWebModel(archive);
 		Assert.assertEquals(ID, results.toDomain().id());
 		Assert.assertEquals(NAME, results.toDomain().name());
 		Assert.assertEquals(CATEGORY, results.toDomain().category());

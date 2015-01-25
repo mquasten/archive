@@ -13,15 +13,15 @@ import org.mockito.Mockito;
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
-import de.mq.archive.web.EnumModel;
 import de.mq.archive.web.OneWayMapping;
+import de.mq.archive.web.TwoWayMapping;
 
 public class SearchPageModelTest {
 
 	private static final int PAGE_SIZE = 10;
 	private static final String ID = "19680528";
 	@SuppressWarnings("unchecked")
-	private final EnumModel<Archive> archiveWeb = Mockito.mock(EnumModel.class);
+	private TwoWayMapping<Archive, Enum<?>> archiveWeb = Mockito.mock(TwoWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final IModel<List<Archive>> listModel = Mockito.mock(ListModel.class);
 	@SuppressWarnings("unchecked")

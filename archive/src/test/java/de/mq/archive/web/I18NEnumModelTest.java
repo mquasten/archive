@@ -54,7 +54,7 @@ public class I18NEnumModelTest {
 		Arrays.asList(I18NSearchPageModelParts.values()).stream().forEach(part -> Mockito.when(messageSource.getMessage(part.key(), null, Locale.GERMAN)).thenReturn(part.key()));
 		oneWayMapping.intoWeb(Locale.GERMAN);
 
-		Arrays.asList(I18NSearchPageModelParts.values()).forEach(part -> Assert.assertEquals(part.key(), oneWayMapping.part(part,String.class).getObject()));
+		Arrays.asList(I18NSearchPageModelParts.values()).forEach(part -> Assert.assertEquals(part.key(), oneWayMapping.part(part).getObject()));
 
 	}
 

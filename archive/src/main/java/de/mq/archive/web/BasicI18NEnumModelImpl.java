@@ -1,5 +1,6 @@
 package de.mq.archive.web;
 
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
@@ -32,12 +33,11 @@ public class BasicI18NEnumModelImpl implements OneWayMapping<Locale, Enum<?>> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-
-	public <T> IModel<T> part(final Enum<?> part, Class<T> clazz) {
+	public <T extends Serializable> IModel<T> part(final Enum<?> part) {
 		Assert.notNull(part);
 		final Entry<String,IModel<String>> entry =    models.get(part);
 		Assert.notNull( entry, String.format("No part model defined for %s", part));
-		return (IModel<T>) entry.getValue();
+		return   (IModel<T>) entry.getValue();
 	}
 
 

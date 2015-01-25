@@ -59,7 +59,7 @@ public class ModelsTest {
 		Assert.assertNotNull(model.getSelectedArchiveWeb());
 		Assert.assertTrue(model.getSearchCriteriaWeb().toDomain() instanceof ArchiveImpl);
 		
-		Arrays.stream(ArchiveModelParts.values()).forEach(part ->  Assert.assertTrue(model.getSearchCriteriaWeb().part(part, Object.class) instanceof IModel ));
+		Arrays.stream(ArchiveModelParts.values()).forEach(part ->  Assert.assertTrue(model.getSearchCriteriaWeb().part(part) instanceof IModel ));
 		
 		
 		

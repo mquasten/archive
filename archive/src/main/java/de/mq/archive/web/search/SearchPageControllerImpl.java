@@ -9,7 +9,7 @@ import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.domain.support.Paging;
 import de.mq.archive.web.BasicEnumModelImpl;
-import de.mq.archive.web.EnumModel;
+import de.mq.archive.web.TwoWayMapping;
 
 class SearchPageControllerImpl implements SearchPageController {
 	
@@ -31,8 +31,8 @@ class SearchPageControllerImpl implements SearchPageController {
 	}
 
 	@Override
-	public EnumModel<Archive> newWebModel(final Archive archive) {
-			final EnumModel<Archive> model = new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
+	public TwoWayMapping<Archive, Enum<?>> newWebModel(final Archive archive) {
+			final TwoWayMapping<Archive, Enum<?>> model = new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
 			model.intoWeb(archive);
 			return model;
 	}
