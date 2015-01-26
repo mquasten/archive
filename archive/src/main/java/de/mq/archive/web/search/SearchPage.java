@@ -29,6 +29,7 @@ import de.mq.archive.web.ActionButton;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.ComponentFactory;
 import de.mq.archive.web.TwoWayMapping;
+import de.mq.archive.web.edit.EditPage;
 
 public class SearchPage extends WebPage {
 	private static final String WICKET_ID_GROUP = "group";
@@ -47,10 +48,11 @@ public class SearchPage extends WebPage {
 	
 	@Inject()
 	private ComponentFactory componentFactory;
-
-	private final Button changeButton;
+	
+	private final ActionButton<?> changeButton;
 	private final Button showButton;
 
+	
 	public SearchPage(final PageParameters parameters) {
 		final Form<String> searchForm = new Form<>("searchForm");
 
@@ -77,6 +79,10 @@ public class SearchPage extends WebPage {
 		final ActionButton<String> searchButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
 
 		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
+		
+		
+		
+		
 
 		searchButton.addActionListener(action -> enableButtons());
 		searchForm.add((Component) searchButton);
@@ -102,13 +108,18 @@ public class SearchPage extends WebPage {
 		});
 
 		final Form<Archive> form = new Form<Archive>("form");
-		changeButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ChangeButton, ActionButton.class);
+		
+		changeButton = (ActionButton<?>) componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ChangeButton, ActionButton.class);
+		
+		
 		showButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ShowButton,  ActionButton.class);
 		add(form);
 		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ApplicationHeadline, Label.class));
 		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.PageHeadline, Label.class));
 		form.add(group);
-		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NewButton, ActionButton.class));
+		ActionButton<?> newButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NewButton, ActionButton.class);
+		newButton.addActionListener(id -> setResponsePage(EditPage.class));
+		group.add(newButton);
 		group.add(changeButton);
 		group.add(showButton);
 		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchTableHeadline, Label.class));
