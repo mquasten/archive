@@ -6,32 +6,36 @@ import de.mq.archive.web.search.WicketIdAware;
 
 public enum I18NEditPageModelParts implements WicketIdAware {
 	
-	ApplicationHeadline("archive_headline"),
-	PageHeadline("archive_edit_headline"),
+	ApplicationHeadline("archive_headline", false, false),
+	PageHeadline("archive_edit_headline", false, false),
 	
-	NameLabel("archive_edit_name"),
-	
-	
-	CategoryLabel("archive_edit_category"),
+	NameLabel("archive_edit_name", true, false),
 	
 	
-	ArchiveIdLabel("archive_edit_archive_id"),
+	CategoryLabel("archive_edit_category", true, false),
+	
+	
+	ArchiveIdLabel("archive_edit_archive_id", true, false),
 	
 
-	DocumentDateLabel("archive_edit_document_date"),
+	DocumentDateLabel("archive_edit_document_date", true, false ),
 	
 	
-	TextLabel("archive_edit_text"),
+	TextLabel("archive_edit_text", true, false ),
 	
 	
-	CancelButton("archive_edit_cancel_button"),
-	SaveButton("archive_edit_save_button");
+	CancelButton("archive_edit_cancel_button", true, true ),
+	SaveButton("archive_edit_save_button", true, true);
 	
-	I18NEditPageModelParts(final String key) {
+	I18NEditPageModelParts(final String key, final boolean withInForm, final boolean button ) {
 		this.key=key;
+		this.withInForm=withInForm;
+		this.button=button;
 	}
 	
+	private final boolean withInForm; 
 	private final String key;
+	private final boolean button;
 	@Override
 	public String wicketId() {
 		return  StringUtils.uncapitalize(name());
@@ -39,6 +43,14 @@ public enum I18NEditPageModelParts implements WicketIdAware {
 	
 	public final String key() {
 		return key;
+	}
+	
+	public final boolean  isWithInForm() {
+		return this.withInForm;
+	}
+	
+	public final boolean  isButton() {
+		return this.button;
 	}
 
 }
