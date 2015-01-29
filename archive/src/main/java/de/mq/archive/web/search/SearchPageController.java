@@ -5,7 +5,7 @@ package de.mq.archive.web.search;
 import de.mq.archive.domain.Archive;
 import de.mq.archive.web.TwoWayMapping;
 
-interface SearchPageController {
+ interface SearchPageController {
 
 	
 	static final String SEARCH_ACTION = "search";

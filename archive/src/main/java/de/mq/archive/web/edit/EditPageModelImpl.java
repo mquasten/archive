@@ -7,7 +7,7 @@ import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
 
 
-class EditPageModelImpl implements EditPageModelWeb {
+class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	
 	private final TwoWayMapping<Archive, Enum<?>> archiveModel;
 	private final OneWayMapping<Locale, Enum<?>>  labels; 
@@ -17,8 +17,12 @@ class EditPageModelImpl implements EditPageModelWeb {
 		this.labels = labels;
 	}
 	
-	
-	
+	@Override
+	public Archive getArchive() {
+		
+		return archiveModel.toDomain();
+		
+	}
 	
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.edit.EditPageModelWeb#getArchiveModelWeb()
