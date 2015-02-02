@@ -21,25 +21,31 @@
 			<tr>
 				<td><span wicket:id="nameLabel" /></td>
 				<td><input type="text" wicket:id="name" /></td>
+				
 			</tr>
 			<tr>
 				<td><span wicket:id="categoryLabel" /></td>
 				<td><select wicket:id="category"/></td>
+				
 			</tr>
 			<tr>
 				<td><span wicket:id="archiveIdLabel" /></td>
 				<td><input type="text" wicket:id="archiveId" /></td>
+			   
 			</tr>
 			<tr>
 				<td><span wicket:id="documentDateLabel" /></td>
-				<td><input type="text" wicket:id="documentDate" /></td>
+				<td><input type="text" wicket:id="documentDate" /> <div wicket:id="documentDateFeedback" > its invisible everytime, it's only used in java code </div>  <span wicket:id="documentDateMessage" style="color:red"/></td>
 			</tr>
 			<tr>
 				<td><span wicket:id="textLabel" /></td>
 				<td><textarea   wicket:id="text"  rows="6" cols="40"/></td>
+				
 			</tr>
 
-
+	
+		
+	
 
 
 			<tr>
@@ -48,6 +54,7 @@
 					wicket:id="saveButton" /></td>
 			</tr>
 		</table>
+		
 	</form>
 
 
