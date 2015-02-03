@@ -12,4 +12,6 @@ interface EditPageModelWeb {
 
 	OneWayMapping<Locale, Enum<?>> getI18NLabels();
 
+	OneWayMapping<Locale, Enum<?>> getI18NMessages();
+
 }

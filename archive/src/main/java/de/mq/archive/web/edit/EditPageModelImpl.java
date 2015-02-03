@@ -11,10 +11,13 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	
 	private final TwoWayMapping<Archive, Enum<?>> archiveModel;
 	private final OneWayMapping<Locale, Enum<?>>  labels; 
+	private final OneWayMapping<Locale, Enum<?>>  messages; 
+
 	
-	EditPageModelImpl(TwoWayMapping<Archive, Enum<?>> archiveModel, OneWayMapping<Locale, Enum<?>> labels) {
+	EditPageModelImpl(final TwoWayMapping<Archive, Enum<?>> archiveModel, final OneWayMapping<Locale, Enum<?>> labels, final OneWayMapping<Locale, Enum<?>> messages) {
 		this.archiveModel = archiveModel;
 		this.labels = labels;
+		this.messages=messages;
 	}
 	
 	@Override
@@ -39,6 +42,14 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	@Override
 	public  final OneWayMapping<Locale, Enum<?>>  getI18NLabels() {
 		return labels;
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.web.edit.EditPageModelWeb#getI18NMessages()
+	 */
+	@Override
+	public  final OneWayMapping<Locale, Enum<?>>  getI18NMessages() {
+		return messages;
 	}
 
 }
