@@ -5,7 +5,7 @@ import javax.inject.Named;
 @Named
 public class EditPageControllerImpl implements EditPageController {
 	
-	@Named("save")
+	@Named(SAVE_ACTION)
 	public final void save(final EditPageModel model) {
 		System.out.println(model.getArchive().name());
 		System.out.println(model.getArchive().archiveId());

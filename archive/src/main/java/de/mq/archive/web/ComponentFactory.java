@@ -4,10 +4,10 @@ import org.apache.wicket.model.IModel;
 
 public interface ComponentFactory {
 
-	public abstract <T> T newComponent(OneWayMapping<?, Enum<?>> model, Enum<?> part, Class<T> clazz);
+	<T> T newComponent(final OneWayMapping<?, Enum<?>> model, Enum<?> part, final Class<T> clazz);
 
-	public abstract <T> T newComponent(OneWayMapping<?, Enum<?>> model, Enum<?> part, Class<T> clazz, IModel<?> valueModel);
+	<T> T newComponent(final OneWayMapping<?, Enum<?>> model, Enum<?> part, final Class<T> clazz, final IModel<?> valueModel);
 
-	public abstract <T> T newComponent(String wicketId, IModel<?> model, Class<T> clazz);
+	<T> T newComponent(final String wicketId, final IModel<?> model, Class<T> clazz);
 
 }

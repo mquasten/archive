@@ -27,6 +27,10 @@ public enum I18NEditPageMessagesParts implements WicketIdAware {
 		 return  StringUtils.uncapitalize(name() +"Feedback");
 	}
 	
+	public String wicketIdInput() {
+		 return  StringUtils.uncapitalize(name() );
+	}
+	
 	public final String key() {
 		return this.key;
 	}
