@@ -68,5 +68,12 @@ class ArchiveMongoRepositoryImpl implements ArchiveRepository {
 		}
 		return query;
 	}
+
+
+	@Override
+	public void save(final Archive archive) {
+		mongoOperations.save(archive);
+		
+	}
 	
 }

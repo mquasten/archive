@@ -13,5 +13,7 @@ public interface ArchiveService {
 	List<Archive> archives(final Archive archive, final Paging paging);
 
 	ModifyablePaging paging(final Archive archive, final int pageSize);
+	
+	void save(final Archive archive); 
 
 }

@@ -37,6 +37,15 @@ public class ArchiveServiceImpl implements ArchiveService {
 		final Number counter = archiveRepository.countForCriteria(archive);
 		return new SimpleResultSetPagingImpl(pageSize, counter.longValue());
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.domain.ArchiveService#save(de.mq.archive.domain.Archive)
+	 */
+	@Override
+	public void save(final Archive archive) {
+		archiveRepository.save(archive);
+	}
 	
 
 }

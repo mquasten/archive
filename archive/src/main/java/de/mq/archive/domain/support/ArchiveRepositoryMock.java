@@ -103,4 +103,10 @@ public class ArchiveRepositoryMock implements ArchiveRepository {
 		return true;
 	}
 
+	@Override
+	public void save(final Archive archive) {
+		 final String id = String.valueOf(UUID.nameUUIDFromBytes(archive.name().getBytes()));
+		 archives.put(id, archive);
+	}
+
 }

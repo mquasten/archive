@@ -9,5 +9,7 @@ interface ArchiveRepository {
 	List<Archive> forCriterias(final Archive archive, final Paging paging);
 	
 	Number countForCriteria(final Archive archive);
+	
+	void save(final Archive archive);
 
 }
