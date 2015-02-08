@@ -109,4 +109,10 @@ public class ArchiveRepositoryMock implements ArchiveRepository {
 		 archives.put(id, archive);
 	}
 
+	@Override
+	public Archive forId(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

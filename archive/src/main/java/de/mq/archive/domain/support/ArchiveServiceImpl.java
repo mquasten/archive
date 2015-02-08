@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
 
@@ -45,6 +47,16 @@ public class ArchiveServiceImpl implements ArchiveService {
 	@Override
 	public void save(final Archive archive) {
 		archiveRepository.save(archive);
+	}
+	
+	@Override
+	public Archive archive(final String id) {
+		final Archive archive = archiveRepository.forId(id);
+		if( archive == null){
+			throw new EmptyResultDataAccessException("Archive not found", 1);	
+		}
+		return archive;
+		
 	}
 	
 

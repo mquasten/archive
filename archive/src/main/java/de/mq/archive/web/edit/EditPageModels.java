@@ -16,9 +16,9 @@ import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.BasicI18NEnumModelImpl;
-
 import de.mq.archive.web.SimpleParameterInjectionActionListenerImpl;
 import de.mq.archive.web.search.ArchiveModelParts;
+
 
 
 @Configuration
@@ -39,6 +39,18 @@ class EditPageModels {
 	 @Scope("singleton")
 	 public ActionListener<?> editActionListener() {
 		 return new SimpleParameterInjectionActionListenerImpl(beanFactory, EditPageController.class);
+	 }
+	 
+	 @Bean(name="initEditActionListener")
+	 @Scope("singleton")
+	 public ActionListener<?> initEditActionListener() {
+		 return new SimpleParameterInjectionActionListenerImpl(beanFactory,EditPageController.class);
+	 }
+	 
+	 @Bean(name="newEditActionListener")
+	 @Scope("singleton")
+	 public ActionListener<?> newEditActionListener() {
+		 return new SimpleParameterInjectionActionListenerImpl(beanFactory,EditPageController.class);
 	 }
 
 }

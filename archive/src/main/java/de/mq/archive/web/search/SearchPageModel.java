@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.mq.archive.domain.Archive;
 
-interface SearchPageModel {
+public interface SearchPageModel {
 
 	Archive getSearchCriteria();
 
@@ -14,5 +14,9 @@ interface SearchPageModel {
 	void setArchives(final List<Archive> archives);
 	
 	Number getPageSize();
+	
+	static final String INIT_EDIT = "init_edit";
+	
+	static final String NEW_EDIT = "new_edit";
 	
 }

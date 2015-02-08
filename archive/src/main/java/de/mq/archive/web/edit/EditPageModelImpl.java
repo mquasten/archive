@@ -27,6 +27,11 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 		
 	}
 	
+	@Override
+	public void setArchive(final Archive archive) {
+		archiveModel.intoWeb(archive);
+	}
+	
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.edit.EditPageModelWeb#getArchiveModelWeb()
 	 */

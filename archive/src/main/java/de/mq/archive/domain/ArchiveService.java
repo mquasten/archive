@@ -14,6 +14,8 @@ public interface ArchiveService {
 
 	ModifyablePaging paging(final Archive archive, final int pageSize);
 	
-	void save(final Archive archive); 
+	void save(final Archive archive);
+
+	Archive archive(final String id); 
 
 }

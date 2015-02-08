@@ -6,4 +6,6 @@ interface EditPageModel {
 
 	Archive getArchive();
 
+	void setArchive(Archive archive);
+
 }

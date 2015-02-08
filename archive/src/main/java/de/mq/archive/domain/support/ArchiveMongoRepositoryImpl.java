@@ -76,4 +76,9 @@ class ArchiveMongoRepositoryImpl implements ArchiveRepository {
 		
 	}
 	
+	@Override
+	public final Archive forId(final String id){
+		return mongoOperations.findById(id, ArchiveImpl.class);
+	}
+	
 }

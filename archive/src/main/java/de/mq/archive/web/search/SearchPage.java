@@ -47,9 +47,16 @@ public class SearchPage extends WebPage {
 	private ActionListener<String> actionListener;
 	
 	@Inject()
+	@Named("initEditActionListener")
+	private ActionListener<String> initEditActionListener;
+	@Inject()
+	@Named("newEditActionListener")
+	private ActionListener<String> newEditActionListener;
+	
+	@Inject()
 	private ComponentFactory componentFactory;
 	
-	private final ActionButton<?> changeButton;
+	private final ActionButton<String> changeButton;
 	private final Button showButton;
 
 	
@@ -109,15 +116,20 @@ public class SearchPage extends WebPage {
 
 		final Form<Archive> form = new Form<Archive>("form");
 		
-		changeButton = (ActionButton<?>) componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ChangeButton, ActionButton.class);
-		
+		changeButton = newButton(I18NSearchPageModelParts.ChangeButton);
+		changeButton.addActionListener(SearchPageModel.INIT_EDIT, initEditActionListener );
+		changeButton.addActionListener( action ->  setResponsePage(EditPage.class));
 		
 		showButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ShowButton,  ActionButton.class);
 		add(form);
 		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ApplicationHeadline, Label.class));
 		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.PageHeadline, Label.class));
 		form.add(group);
-		ActionButton<?> newButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.NewButton, ActionButton.class);
+		final ActionButton<String> newButton = newButton(I18NSearchPageModelParts.NewButton);
+		newButton.addActionListener(SearchPageModel.NEW_EDIT, newEditActionListener);		
+				
+		
+		
 		newButton.addActionListener(id -> setResponsePage(EditPage.class));
 		group.add(newButton);
 		group.add(changeButton);
@@ -153,6 +165,14 @@ public class SearchPage extends WebPage {
 		enableButtons();
 		searchPageModel.getI18NLabels().intoWeb(getLocale());
 
+	}
+
+
+
+
+	@SuppressWarnings("unchecked")
+	private ActionButton<String> newButton(I18NSearchPageModelParts part) {
+		return (ActionButton<String>) componentFactory.newComponent(searchPageModel.getI18NLabels(), part, ActionButton.class);
 	}
 
 	

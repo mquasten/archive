@@ -12,4 +12,6 @@ interface ArchiveRepository {
 	
 	void save(final Archive archive);
 
+	Archive forId(final String id);
+
 }
