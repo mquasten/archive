@@ -6,15 +6,19 @@ import java.util.List;
 
 
 
+
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
 
 public class ArchiveServiceTest {
 	
+	private static final String ID = "19680528";
 	private static final int COUNTER = 42;
 	private static final int PAGE_SIZE = 10;
 	private final ArchiveRepository archiveRepository = Mockito.mock(ArchiveRepository.class);
@@ -39,6 +43,23 @@ public class ArchiveServiceTest {
 		final Paging paging = archiveService.paging(archive, PAGE_SIZE);
 		Assert.assertEquals(PAGE_SIZE, paging.pageSize());
 		Assert.assertEquals((long) Math.ceil((double) COUNTER/PAGE_SIZE), paging.maxPages());
+	}
+	
+	@Test
+	public final void save() {
+		archiveService.save(archive);
+		Mockito.verify(archiveRepository).save(archive);
+	}
+	
+	@Test
+	public final void archive() {
+		Mockito.when(archiveRepository.forId(ID)).thenReturn(archive);
+		archiveService.archive(ID);
+	}
+	
+	@Test(expected=EmptyResultDataAccessException.class)
+	public final void archiveNotFound() {
+		archiveService.archive(ID);
 	}
 
 }

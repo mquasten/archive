@@ -106,13 +106,16 @@ public class ArchiveRepositoryMock implements ArchiveRepository {
 	@Override
 	public void save(final Archive archive) {
 		 final String id = String.valueOf(UUID.nameUUIDFromBytes(archive.name().getBytes()));
+		 final Field field = ReflectionUtils.findField(ArchiveImpl.class, "id");
+		 field.setAccessible(true);
+		 ReflectionUtils.setField(field, archive, id);
 		 archives.put(id, archive);
 	}
 
 	@Override
-	public Archive forId(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Archive forId(final String id) {
+		return archives.get(id);
 	}
+	
 
 }

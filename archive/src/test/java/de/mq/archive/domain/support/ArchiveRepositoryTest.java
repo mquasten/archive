@@ -21,6 +21,7 @@ import de.mq.archive.domain.Category;
 
 public class ArchiveRepositoryTest {
 
+	private static final String ID = "19680528";
 	private static final Long COUNTER = Long.valueOf(42);
 	private static final String ARCHIVE_ID_FIELDS = "archiveId";
 	private static final String CRITERIA_FIELD = "criteria";
@@ -43,7 +44,7 @@ public class ArchiveRepositoryTest {
 		Mockito.when(paging.firstRow()).thenReturn(0);
 
 		Mockito.when(archive.name()).thenReturn("Loveletter for Kylie");
-		Mockito.when(archive.archiveId()).thenReturn("19680528");
+		Mockito.when(archive.archiveId()).thenReturn(ID);
 		Mockito.when(archive.category()).thenReturn(Category.Correspondence);
 		archives.add(archive);
 
@@ -114,5 +115,21 @@ public class ArchiveRepositoryTest {
 		Assert.assertEquals(0, queryCaptor.getValue().getLimit());
 
 	}
+	
+	@Test
+	public final void save() {
+		archiveRepository.save(archive);
+		Mockito.verify(mongoOperations, Mockito.times(1)).save(archive);
+	}
+	
+	@Test
+	public final void forId() {
+		final  ArchiveImpl archive = Mockito.mock(ArchiveImpl.class);
+		Mockito.when(mongoOperations.findById(ID, ArchiveImpl.class)).thenReturn(archive);
+		Assert.assertEquals(archive, archiveRepository.forId(ID));
+	}
+	
+
+	
 
 }

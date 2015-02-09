@@ -17,6 +17,7 @@ import de.mq.archive.domain.Category;
 
 public class ArchiveRepositoryMockTest {
 
+	private static final String NAME = "Where the wild roses grow";
 	private static final String ARCHIVES_FIELD = "archives";
 	private static final String FORMAT_PATTERN = "name %02d";
 	private final ArchiveRepository archiveRepository = new ArchiveRepositoryMock();
@@ -105,6 +106,24 @@ public class ArchiveRepositoryMockTest {
 		((ArchiveRepositoryMock) archiveRepository).init();
 		
 		Assert.assertEquals(((Map<?, ?>) ReflectionTestUtils.getField(archiveRepository, ARCHIVES_FIELD)).size(), archiveRepository.countForCriteria(Mockito.mock(Archive.class)));
+	}
+	
+	@Test
+	public final void save() {
+		@SuppressWarnings("unchecked")
+		final Map<String, Archive> archives = (Map<String, Archive>) ReflectionTestUtils.getField(archiveRepository, ARCHIVES_FIELD);
+		final Archive archive = new ArchiveImpl(NAME, Category.Correspondence, null, null);
+	
+		archiveRepository.save(archive);
+		Assert.assertEquals(1, archives.size());
+		Assert.assertEquals(archive, archives.get(String.valueOf(UUID.nameUUIDFromBytes(archive.name().getBytes()))));
+		Assert.assertEquals(String.valueOf(UUID.nameUUIDFromBytes(NAME.getBytes())), archive.id());
+	}
+	
+	@Test
+	public final void forId() {
+		((ArchiveRepositoryMock) archiveRepository).init();
+		Assert.assertEquals(ArchiveRepositoryMock.ARCHIVE_01, archiveRepository.forId(ArchiveRepositoryMock.ARCHIVE_01.id()));
 	}
 
 }
