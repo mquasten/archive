@@ -19,14 +19,20 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 		this.labels = labels;
 		this.messages=messages;
 	}
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.web.edit.EditPageModel#getArchive()
+	 */
 	@Override
 	public Archive getArchive() {
 		
 		return archiveModel.toDomain();
 		
 	}
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.web.edit.EditPageModel#setArchive(de.mq.archive.domain.Archive)
+	 */
 	@Override
 	public void setArchive(final Archive archive) {
 		archiveModel.intoWeb(archive);

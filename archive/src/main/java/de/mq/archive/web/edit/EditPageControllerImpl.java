@@ -27,17 +27,20 @@ public class EditPageControllerImpl implements EditPageController {
 	
 	
 	@Named(SAVE_ACTION)
+	@Override
 	public final void save(final EditPageModel model) {
 		archiveService.save(model.getArchive());
 		
 	}
 	
 	@Named(SearchPageModel.INIT_EDIT)
+	@Override
 	public final void init(final SearchPageModel searchPageModel, final EditPageModel model) {
 		model.setArchive(archiveService.archive(searchPageModel.getSelectedArchiveId()));
 	}
 	
 	@Named(SearchPageModel.NEW_EDIT)
+	@Override
 	public final void init(final EditPageModel model) {
 		model.setArchive(BeanUtils.instantiateClass(ArchiveImpl.class));
 	}
