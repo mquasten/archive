@@ -52,5 +52,7 @@ public enum I18NEditPageModelParts implements WicketIdAware {
 	public final boolean  isButton() {
 		return this.button;
 	}
+	
+	
 
 }

@@ -12,8 +12,8 @@ public enum I18NEditPageMessagesParts implements WicketIdAware {
 	ArchiveId("archive_edit_archive_id_message"),
 	Name("archive_edit_name_message");
 	
-	private static final String FEEDBACK = "Feedback";
-	private static final String MESSAGE = "Message";
+	static final String FEEDBACK = "Feedback";
+	static final String MESSAGE = "Message";
 	private String key;
 	
 	I18NEditPageMessagesParts( final String key){
