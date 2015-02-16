@@ -49,7 +49,6 @@ public class ActionButton<T> extends Button  {
 
 	@Override
 	public void onSubmit() {
-	
 		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process(e.getKey()));
 		super.onSubmit();
 		

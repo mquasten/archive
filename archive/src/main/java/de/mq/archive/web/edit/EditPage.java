@@ -120,6 +120,8 @@ public class EditPage extends WebPage {
 
 
 	private void addMessage(final I18NEditPageMessagesParts part, final Form<?> form ){
+		
+		
 		final Label messageLabel = componentFactory.newComponent(editPageModelWeb.getI18NMessages(), part, Label.class);
 		messageLabel.setVisible(false);
 		form.add(messageLabel);

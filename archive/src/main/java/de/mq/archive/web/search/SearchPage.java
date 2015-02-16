@@ -115,9 +115,10 @@ public class SearchPage extends WebPage {
 		});
 
 		final Form<Archive> form = new Form<Archive>("form");
-		
+	
 		changeButton = newButton(I18NSearchPageModelParts.ChangeButton);
 		changeButton.addActionListener(SearchPageModel.INIT_EDIT, initEditActionListener );
+		
 		changeButton.addActionListener( action ->  setResponsePage(EditPage.class));
 		
 		showButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ShowButton,  ActionButton.class);

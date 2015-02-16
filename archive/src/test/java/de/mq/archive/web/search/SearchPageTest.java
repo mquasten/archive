@@ -1,9 +1,11 @@
 package de.mq.archive.web.search;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -31,6 +33,8 @@ import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TestConstants;
 import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.WicketApplication;
+import de.mq.archive.web.edit.EditPage;
+import de.mq.archive.web.edit.EditPageModelWeb;
 
 public class SearchPageTest {
 
@@ -60,6 +64,7 @@ public class SearchPageTest {
 	@SuppressWarnings("unchecked")
 	private IModel<String> selectedArchive = Mockito.mock(IModel.class);
 
+	private EditPageModelWeb editPageModelWeb = Mockito.mock(EditPageModelWeb.class);
 	WicketTester tester;
 
 	@SuppressWarnings("unchecked")
@@ -78,6 +83,8 @@ public class SearchPageTest {
 		beans.put(SearchPageController.class, searchPageController);
 		beans.put(ActionListener.class, actionListener);
 		beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
+		beans.put(EditPageModelWeb.class, editPageModelWeb);
+		
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
 		Mockito.when(searchPageModelWeb.getSelectedArchiveWeb()).thenReturn(selectedArchive);
@@ -108,6 +115,19 @@ public class SearchPageTest {
 		paths.put(I18NSearchPageModelParts.CategoryHeader, String.format("form:group:%s", I18NSearchPageModelParts.CategoryHeader.wicketId()));
 		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s",I18NSearchPageModelParts.DateHeader.wicketId()));
 		paths.put(I18NSearchPageModelParts.ArchiveIdHeader, String.format("form:group:%s", I18NSearchPageModelParts.ArchiveIdHeader.wicketId()));
+		
+	
+		final OneWayMapping<Locale,Enum<?>> oneWayMapping = Mockito.mock(OneWayMapping.class);
+		Mockito.when(editPageModelWeb.getI18NMessages()).thenReturn(oneWayMapping);
+		Mockito.when(editPageModelWeb.getI18NLabels()).thenReturn(oneWayMapping);
+		
+		final TwoWayMapping<Archive,Enum<?>> mock2 = Mockito.mock(TwoWayMapping.class);
+		
+		Mockito.when(editPageModelWeb.getArchiveModelWeb()).thenReturn(mock2);
+		
+		final IModel<Serializable> iModel = Mockito.mock(IModel.class);
+		Mockito.when(mock2.part(Mockito.any())).thenReturn(iModel);
+		Mockito.when(oneWayMapping.part(Mockito.any())).thenReturn(iModel);
 
 	}
 
@@ -178,6 +198,30 @@ public class SearchPageTest {
 		tester.assertComponentOnAjaxResponse(changeButton);
 		tester.assertComponentOnAjaxResponse(showButton);
 		
+	}
+	
+	@Test
+	public final void newButton() {
+	
+		
+		final FormTester formTester = tester.newFormTester("form");
+		
+		formTester.submit("group:" + I18NSearchPageModelParts.NewButton.wicketId() );
+	
+		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
+		
+	}
+	
+	@Test
+	public final void changeButton() {
+		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
+		Assert.assertFalse(changeButton.isEnabled());
+		changeButton.setEnabled(true);
+		final FormTester formTester = tester.newFormTester("form");
+		
+		formTester.submit("group:" + I18NSearchPageModelParts.ChangeButton.wicketId() );
+	
+		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
 	}
 
 }

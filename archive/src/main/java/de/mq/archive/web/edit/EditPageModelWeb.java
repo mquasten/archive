@@ -6,7 +6,7 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
 
-interface EditPageModelWeb {
+public interface EditPageModelWeb {
 
 	TwoWayMapping<Archive, Enum<?>> getArchiveModelWeb();
 
