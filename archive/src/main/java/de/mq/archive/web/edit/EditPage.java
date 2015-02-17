@@ -31,7 +31,7 @@ import de.mq.archive.web.search.SearchPage;
 public class EditPage extends WebPage {
 	
 	
-	private static final String FORM_NAME = "editForm";
+	static final String FORM_NAME = "editForm";
 
 	private static final long serialVersionUID = 1L;
 	
@@ -121,11 +121,13 @@ public class EditPage extends WebPage {
 
 	private void addMessage(final I18NEditPageMessagesParts part, final Form<?> form ){
 		
-		
 		final Label messageLabel = componentFactory.newComponent(editPageModelWeb.getI18NMessages(), part, Label.class);
 		messageLabel.setVisible(false);
 		form.add(messageLabel);
+		
 		final FeedbackPanel panel = new FeedbackPanel(part.wicketIdFeedback(), message -> message.getReporter().equals(form.get(part.wicketIdInput())));
+		
+		
 	   panel.setVisible(false);
 		form.add(panel);
 	}
