@@ -9,7 +9,7 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
 
-interface SearchPageModelWeb {
+public interface SearchPageModelWeb {
 	TwoWayMapping<Archive, Enum<?>> getSearchCriteriaWeb();
 
 	IModel<List<Archive>> getArchivesWeb();

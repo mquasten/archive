@@ -9,9 +9,12 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,6 +33,8 @@ import de.mq.archive.web.TestConstants;
 import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.WicketApplication;
 import de.mq.archive.web.search.ArchiveModelParts;
+import de.mq.archive.web.search.SearchPage;
+import de.mq.archive.web.search.SearchPageModelWeb;
 
 
 public class EditPageTest {
@@ -41,7 +46,7 @@ private final WebApplicationContext webApplicationContext = Mockito.mock(WebAppl
 @SuppressWarnings("unchecked")
 private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
 
-
+final SearchPageModelWeb searchPageModelWeb = Mockito.mock(SearchPageModelWeb.class);
 
 
 
@@ -55,27 +60,35 @@ private EditPageModelWeb editPageModelWeb = Mockito.mock(EditPageModelWeb.class)
 private WicketTester tester;
 private EditPage page;
 
-@SuppressWarnings("unchecked")
+
+
 @Before
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final void setup() {
 
 	Mockito.doAnswer(a -> new String[] { ((Class<?>) a.getArguments()[0]).getName() }).when(webApplicationContext).getBeanNamesForType(Mockito.any());
 	
 	Mockito.when(ctx.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).thenReturn(webApplicationContext);
-	@SuppressWarnings("rawtypes")
+	
+
 	final ArgumentCaptor<Class> clazzCaptor = ArgumentCaptor.forClass(Class.class);
 
 	
 	beans.put(ActionListener.class, actionListener);
 	beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
 	beans.put(EditPageModelWeb.class, editPageModelWeb);
+	beans.put(SearchPageModelWeb.class, searchPageModelWeb);
 	
 	Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
-
 	
 
-
 	
+	final OneWayMapping searchModelLabels = Mockito.mock(OneWayMapping.class);
+	Mockito.when(searchPageModelWeb.getI18NLabels()).thenReturn(searchModelLabels);
+	TwoWayMapping<Archive, Enum<?>> criteriaModel = Mockito.mock(TwoWayMapping.class);
+	Mockito.when(searchPageModelWeb.getSearchCriteriaWeb()).thenReturn(criteriaModel); 
+	
+	Mockito.when(searchPageModelWeb.getArchivesWeb()).thenReturn(new ListModel());
 	final OneWayMapping<Locale,Enum<?>> messages = Mockito.mock(OneWayMapping.class);
 	final OneWayMapping<Locale,Enum<?>> oneWayMapping = Mockito.mock(OneWayMapping.class);
 	Mockito.when(editPageModelWeb.getI18NMessages()).thenReturn(messages);
@@ -121,6 +134,27 @@ public final void setup() {
 	
 	}
 	
+	@Test
+	public final void cancel() {
+	
+		final FormTester formTester = tester.newFormTester(EditPage.FORM_NAME);
+		formTester.submit(I18NEditPageModelParts.CancelButton.wicketId());
+		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
+	}
+	
+	@Test
+	public final void saveWithoutInputs() {
+		final FormTester formTester = tester.newFormTester(EditPage.FORM_NAME);
+		formTester.submit(I18NEditPageModelParts.SaveButton.wicketId());
+	
+		Arrays.stream(I18NEditPageMessagesParts.values()).filter(x -> x == I18NEditPageMessagesParts.Name).forEach( x ->  Assert.assertTrue(((FeedbackPanel)tester.getComponentFromLastRenderedPage(EditPage.FORM_NAME + ":" + x.wicketIdFeedback(), false)).anyMessage()));
+		Arrays.stream(I18NEditPageMessagesParts.values()).filter(x -> x != I18NEditPageMessagesParts.Name).forEach( x ->  Assert.assertFalse(((FeedbackPanel)tester.getComponentFromLastRenderedPage(EditPage.FORM_NAME + ":" + x.wicketIdFeedback(), false)).anyMessage()));
+		Arrays.stream(I18NEditPageMessagesParts.values()).filter(x -> x == I18NEditPageMessagesParts.Name).forEach( x ->   Assert.assertTrue(((Label)tester.getComponentFromLastRenderedPage(EditPage.FORM_NAME + ":" + x.wicketId(), false)).isVisible()));
+		Arrays.stream(I18NEditPageMessagesParts.values()).filter(x -> x != I18NEditPageMessagesParts.Name).forEach( x ->   Assert.assertFalse(((Label)tester.getComponentFromLastRenderedPage(EditPage.FORM_NAME + ":" + x.wicketId(), false)).isVisible()));
+	
+		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
+		
+	}
 	
 }
 
