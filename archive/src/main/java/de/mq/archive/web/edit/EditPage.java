@@ -63,7 +63,6 @@ public class EditPage extends WebPage {
 
 			@Override
 			protected void onError() {
-				
 				Arrays.stream(I18NEditPageMessagesParts.values()).forEach(part -> {
 					((Component) get(part.wicketId())).setVisible(((FeedbackPanel) get(part.wicketIdFeedback())).anyMessage());
 				});
@@ -71,7 +70,6 @@ public class EditPage extends WebPage {
 			}
 		
 		};
-		
 		
 		
 		Arrays.stream(I18NEditPageMessagesParts.values()).forEach(part -> addMessage(part, editForm) );
@@ -108,8 +106,8 @@ public class EditPage extends WebPage {
 	}
 
 	@SuppressWarnings("unchecked")
-	private TextField<String> input(final Form<String> editForm, ArchiveModelParts part) {
-		return (TextField<String>) editForm.get(part.wicketId());
+	private TextField<String> input(final Form<String> editForm, final ArchiveModelParts part) {
+			return (TextField<String>) editForm.get(part.wicketId());
 	}
 
 
