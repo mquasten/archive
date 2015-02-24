@@ -37,6 +37,13 @@
 		<!--constructor-arg name="mongoConverter" ref="mappingMongoConverter" / -->
 	</bean>
 
+
+	<bean class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+  <constructor-arg ref="mongoDbFactory"/>
+  <constructor-arg ref="mappingMongoConverter"/>
+</bean>
+
+
 	<context:component-scan base-package="de.mq.archive.domain.support" />
 
 	<bean
