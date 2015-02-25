@@ -7,15 +7,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-
-
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,7 +23,8 @@ import de.mq.archive.domain.Category;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/mongo-test.xml"})
-
+@ActiveProfiles({"db"})
+@Ignore
 public class ArchiveIntegrationTest {
 	
 	@Inject
