@@ -1,15 +1,16 @@
 package de.mq.archive.domain.support;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
@@ -129,6 +130,14 @@ public class ArchiveImpl implements Archive {
 			return;
 		}
 		relatedPersons.remove(person);
+	}
+
+
+	public final Optional<String> parentId() {
+		if( StringUtils.hasText(id)){
+			return Optional.of(id);		
+		}
+		return Optional.empty();
 	}
 
 

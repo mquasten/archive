@@ -1,88 +1,58 @@
 package de.mq.archive.domain.support;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Optional;
 
-import javax.inject.Inject;
 
-import org.junit.Ignore;
+
+
+
+
+
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.FileCopyUtils;
 
-import com.mongodb.gridfs.GridFSDBFile;
+import de.mq.archive.domain.GridFsInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/mongo-test.xml"})
 @ActiveProfiles({"db"})
 public class MongoFileRepositoryIntegrationTest {
-	private static final String FILE_NAME = "WhereTheWildRosesGrow.mp3";
-	@Inject
-	private  GridFsOperations gridOperations;
 	
-	@Ignore
+	private static final String PARENT_ID = "kylieAndNick";
+
+	private static final byte[] CONTENT = "They call me The Wild Rose But my name was Elisa Day Why they call me it I do not know. For my name was Elisa Day ...".getBytes();
+
+	private static final String CONTENT_TYPE = "audio/mpeg";
+
+	private static final String NAME = "whereTheWildRosesGrow";
+
+	@Autowired
+	private MongoFileRepository mongoFileRepository;
+	
+	private final InputStream is = new ByteArrayInputStream( CONTENT );
+	
 	@Test
-	public final void store() throws FileNotFoundException {
-		System.out.println(gridOperations);
-		final InputStream is = new ByteArrayInputStream("They call me The Wild Rose But my name was Elisa Day Why they call me it I do not know For my name was ...".getBytes());
-	
-		gridOperations.store(is, FILE_NAME, "audio/mpeg" , new FileMetaInfos());
-	}
-	
-	@Test
-	public final void read() {
-		final Query query = new Query(new Criteria("metadata").is(new FileMetaInfos()));
+	public final void save() {
+		mongoFileRepository.save(is, NAME,  Optional.of(PARENT_ID),  CONTENT_TYPE);
 		
-		final Collection<GridFSDBFile> results = gridOperations.find(query);
+		final Collection<GridFsInfo<String>> results = mongoFileRepository.resources(Optional.of(PARENT_ID));
+		Assert.assertEquals(1, results.size());
 		
+		final GridFsInfo<String> result = results.stream().findFirst().get();
+		Assert.assertNotNull(result.id());
+		Assert.assertEquals(NAME, result.filename());
+		Assert.assertEquals(CONTENT_TYPE, result.contentType());
+		Assert.assertEquals((long) CONTENT.length, result.contentLength());
 		
-		
-		results.forEach(x -> System.out.println(print(x) ) );
-	
-
-}
-
-private String print(final GridFSDBFile info) {
-	
-	try {
-		return info.getId() + ":" + new String( FileCopyUtils.copyToByteArray(info.getInputStream()))+":"+ info.getMetaData().toString() ;
-	} catch (IOException e) {
-		return "sucks:" +e.getMessage();
-	}
-}
-
-}
-class FileMetaInfos {
-	
-	
-	private String parentId = "19680528";
-
-	@Override
-	public int hashCode() {
-		
-		return parentId.hashCode();
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof FileMetaInfos)) {
-			return false;
-		}
-		final FileMetaInfos  other = (FileMetaInfos) obj;
-		return parentId.equals(other);
-	}
-
-	
-	
-	
-	
 }
