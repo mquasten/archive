@@ -53,6 +53,7 @@ public class MongoFileRepositoryIntegrationTest {
 		Assert.assertEquals(CONTENT_TYPE, result.contentType());
 		Assert.assertEquals((long) CONTENT.length, result.contentLength());
 		
+		
 	}
 
 }

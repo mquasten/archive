@@ -12,6 +12,10 @@ public interface MongoFileRepository {
 	
 	Collection<GridFsInfo<String>> resources(final Optional<String> parentId);
 
+	void deleteAll(Optional<String> parentId);
+
+	void delete(String fileId);
+
 	
 
 }

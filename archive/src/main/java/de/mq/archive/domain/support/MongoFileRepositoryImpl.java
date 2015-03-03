@@ -22,6 +22,7 @@ import de.mq.archive.domain.GridFsInfo;
 @Named
 public class MongoFileRepositoryImpl implements MongoFileRepository {
 	
+	private static final String ID_FIELD = "id";
 	private static final String ALIASES_FIELD = "aliases";
 	private static final String METADATA_FIELD = "metadata";
 	private final GridFsOperations gridOperations;
@@ -38,7 +39,7 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 	 */
 	@Override
 	public final void save(final InputStream is, final String name, final Optional<String> parentId, final String contentType) {
-		Assert.isTrue(parentId.isPresent(), "ParentId is mandatory, may be Parent isn't persistent");
+		parentExistsGuard(parentId);
 		final Query query = new Query(Criteria.where(METADATA_FIELD).is(parentId).and(ALIASES_FIELD).is(name.toLowerCase().trim()));
 		gridOperations.delete(query);
 		
@@ -47,6 +48,11 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 		
 		gridFSFile.save();
 		
+	}
+
+
+	private void parentExistsGuard(final Optional<String> parentId) {
+		Assert.isTrue(parentId.isPresent(), "ParentId is mandatory, may be Parent isn't persistent");
 	} 
 	/*
 	 * (non-Javadoc)
@@ -88,7 +94,25 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 		return results;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.domain.support.MongoFileRepository#deleteAll(java.util.Optional)
+	 */
+	@Override
+	public final void deleteAll(final Optional<String> parentId) {
+		parentExistsGuard(parentId);
+		gridOperations.delete(new Query(Criteria.where(METADATA_FIELD).is(parentId)));
+	}
 	
+
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.domain.support.MongoFileRepository#delete(java.lang.String)
+	 */
+	@Override
+	public final void delete(final String fileId) {
+		gridOperations.find(new Query(Criteria.where(ID_FIELD).is(fileId)));
+	}
 	
 	
 	
