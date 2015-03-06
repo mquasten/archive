@@ -12,7 +12,7 @@ public class ActionButton<T> extends Button implements ActionListenerOperations<
 
 	private static final long serialVersionUID = 1L;
 	
-	private final Map<String,ActionListener<T>> listeners = new HashMap<>();
+	private final Map<T,ActionListener<T>> listeners = new HashMap<>();
 	
 	public ActionButton(final String id) {
 		super(id);
@@ -27,16 +27,17 @@ public class ActionButton<T> extends Button implements ActionListenerOperations<
 	 * @see de.mq.archive.web.ActionListenerOperations#addActionListener(T, de.mq.archive.web.ActionListener)
 	 */
 	@Override
-	public final void addActionListener(final String key, final ActionListener<T> actionListener) {
+	public final void addActionListener(final T key, final ActionListener<T> actionListener) {
 		listeners.put(key, actionListener);
 	}
 	
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.ActionListenerOperations#addActionListener(de.mq.archive.web.ActionListener)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public final void addActionListener(final ActionListener<T> actionListener) {
-		listeners.put( getId(), actionListener);
+		listeners.put( (T) getId(), actionListener);
 	}
 	
 	
@@ -52,7 +53,7 @@ public class ActionButton<T> extends Button implements ActionListenerOperations<
 	 * @see de.mq.archive.web.ActionListenerOperations#removeActionListener(T)
 	 */
 	@Override
-	public final void removeActionListener(String key) {
+	public final void removeActionListener(T key) {
 		listeners.remove(key);
 	}
 	
@@ -61,12 +62,12 @@ public class ActionButton<T> extends Button implements ActionListenerOperations<
 	 * @see de.mq.archive.web.ActionListenerOperations#getActionListeners()
 	 */
 	@Override
-	public final Map<String, ActionListener<T>> getActionListeners() {
+	public final Map<T, ActionListener<T>> getActionListeners() {
 		return Collections.unmodifiableMap(listeners);
 	}
 
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void onSubmit() {
 		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process((T) e.getKey()));

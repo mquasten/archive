@@ -8,16 +8,16 @@ import java.util.stream.Collectors;
 import org.apache.wicket.markup.html.form.Form;
 
 
-public class ActionForm<T,M>   extends Form<T> implements ActionListenerOperations<M>  {
+public class ActionForm<T>  extends Form<T> implements ActionListenerOperations<T>  {
 	
 	private static final long serialVersionUID = 1L;
-	private final Map<String,ActionListener<M>> listeners = new HashMap<>();
+	private final Map<T,ActionListener<T>> listeners = new HashMap<>();
 	
-	private final M model;
 	
-	public ActionForm(final String id, final M model ) {
-		super("id");
-	   this.model=model; 
+	
+	public ActionForm(final String id) {
+		super(id);
+	   
 	}
 	
 
@@ -27,37 +27,40 @@ public class ActionForm<T,M>   extends Form<T> implements ActionListenerOperatio
 
 
 	@Override
-	public void addActionListener(final String key, final ActionListener<M> actionListener) {
-		listeners.put(key, actionListener);
+	public void addActionListener(final T key, final ActionListener<T> actionListener) {
+		listeners.put( key, actionListener);
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addActionListener(final ActionListener<T> actionListener) {
+		listeners.put( (T) getId(), actionListener);
 		
 	}
 
 	@Override
-	public void addActionListener(final ActionListener<M> actionListener) {
-		listeners.put( getId(), actionListener);
-		
-	}
-
-	@Override
-	public void removeActionListener(final  ActionListener<M> actionListener) {
+	public void removeActionListener(final  ActionListener<T> actionListener) {
 		listeners.entrySet().stream().filter(entry  -> entry.getValue().equals(actionListener)).map(entry -> entry.getKey()).collect(Collectors.toSet()).forEach(key -> listeners.remove(key));
 		
 	}
 
 	@Override
-	public void removeActionListener(final String key) {
+	public void removeActionListener(final T key) {
 		listeners.remove(key);
 		
 	}
 
 	@Override
-	public Map<String, ActionListener<M>> getActionListeners() {
+	public Map<T, ActionListener<T>> getActionListeners() {
 		return Collections.unmodifiableMap(listeners);
 	}
 	
 	@Override
 	public void onSubmit() {
-		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process(model));
+		System.out.println("!!!submit");
+		System.out.println(listeners);
+		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process(e.getKey()));
 		super.onSubmit();
 		
 	}

@@ -22,6 +22,13 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 	
 	private final BeanFactory beanFactory;
 	
+	private final Map<Class<?>,Object> dependencies = new HashMap<>();
+	
+	public final <T>  void addDependency(Class<? extends T > clazz, T dependency) {
+		dependencies.put(clazz, dependency);
+	}
+	
+	
 	final Map<String, Method> methods = new HashMap<>();
 	public SimpleParameterInjectionActionListenerImpl(final BeanFactory beanfactory, final Class<?> controllerClass) {
 		this.controller=beanfactory.getBean(controllerClass);
@@ -32,6 +39,7 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 	
 	@Override
 	public void process(final String id) {
+		
 		if( ! methods.containsKey(id)){
 			System.out.println(String.format("No actions for %s", id));
 			return;
@@ -39,10 +47,17 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 		final Method method = methods.get(id);
 		method.setAccessible(true);
 		final List<Object> args = new ArrayList<>();
-		Arrays.asList(method.getParameters()).forEach(p ->args.add(beanFactory.getBean(p.getType())));
+		Arrays.asList(method.getParameters()).forEach(p ->args.add(resolveBean(p.getType())));
 	
 		ReflectionUtils.invokeMethod(method, controller,  args.toArray(new Object[args.size()]));
 		
+	}
+
+	private Object resolveBean(Class<?> clazz) {
+		if( dependencies.containsKey(clazz)) {
+			return dependencies.get(clazz);
+		}
+		return beanFactory.getBean(clazz);
 	}
 
 }

@@ -6,6 +6,8 @@ import javax.inject.Named;
 
 
 
+
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,4 +46,16 @@ public class EditPageControllerImpl implements EditPageController {
 	public final void init(final EditPageModel model) {
 		model.setArchive(BeanUtils.instantiateClass(ArchiveImpl.class));
 	}
+	
+	@Named("uploadAction")
+	@Override
+	public final void uplod(final EditPageModel model, final FileUploadField fileUploadField) {
+		System.out.println("***************************");
+		System.out.println(model);
+		System.out.println(fileUploadField.getFileUpload());
+		System.out.println("***************************");
+	}	
+		
+		
+
 }

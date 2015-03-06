@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -52,5 +53,20 @@ class EditPageModels {
 	 public ActionListener<?> newEditActionListener() {
 		 return new SimpleParameterInjectionActionListenerImpl(beanFactory,EditPageController.class);
 	 }
+	 
+	 @Bean(name="fileUpload")
+	 @Scope(value="session")
+	 public   FileUploadField fileUploadField() { 
+	 
+		 return new FileUploadField("fileUpload");
+	
+	 }
+	 
+	 
+	 
+	 
 
 }
+
+
+

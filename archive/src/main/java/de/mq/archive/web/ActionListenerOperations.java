@@ -4,14 +4,14 @@ import java.util.Map;
 
 public interface ActionListenerOperations<T> {
 
-	public abstract void addActionListener(String key, ActionListener<T> actionListener);
+	public abstract void addActionListener(T key, ActionListener<T> actionListener);
 
 	public abstract void addActionListener(ActionListener<T> actionListener);
 
 	public abstract void removeActionListener(ActionListener<T> actionListener);
 
-	public abstract void removeActionListener(String key);
+	public abstract void removeActionListener(T key);
 
-	public abstract Map<String, ActionListener<T>> getActionListeners();
+	public abstract Map<T, ActionListener<T>> getActionListeners();
 
 }
