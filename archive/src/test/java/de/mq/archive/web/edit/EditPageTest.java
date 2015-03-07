@@ -9,7 +9,9 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.IGenericComponent;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -68,6 +70,7 @@ public class EditPageTest {
 		beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
 		beans.put(EditPageModelWeb.class, editPageModelWeb);
 		beans.put(SearchPageModelWeb.class, searchPageModelWeb);
+		
 
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
@@ -96,6 +99,8 @@ public class EditPageTest {
 		Arrays.stream(I18NEditPageMessagesParts.values()).forEach(p -> Mockito.when(messages.part(p)).thenReturn(new Model<>(p.key())));
 
 		tester = new WicketTester(wicketApplication, ctx);
+		
+		beans.put(IGenericComponent.class, new FileUploadField("fileUpload"));
 		page = new EditPage(null);
 		tester.startPage(page);
 

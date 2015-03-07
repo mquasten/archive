@@ -1,6 +1,7 @@
 package de.mq.archive.domain;
 
 
+import java.io.InputStream;
 import java.util.List;
 
 import de.mq.archive.domain.support.ModifyablePaging;
@@ -16,6 +17,8 @@ public interface ArchiveService {
 	
 	void save(final Archive archive);
 
-	Archive archive(final String id); 
+	Archive archive(final String id);
+
+	void upload(Archive archive, InputStream is, String filename, String contentType); 
 
 }

@@ -3,8 +3,6 @@ package de.mq.archive.web;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import de.mq.archive.web.search.SearchPage;
 
@@ -33,8 +31,6 @@ public class WicketApplication extends WebApplication
 	@Override
 	public void init()
 	{
-	
-		ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-		super.getComponentInstantiationListeners().add(new SpringComponentInjector(this,ctx, true));
+		super.getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 	}
 }

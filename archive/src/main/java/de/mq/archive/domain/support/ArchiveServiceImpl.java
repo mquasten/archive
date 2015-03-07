@@ -1,5 +1,6 @@
 package de.mq.archive.domain.support;
 
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class ArchiveServiceImpl implements ArchiveService {
 	
 	
 	private final ArchiveRepository archiveRepository;
+	private final MongoFileRepository fileRepository;
 	
 	@Inject
-	public ArchiveServiceImpl(ArchiveRepository archiveRepository) {
+	public ArchiveServiceImpl(final ArchiveRepository archiveRepository, final MongoFileRepository fileRepository) {
 		this.archiveRepository = archiveRepository;
+		this.fileRepository=fileRepository;
 	}
 	
 	/* (non-Javadoc)
@@ -57,6 +60,15 @@ public class ArchiveServiceImpl implements ArchiveService {
 		}
 		return archive;
 		
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.domain.ArchiveService#upload(de.mq.archive.domain.Archive, java.io.InputStream, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void upload(final  Archive archive, final InputStream is , final String filename, final String contentType) {
+		fileRepository.save(is, filename, archive.parentId(), contentType);
 	}
 	
 

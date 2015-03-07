@@ -22,10 +22,6 @@ public class ActionForm<T>  extends Form<T> implements ActionListenerOperations<
 	
 
 
-	
-
-
-
 	@Override
 	public void addActionListener(final T key, final ActionListener<T> actionListener) {
 		listeners.put( key, actionListener);
@@ -58,8 +54,6 @@ public class ActionForm<T>  extends Form<T> implements ActionListenerOperations<
 	
 	@Override
 	public void onSubmit() {
-		System.out.println("!!!submit");
-		System.out.println(listeners);
 		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process(e.getKey()));
 		super.onSubmit();
 		

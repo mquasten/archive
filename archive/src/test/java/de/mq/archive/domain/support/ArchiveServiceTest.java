@@ -22,7 +22,8 @@ public class ArchiveServiceTest {
 	private static final int COUNTER = 42;
 	private static final int PAGE_SIZE = 10;
 	private final ArchiveRepository archiveRepository = Mockito.mock(ArchiveRepository.class);
-	private final ArchiveService archiveService = new ArchiveServiceImpl(archiveRepository);
+	private final MongoFileRepository mongoFileRepository = Mockito.mock(MongoFileRepository.class);
+	private final ArchiveService archiveService = new ArchiveServiceImpl(archiveRepository, mongoFileRepository);
 	private final Archive archive = Mockito.mock(Archive.class);
 	private final Paging paging = Mockito.mock(Paging.class);
 
