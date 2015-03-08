@@ -16,10 +16,14 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.proxy.ILazyInitProxy;
@@ -27,11 +31,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 import de.mq.archive.domain.Category;
+import de.mq.archive.domain.GridFsInfo;
 import de.mq.archive.web.ActionButton;
 import de.mq.archive.web.ActionForm;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.ActionListenerOperations;
 import de.mq.archive.web.ComponentFactory;
+import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.search.ArchiveModelParts;
 import de.mq.archive.web.search.SearchPage;
 
@@ -111,11 +117,36 @@ public class EditPage extends WebPage {
 		
 		editPageModelWeb.getI18NLabels().intoWeb(getLocale());
 		editPageModelWeb.getI18NMessages().intoWeb(getLocale());
+		editPageModelWeb.getI18NAttachementLabels().intoWeb(getLocale());
 		
 		input(editForm, ArchiveModelParts.Name).add(new PatternValidator("[ 0-9a-zA-Z_-]{1,25}"));
 		input(editForm, ArchiveModelParts.ArchiveId).add(new PatternValidator("[0-9a-zA-Z_-]{0,25}"));
 	
-	
+		final Form<String> attachementForm = new Form<String>("attachementForm");
+		
+		@SuppressWarnings("unchecked")
+		final RadioGroup<String> group = componentFactory.newComponent("group", editPageModelWeb.getSelectedAttachementWeb(), RadioGroup.class);
+		
+		
+		final ListView<TwoWayMapping<GridFsInfo<String>, Enum<?>>> attachements = new ListView<TwoWayMapping<GridFsInfo<String>, Enum<?>>>("attachements", editPageModelWeb.getAttachements()) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<TwoWayMapping<GridFsInfo<String>, Enum<?>>> item) {
+				item.add(componentFactory.newComponent( item.getModelObject(),GridFsInfoParts.Id, Radio.class));
+				item.add(componentFactory.newComponent( item.getModelObject(),GridFsInfoParts.Filename, Label.class));
+				item.add(componentFactory.newComponent( item.getModelObject(),GridFsInfoParts.ContentType, Label.class));
+				item.add(componentFactory.newComponent( item.getModelObject(),GridFsInfoParts.ContentLength, Label.class));
+			}
+			
+		};
+
+		Arrays.stream(I18NAttachementsModelParts.values()).forEach(part -> group.add(componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), part, Label.class)) );
+		
+		group.add(attachements);
+		add(attachementForm);
+		attachementForm.add(group);	
 		final ActionForm<String>  uploadForm = new ActionForm<>(UPLOAD_FORM);		
 		uploadForm.addActionListener(EditPageModel.UPLOAD_ACTION ,  actionListener);
 		

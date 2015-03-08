@@ -54,11 +54,38 @@
 					wicket:id="saveButton" /></td>
 			</tr>
 		</table>
-		
+	
+	
 	</form>
 	
+	<form wicket:id="attachementForm">
+	<div wicket:id="group">
+	<table style="border: 2px dotted #fc0; padding: 5px;">
+                    <tr>
+                        <td></td>
+                        <td><b><span wicket:id="filenameHeader"/></b></td>
+                          <td><b><span wicket:id="contentTypeHeader"/></b></td>
+                           <td><b><span wicket:id="contentLengthHeader"/></b></td>
+                       
+                    </tr>
+                    <tr wicket:id="attachements">
+                     	<td><input type="radio" wicket:id="id"/></td>
+                        <td><span wicket:id="filename"/></td>
+                        <td><span wicket:id="contentType"/></td>
+                        <td><span wicket:id="contentLength"/></td>
+                      
+                    </tr>
+                 
+            
+            
+          
+   </table>
+   </div>
+	</form>
+	
+	
+	
 	<form wicket:id="uploadForm">
-
 		<table style="border: 2px dotted #fc0; padding: 5px;">
 		<tr>
 		<td>

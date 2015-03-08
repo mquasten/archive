@@ -2,6 +2,7 @@ package de.mq.archive.domain;
 
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import de.mq.archive.domain.support.ModifyablePaging;
@@ -19,6 +20,8 @@ public interface ArchiveService {
 
 	Archive archive(final String id);
 
-	void upload(Archive archive, InputStream is, String filename, String contentType); 
+	void upload(final Archive archive, final InputStream is, final String filename, final String contentType);
+
+	Collection<GridFsInfo<String>> attachements(final Archive archive); 
 
 }

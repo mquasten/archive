@@ -5,17 +5,6 @@ import java.io.InputStream;
 
 import javax.inject.Named;
 
-
-
-
-
-
-
-
-
-
-
-
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.springframework.beans.BeanUtils;
@@ -27,9 +16,6 @@ import de.mq.archive.web.search.SearchPageModel;
 
 @Named
 public class EditPageControllerImpl implements EditPageController {
-	
-	
-	
 	private final ArchiveService archiveService;
 	
 	@Autowired
@@ -50,6 +36,8 @@ public class EditPageControllerImpl implements EditPageController {
 	@Override
 	public final void init(final SearchPageModel searchPageModel, final EditPageModel model) {
 		model.setArchive(archiveService.archive(searchPageModel.getSelectedArchiveId()));
+		archiveService.attachements(model.getArchive()).forEach(attachement -> model.add(attachement));
+		
 	}
 	
 	@Named(SearchPageModel.NEW_EDIT)

@@ -1,6 +1,7 @@
 package de.mq.archive.domain.support;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
+import de.mq.archive.domain.GridFsInfo;
 
 
 @Named
@@ -69,6 +71,15 @@ public class ArchiveServiceImpl implements ArchiveService {
 	@Override
 	public void upload(final  Archive archive, final InputStream is , final String filename, final String contentType) {
 		fileRepository.save(is, filename, archive.parentId(), contentType);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.domain.ArchiveService#attachements(de.mq.archive.domain.Archive)
+	 */
+	@Override
+	public Collection<GridFsInfo<String>> attachements(final Archive archive) {
+		return fileRepository.resources(archive.parentId());
 	}
 	
 

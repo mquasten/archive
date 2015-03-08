@@ -5,6 +5,7 @@ import java.util.Locale;
 
 
 
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -20,8 +21,10 @@ public class EditPageModelTest {
 	private final OneWayMapping<Locale, Enum<?>> labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final OneWayMapping<Locale, Enum<?>> messages = Mockito.mock(OneWayMapping.class);
+	@SuppressWarnings("unchecked")
+	private final OneWayMapping<Locale, Enum<?>> attachementsLabels = Mockito.mock(OneWayMapping.class);
 	
-	private final EditPageModel editPageModel = new EditPageModelImpl(archiveModel, labels, messages);
+	private final EditPageModel editPageModel = new EditPageModelImpl(archiveModel, labels, messages,attachementsLabels );
 	
 	private final Archive archive = Mockito.mock(Archive.class);
 	@Test

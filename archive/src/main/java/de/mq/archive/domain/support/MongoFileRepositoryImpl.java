@@ -3,7 +3,6 @@ package de.mq.archive.domain.support;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -62,35 +61,7 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 	public final Collection<GridFsInfo<String>> resources(final Optional<String> parentId) {
 		final Query query = new Query(Criteria.where(METADATA_FIELD).is(parentId));
 		final Collection<GridFsInfo<String>> results = new ArrayList<>();
-		gridOperations.find(query).forEach( gridFSDBFile -> results.add( new GridFsInfo<String>(){
-
-			@Override
-			public Number contentLength() {
-				return gridFSDBFile.getLength();
-			}
-
-			@Override
-			public String filename() {
-				return gridFSDBFile.getFilename();
-			}
-
-			@Override
-			public Date lastModified() {
-				return gridFSDBFile.getUploadDate();
-			}
-
-			@Override
-			public String id() {
-				if(   gridFSDBFile.getId() == null) {
-					return null;
-				}
-				return gridFSDBFile.getId().toString();
-			}
-
-			@Override
-			public String contentType() {
-				return gridFSDBFile.getContentType();
-			}}) );
+		gridOperations.find(query).forEach( gridFSDBFile -> results.add( new GridFsInfoImpl( gridFSDBFile.getId() != null ? gridFSDBFile.getId().toString() : null , gridFSDBFile.getFilename(), gridFSDBFile.getLength(),gridFSDBFile.getUploadDate(), gridFSDBFile.getContentType()))); 
 		return results;
 	}
 	

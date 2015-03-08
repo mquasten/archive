@@ -1,6 +1,7 @@
 package de.mq.archive.web.edit;
 
 import de.mq.archive.domain.Archive;
+import de.mq.archive.domain.GridFsInfo;
 
 interface EditPageModel {
 	
@@ -9,5 +10,7 @@ interface EditPageModel {
 	Archive getArchive();
 
 	void setArchive(Archive archive);
+
+	void add(GridFsInfo<String> attachement);
 
 }

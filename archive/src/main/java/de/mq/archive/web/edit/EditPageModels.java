@@ -33,7 +33,7 @@ class EditPageModels {
 	@Bean()
 	@Scope("session")
 	EditPageModelImpl editPageModel() {
-		return new EditPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NEditPageModelParts.values()), Arrays.asList(I18NEditPageModelParts.values()).stream().map(part -> part.key()).collect(Collectors.toList())), new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NEditPageMessagesParts.values()), Arrays.asList(I18NEditPageMessagesParts.values()).stream().map(part -> part.key()).collect(Collectors.toList())));
+		 return new EditPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NEditPageModelParts.values()), Arrays.asList(I18NEditPageModelParts.values()).stream().map(part -> part.key()).collect(Collectors.toList())), new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NEditPageMessagesParts.values()), Arrays.asList(I18NEditPageMessagesParts.values()).stream().map(part -> part.key()).collect(Collectors.toList())), new BasicI18NEnumModelImpl(messageSource, Arrays.asList(I18NAttachementsModelParts.values()), Arrays.asList(I18NAttachementsModelParts.values()).stream().map(part -> part.key()).collect(Collectors.toList())));
 	}
 	
 	 @Bean(name="editActionListener")
