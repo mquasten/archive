@@ -18,4 +18,7 @@ interface EditPageController  {
 
 
 	void uplod(final EditPageModel model, final FileUploadField fileUploadField);
+
+
+	void deleteUpload(final EditPageModel model);
 }

@@ -142,19 +142,25 @@ public class EditPage extends WebPage {
 			
 		};
 
-		Arrays.stream(I18NAttachementsModelParts.values()).forEach(part -> group.add(componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), part, Label.class)) );
+	
 		
+		Arrays.stream(I18NAttachementsModelParts.values()).filter(part -> part.targetClass()==Label.class).forEach(part -> group.add(componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), part, part.targetClass())) );
+		
+		@SuppressWarnings("unchecked")
+		final ActionButton<String> deleteButton = (ActionButton<String>) componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), I18NAttachementsModelParts.DeleteButton,ActionButton.class);
+		deleteButton.addActionListener(EditPageModel.DELETE_UPLOAD_ACTION, actionListener);
+		deleteButton.addActionListener( action ->  setResponsePage(EditPage.class));
 		group.add(attachements);
+		group.add(deleteButton);
 		add(attachementForm);
 		attachementForm.add(group);	
 		final ActionForm<String>  uploadForm = new ActionForm<>(UPLOAD_FORM);		
 		uploadForm.addActionListener(EditPageModel.UPLOAD_ACTION ,  actionListener);
+		uploadForm.addActionListener( a -> setResponsePage(EditPage.class));
 		
 		uploadForm.add( (FileUploadField)  ((ILazyInitProxy) fileUploadField).getObjectLocator().locateProxyTarget());
 	
 		add(uploadForm);
-	
-			
 	
 	}
 

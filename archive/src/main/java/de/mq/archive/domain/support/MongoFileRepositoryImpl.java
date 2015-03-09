@@ -21,7 +21,7 @@ import de.mq.archive.domain.GridFsInfo;
 @Named
 public class MongoFileRepositoryImpl implements MongoFileRepository {
 	
-	private static final String ID_FIELD = "id";
+	private static final String ID_FIELD = "_id";
 	private static final String ALIASES_FIELD = "aliases";
 	private static final String METADATA_FIELD = "metadata";
 	private final GridFsOperations gridOperations;
@@ -82,7 +82,7 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 	 */
 	@Override
 	public final void delete(final String fileId) {
-		gridOperations.find(new Query(Criteria.where(ID_FIELD).is(fileId)));
+		gridOperations.delete(new Query(Criteria.where(ID_FIELD).is(fileId)));
 	}
 	
 	

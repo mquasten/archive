@@ -81,6 +81,10 @@ public class ArchiveServiceImpl implements ArchiveService {
 	public Collection<GridFsInfo<String>> attachements(final Archive archive) {
 		return fileRepository.resources(archive.parentId());
 	}
+	@Override
+	public final void deleteAttachement(final String fileId){
+		fileRepository.delete(fileId);
+	}
 	
 
 }

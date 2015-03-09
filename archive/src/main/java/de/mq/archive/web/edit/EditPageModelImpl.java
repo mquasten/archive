@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
+import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.GridFsInfo;
@@ -119,6 +120,14 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	@Override
 	public final IModel<String> getSelectedAttachementWeb() {
 		return selectedAttachementWeb;
+	}
+	@Override
+	public String getSelectedAttachement() {
+		if( !StringUtils.hasText(selectedAttachementWeb.getObject())){
+			return "";
+		}
+		return selectedAttachementWeb.getObject();
+		
 	}
 
 }

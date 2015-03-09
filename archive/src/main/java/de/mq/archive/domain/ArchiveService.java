@@ -22,6 +22,8 @@ public interface ArchiveService {
 
 	void upload(final Archive archive, final InputStream is, final String filename, final String contentType);
 
-	Collection<GridFsInfo<String>> attachements(final Archive archive); 
+	Collection<GridFsInfo<String>> attachements(final Archive archive);
+
+	void deleteAttachement(final String fileId); 
 
 }
