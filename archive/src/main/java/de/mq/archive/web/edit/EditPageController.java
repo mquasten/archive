@@ -21,4 +21,7 @@ interface EditPageController  {
 
 
 	void deleteUpload(final EditPageModel model);
+
+
+	void showAttachement(EditPageModel model);
 }

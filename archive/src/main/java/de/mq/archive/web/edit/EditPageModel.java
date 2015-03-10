@@ -7,12 +7,14 @@ interface EditPageModel {
 	
 	static final String UPLOAD_ACTION = "uploadAction";
 	static final String DELETE_UPLOAD_ACTION = "deleteUploadAction";
+	
+	static final String SHOW_ATTACHEMENT_ACTION = "showAttachement";
 
 	Archive getArchive();
 
 	void setArchive(Archive archive);
 
 	void add(GridFsInfo<String> attachement);
-	String getSelectedAttachement();
+	String getSelectedAttachementId();
 
 }

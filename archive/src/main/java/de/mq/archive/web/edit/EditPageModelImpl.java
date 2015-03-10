@@ -122,7 +122,7 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 		return selectedAttachementWeb;
 	}
 	@Override
-	public String getSelectedAttachement() {
+	public String getSelectedAttachementId() {
 		if( !StringUtils.hasText(selectedAttachementWeb.getObject())){
 			return "";
 		}

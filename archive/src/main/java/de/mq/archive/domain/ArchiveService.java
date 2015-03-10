@@ -4,6 +4,7 @@ package de.mq.archive.domain;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 
 import de.mq.archive.domain.support.ModifyablePaging;
 import de.mq.archive.domain.support.Paging;
@@ -24,6 +25,8 @@ public interface ArchiveService {
 
 	Collection<GridFsInfo<String>> attachements(final Archive archive);
 
-	void deleteAttachement(final String fileId); 
+	void deleteAttachement(final String fileId);
+
+	Entry<GridFsInfo<String>, byte[]> content(final String fileId); 
 
 }

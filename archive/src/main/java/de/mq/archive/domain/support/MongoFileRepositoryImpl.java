@@ -1,8 +1,11 @@
 package de.mq.archive.domain.support;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -13,7 +16,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.client.ResourceAccessException;
 
+import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSFile;
 
 import de.mq.archive.domain.GridFsInfo;
@@ -61,8 +67,13 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 	public final Collection<GridFsInfo<String>> resources(final Optional<String> parentId) {
 		final Query query = new Query(Criteria.where(METADATA_FIELD).is(parentId));
 		final Collection<GridFsInfo<String>> results = new ArrayList<>();
-		gridOperations.find(query).forEach( gridFSDBFile -> results.add( new GridFsInfoImpl( gridFSDBFile.getId() != null ? gridFSDBFile.getId().toString() : null , gridFSDBFile.getFilename(), gridFSDBFile.getLength(),gridFSDBFile.getUploadDate(), gridFSDBFile.getContentType()))); 
+		gridOperations.find(query).forEach( gridFSDBFile -> results.add( gridFsInfo(gridFSDBFile))); 
 		return results;
+	}
+
+
+	private GridFsInfo<String> gridFsInfo(final GridFSDBFile gridFSDBFile) {
+		return new GridFsInfoImpl( gridFSDBFile.getId() != null ? gridFSDBFile.getId().toString() : null , gridFSDBFile.getFilename(), gridFSDBFile.getLength(),gridFSDBFile.getUploadDate(), gridFSDBFile.getContentType());
 	}
 	
 	/*
@@ -84,8 +95,20 @@ public class MongoFileRepositoryImpl implements MongoFileRepository {
 	public final void delete(final String fileId) {
 		gridOperations.delete(new Query(Criteria.where(ID_FIELD).is(fileId)));
 	}
-	
-	
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.domain.support.MongoFileRepository#file(java.lang.String)
+	 */
+	@Override
+	public final Entry<GridFsInfo<String>, byte[]> file(final String fileId) {
+		final GridFSDBFile result = gridOperations.findOne(new Query(Criteria.where(ID_FIELD).is(fileId)));
+		
+		try(final InputStream is = result.getInputStream()) {
+			return new AbstractMap.SimpleEntry<GridFsInfo<String>,byte[]>(gridFsInfo(result), FileCopyUtils.copyToByteArray(is));
+		} catch (final IOException ex) {
+			throw new ResourceAccessException("Error reding Stream from Mongo", ex);
+		}
+	}
 	
 	
 }

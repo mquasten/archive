@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -84,6 +85,10 @@ public class ArchiveServiceImpl implements ArchiveService {
 	@Override
 	public final void deleteAttachement(final String fileId){
 		fileRepository.delete(fileId);
+	}
+	@Override
+	public final Entry<GridFsInfo<String>, byte[]> content(final String fileId){
+		return fileRepository.file(fileId);
 	}
 	
 

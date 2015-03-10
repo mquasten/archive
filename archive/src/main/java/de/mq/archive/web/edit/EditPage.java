@@ -11,6 +11,8 @@ import javax.inject.Named;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.IGenericComponent;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -142,7 +144,18 @@ public class EditPage extends WebPage {
 			
 		};
 
-	
+		group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(final AjaxRequestTarget target) {
+			
+				
+
+			}
+
+		});
 		
 		Arrays.stream(I18NAttachementsModelParts.values()).filter(part -> part.targetClass()==Label.class).forEach(part -> group.add(componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), part, part.targetClass())) );
 		
@@ -150,8 +163,13 @@ public class EditPage extends WebPage {
 		final ActionButton<String> deleteButton = (ActionButton<String>) componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), I18NAttachementsModelParts.DeleteButton,ActionButton.class);
 		deleteButton.addActionListener(EditPageModel.DELETE_UPLOAD_ACTION, actionListener);
 		deleteButton.addActionListener( action ->  setResponsePage(EditPage.class));
+		
+		@SuppressWarnings("unchecked")
+		final ActionButton<String> showButton = (ActionButton<String>) componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), I18NAttachementsModelParts.ShowButton,ActionButton.class);
+		showButton.addActionListener(EditPageModel.SHOW_ATTACHEMENT_ACTION, actionListener);
 		group.add(attachements);
 		group.add(deleteButton);
+		group.add(showButton);
 		add(attachementForm);
 		attachementForm.add(group);	
 		final ActionForm<String>  uploadForm = new ActionForm<>(UPLOAD_FORM);		
