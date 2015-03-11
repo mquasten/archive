@@ -24,6 +24,12 @@ public interface EditPageModelWeb {
 
 	IModel<String> getSelectedAttachementWeb();
 
+	boolean isPersistent();
+
+	boolean hasAttachements();
+
+	boolean isAttachementSelected();
+
 	
 
 }

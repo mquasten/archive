@@ -5,7 +5,6 @@ package de.mq.archive.web.edit;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -16,6 +15,7 @@ import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -125,6 +125,7 @@ public class EditPage extends WebPage {
 		input(editForm, ArchiveModelParts.ArchiveId).add(new PatternValidator("[0-9a-zA-Z_-]{0,25}"));
 	
 		final Form<String> attachementForm = new Form<String>("attachementForm");
+		attachementForm.setVisible(editPageModelWeb.hasAttachements());
 		
 		@SuppressWarnings("unchecked")
 		final RadioGroup<String> group = componentFactory.newComponent("group", editPageModelWeb.getSelectedAttachementWeb(), RadioGroup.class);
@@ -144,18 +145,7 @@ public class EditPage extends WebPage {
 			
 		};
 
-		group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(final AjaxRequestTarget target) {
-			
-				
-
-			}
-
-		});
+		
 		
 		Arrays.stream(I18NAttachementsModelParts.values()).filter(part -> part.targetClass()==Label.class).forEach(part -> group.add(componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), part, part.targetClass())) );
 		
@@ -167,6 +157,22 @@ public class EditPage extends WebPage {
 		@SuppressWarnings("unchecked")
 		final ActionButton<String> showButton = (ActionButton<String>) componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), I18NAttachementsModelParts.ShowButton,ActionButton.class);
 		showButton.addActionListener(EditPageModel.SHOW_ATTACHEMENT_ACTION, actionListener);
+		
+		group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(final AjaxRequestTarget target) {
+			enableButtons(editPageModelWeb.isAttachementSelected(), deleteButton, showButton);
+				target.add(deleteButton);
+				target.add(showButton);
+
+
+			}
+
+		});
+		
 		group.add(attachements);
 		group.add(deleteButton);
 		group.add(showButton);
@@ -175,9 +181,10 @@ public class EditPage extends WebPage {
 		final ActionForm<String>  uploadForm = new ActionForm<>(UPLOAD_FORM);		
 		uploadForm.addActionListener(EditPageModel.UPLOAD_ACTION ,  actionListener);
 		uploadForm.addActionListener( a -> setResponsePage(EditPage.class));
-		
+		uploadForm.setVisible(editPageModelWeb.isPersistent());
 		uploadForm.add( (FileUploadField)  ((ILazyInitProxy) fileUploadField).getObjectLocator().locateProxyTarget());
 	
+		enableButtons(editPageModelWeb.isAttachementSelected(), deleteButton, showButton);
 		add(uploadForm);
 	
 	}
@@ -208,7 +215,9 @@ public class EditPage extends WebPage {
 	}
 	
 
-	
+	private void enableButtons(final boolean enabled, Button ... buttons) {
+		Arrays.asList(buttons).forEach(button -> button.setEnabled(enabled));
+	}
 	
 	
 

@@ -15,6 +15,7 @@ import de.mq.archive.domain.GridFsInfo;
 import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
+import de.mq.archive.web.search.ArchiveModelParts;
 
 
 class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
@@ -55,6 +56,7 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	public void setArchive(final Archive archive) {
 		archiveModel.intoWeb(archive);
 		attachements.clear();
+		selectedAttachementWeb.setObject(null);
 	}
 	
 	/*
@@ -128,6 +130,22 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 		}
 		return selectedAttachementWeb.getObject();
 		
+	}
+	@Override
+	public final boolean isPersistent(){
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		final Model<String> model = (Model) archiveModel.part(ArchiveModelParts.Id);
+		return StringUtils.hasText(model.getObject());
+	}
+	
+	@Override
+	public final boolean hasAttachements(){
+		return ! attachements.isEmpty();
+	}
+	
+	@Override
+	public final boolean isAttachementSelected() {
+		return StringUtils.hasText(getSelectedAttachementId());
 	}
 
 }
