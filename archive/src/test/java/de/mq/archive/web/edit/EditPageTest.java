@@ -74,22 +74,28 @@ public class EditPageTest {
 
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
-		final OneWayMapping searchModelLabels = Mockito.mock(OneWayMapping.class);
+		final OneWayMapping attachementLabels = Mockito.mock(OneWayMapping.class);
+		final OneWayMapping searchModelLabels = attachementLabels;
 		Mockito.when(searchPageModelWeb.getI18NLabels()).thenReturn(searchModelLabels);
 		TwoWayMapping<Archive, Enum<?>> criteriaModel = Mockito.mock(TwoWayMapping.class);
 		Mockito.when(searchPageModelWeb.getSearchCriteriaWeb()).thenReturn(criteriaModel);
 
 		Mockito.when(searchPageModelWeb.getArchivesWeb()).thenReturn(new ListModel());
-		final OneWayMapping<Locale, Enum<?>> messages = Mockito.mock(OneWayMapping.class);
-		final OneWayMapping<Locale, Enum<?>> oneWayMapping = Mockito.mock(OneWayMapping.class);
+		final OneWayMapping<Locale, Enum<?>> messages = attachementLabels;
+		final OneWayMapping<Locale, Enum<?>> oneWayMapping = attachementLabels;
 		Mockito.when(editPageModelWeb.getI18NMessages()).thenReturn(messages);
 		Mockito.when(editPageModelWeb.getI18NLabels()).thenReturn(oneWayMapping);
+		
+		Mockito.when(editPageModelWeb.getI18NAttachementLabels()).thenReturn(attachementLabels);
+		
+		final IModel attachementsListModel = Mockito.mock(IModel.class);
+		Mockito.when(editPageModelWeb.getAttachements()).thenReturn(attachementsListModel);
 
 		final TwoWayMapping<Archive, Enum<?>> mock2 = Mockito.mock(TwoWayMapping.class);
 
 		Mockito.when(editPageModelWeb.getArchiveModelWeb()).thenReturn(mock2);
 
-		final IModel<Serializable> iModel = Mockito.mock(IModel.class);
+		final IModel<Serializable> iModel = attachementsListModel;
 		Mockito.when(mock2.part(Mockito.any())).thenReturn(iModel);
 		Mockito.when(oneWayMapping.part(Mockito.any())).thenReturn(iModel);
 		Mockito.when(messages.part(Mockito.any())).thenReturn(iModel);

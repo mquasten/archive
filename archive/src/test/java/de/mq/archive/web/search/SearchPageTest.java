@@ -10,10 +10,12 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.wicket.IGenericComponent;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.FormTester;
@@ -95,6 +97,8 @@ public class SearchPageTest {
 		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId)).thenReturn(new Model<>());
 
 		tester = new WicketTester(wicketApplication, ctx);
+		
+		beans.put(IGenericComponent.class, new FileUploadField("fileUpload"));
 		final SearchPage page = new SearchPage(null);
 		tester.startPage(page);
 
@@ -124,6 +128,9 @@ public class SearchPageTest {
 		final TwoWayMapping<Archive,Enum<?>> mock2 = Mockito.mock(TwoWayMapping.class);
 		
 		Mockito.when(editPageModelWeb.getArchiveModelWeb()).thenReturn(mock2);
+		
+		Mockito.when(editPageModelWeb.getI18NAttachementLabels()).thenReturn(oneWayMapping);
+		Mockito.when(editPageModelWeb.getAttachements()).thenReturn(Mockito.mock(IModel.class));
 		
 		final IModel<Serializable> iModel = Mockito.mock(IModel.class);
 		Mockito.when(mock2.part(Mockito.any())).thenReturn(iModel);
