@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.IModel;
 
-public class ActionButton<T> extends Button implements ActionListenerOperations<T>  {
+public class ActionButton<T> extends Button   {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -23,51 +23,39 @@ public class ActionButton<T> extends Button implements ActionListenerOperations<
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.ActionListenerOperations#addActionListener(T, de.mq.archive.web.ActionListener)
-	 */
-	@Override
+
 	public final void addActionListener(final T key, final ActionListener<T> actionListener) {
 		listeners.put(key, actionListener);
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.ActionListenerOperations#addActionListener(de.mq.archive.web.ActionListener)
-	 */
+	
 	@SuppressWarnings("unchecked")
-	@Override
 	public final void addActionListener(final ActionListener<T> actionListener) {
 		listeners.put( (T) getId(), actionListener);
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.ActionListenerOperations#removeActionListener(de.mq.archive.web.ActionListener)
-	 */
-	@Override
+	
 	public final void removeActionListener(final ActionListener<T> actionListener) {
 		listeners.entrySet().stream().filter(entry  -> entry.getValue().equals(actionListener)).map(entry -> entry.getKey()).collect(Collectors.toSet()).forEach(key -> listeners.remove(key));
 	}
 	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.ActionListenerOperations#removeActionListener(T)
-	 */
-	@Override
+	
 	public final void removeActionListener(T key) {
 		listeners.remove(key);
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see de.mq.archive.web.ActionListenerOperations#getActionListeners()
-	 */
-	@Override
+	
 	public final Map<T, ActionListener<T>> getActionListeners() {
 		return Collections.unmodifiableMap(listeners);
 	}
 
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.apache.wicket.markup.html.form.Button#onSubmit()
+	 */
 	@Override
 	public void onSubmit() {
 		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process((T) e.getKey()));

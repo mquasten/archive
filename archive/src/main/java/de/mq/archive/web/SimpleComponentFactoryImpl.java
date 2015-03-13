@@ -5,7 +5,9 @@ import java.lang.reflect.Constructor;
 import javax.inject.Named;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.proxy.ILazyInitProxy;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
 
 import de.mq.archive.web.search.WicketIdAware;
 
@@ -36,6 +38,12 @@ class SimpleComponentFactoryImpl implements ComponentFactory {
 	
 		return BeanUtils.instantiateClass(constructor(clazz, String.class, IModel.class), wicketId, model);
 	}
+	@Override
+	@SuppressWarnings("unchecked")
+	public final <T,S> T deProxymize(final S proxy, final Class<? extends T> target) {
+		Assert.isInstanceOf(ILazyInitProxy.class, proxy);
+		 return (T)  ((ILazyInitProxy) proxy).getObjectLocator().locateProxyTarget();
+	}
 
 	private <T> Constructor<T> constructor(final Class<T> clazz, final Class<?>... types) {
 		try {
@@ -46,4 +54,7 @@ class SimpleComponentFactoryImpl implements ComponentFactory {
 
 	}
 
+	
+
+	
 }

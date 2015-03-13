@@ -27,7 +27,6 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionButton;
 import de.mq.archive.web.ActionListener;
-import de.mq.archive.web.ActionListenerOperations;
 import de.mq.archive.web.ComponentFactory;
 import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.edit.EditPage;
@@ -84,7 +83,7 @@ public class SearchPage extends WebPage {
 		searchForm.add(componentFactory.newComponent( searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchArchiveLabel, Label.class	));
 
 		@SuppressWarnings("unchecked")
-		final ActionListenerOperations<String> searchButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
+		final ActionButton<String> searchButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
 
 		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
 		

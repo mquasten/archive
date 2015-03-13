@@ -5,6 +5,7 @@ package de.mq.archive.web.edit;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -28,16 +29,15 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.wicket.proxy.ILazyInitProxy;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 import de.mq.archive.domain.Category;
 import de.mq.archive.domain.GridFsInfo;
 import de.mq.archive.web.ActionButton;
-import de.mq.archive.web.ActionForm;
 import de.mq.archive.web.ActionListener;
-import de.mq.archive.web.ActionListenerOperations;
+
 import de.mq.archive.web.ComponentFactory;
 import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.search.ArchiveModelParts;
@@ -112,7 +112,7 @@ public class EditPage extends WebPage {
 		editForm.add(categoryBox);
 		categoryBox.setNullValid(true);
 		
-		Arrays.stream(I18NEditPageModelParts.values()).filter(value -> value.isButton()).forEach(value -> ((ActionListenerOperations<?>)editForm.get(value.wicketId())).addActionListener(id -> setResponsePage(SearchPage.class)));
+		Arrays.stream(I18NEditPageModelParts.values()).filter(value -> value.isButton()).forEach(value -> ((ActionButton<?>)editForm.get(value.wicketId())).addActionListener(id -> setResponsePage(SearchPage.class)));
 		
 		button(editForm, I18NEditPageModelParts.CancelButton).setDefaultFormProcessing(false);
 		
@@ -178,12 +178,17 @@ public class EditPage extends WebPage {
 		group.add(showButton);
 		add(attachementForm);
 		attachementForm.add(group);	
-		final ActionForm<String>  uploadForm = new ActionForm<>(UPLOAD_FORM);		
-		uploadForm.addActionListener(EditPageModel.UPLOAD_ACTION ,  actionListener);
-		uploadForm.addActionListener( a -> setResponsePage(EditPage.class));
-		uploadForm.setVisible(editPageModelWeb.isPersistent());
-		uploadForm.add( (FileUploadField)  ((ILazyInitProxy) fileUploadField).getObjectLocator().locateProxyTarget());
+		final Form<String>  uploadForm = new Form<>(UPLOAD_FORM);		
+		@SuppressWarnings("unchecked")
+		final ActionButton<String> uploadButton = componentFactory.newComponent(editPageModelWeb.getI18NAttachementLabels(), I18NAttachementsModelParts.UploadButton, ActionButton.class);
+		
+		uploadButton.addActionListener(EditPageModel.UPLOAD_ACTION, actionListener);
+		uploadButton.addActionListener( a -> setResponsePage(EditPage.class));
+		uploadForm.add(uploadButton);
 	
+
+		uploadForm.setVisible(editPageModelWeb.isPersistent());
+		uploadForm.add(componentFactory.deProxymize(fileUploadField, FileUploadField.class));
 		enableButtons(editPageModelWeb.isAttachementSelected(), deleteButton, showButton);
 		add(uploadForm);
 	

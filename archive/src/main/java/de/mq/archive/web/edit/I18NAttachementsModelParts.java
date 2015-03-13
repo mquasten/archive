@@ -13,7 +13,8 @@ public enum I18NAttachementsModelParts implements WicketIdAware {
 	ContentTypeHeader("archive_edit_attachement_contentType",Label.class),
 	ContentLengthHeader("archive_edit_attachement_contentLength", Label.class),
 	DeleteButton("archive_edit_attachement_delete" , ActionButton.class),
-	ShowButton("archive_edit_attachement_show" , ActionButton.class);
+	ShowButton("archive_edit_attachement_show" , ActionButton.class),
+	UploadButton("archive_edit_attachement_upload" , ActionButton.class);
 
 	private final String key;
 	private final Class<? extends Component> targetClass;
