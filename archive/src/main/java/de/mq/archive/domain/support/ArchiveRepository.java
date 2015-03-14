@@ -14,4 +14,6 @@ interface ArchiveRepository {
 
 	Archive forId(final String id);
 
+	void delete(Archive archive);
+
 }

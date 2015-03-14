@@ -19,4 +19,5 @@ public interface SearchPageModel {
 	
 	static final String NEW_EDIT = "new_edit";
 	
+	
 }

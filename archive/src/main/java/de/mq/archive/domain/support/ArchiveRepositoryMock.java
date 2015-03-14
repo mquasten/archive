@@ -116,6 +116,12 @@ public class ArchiveRepositoryMock implements ArchiveRepository {
 	public Archive forId(final String id) {
 		return archives.get(id);
 	}
+
+	@Override
+	public void delete(final Archive archive) {
+		archives.remove(archive.id());
+		
+	}
 	
 
 }

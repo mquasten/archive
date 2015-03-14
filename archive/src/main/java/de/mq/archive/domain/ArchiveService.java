@@ -27,6 +27,8 @@ public interface ArchiveService {
 
 	void deleteAttachement(final String fileId);
 
-	Entry<GridFsInfo<String>, byte[]> content(final String fileId); 
+	Entry<GridFsInfo<String>, byte[]> content(final String fileId);
+
+	void delte(final Archive archive); 
 
 }

@@ -25,7 +25,8 @@ public enum I18NEditPageModelParts implements WicketIdAware {
 	
 	
 	CancelButton("archive_edit_cancel_button", true, true ),
-	SaveButton("archive_edit_save_button", true, true);
+	SaveButton("archive_edit_save_button", true, true),
+	DeleteButton("archive_edit_delete_button", true, true);
 	
 	I18NEditPageModelParts(final String key, final boolean withInForm, final boolean button ) {
 		this.key=key;

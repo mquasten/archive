@@ -40,6 +40,18 @@ public class EditPageControllerImpl implements EditPageController {
 		
 	}
 	
+	@Named(EditPageModel.DELETE_ACTION)
+	@Override
+	public final void delete(final EditPageModel model) {
+		
+		if( ! model.isPersistent() ) {
+		    return;
+		}
+		
+		archiveService.delte(model.getArchive());
+		
+	}
+	
 	@Named(SearchPageModel.INIT_EDIT)
 	@Override
 	public final void init(final SearchPageModel searchPageModel, final EditPageModel model) {

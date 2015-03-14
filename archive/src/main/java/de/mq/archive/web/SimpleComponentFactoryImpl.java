@@ -6,6 +6,7 @@ import javax.inject.Named;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.proxy.ILazyInitProxy;
+import org.apache.wicket.request.component.IRequestableComponent;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 
@@ -38,6 +39,10 @@ class SimpleComponentFactoryImpl implements ComponentFactory {
 	
 		return BeanUtils.instantiateClass(constructor(clazz, String.class, IModel.class), wicketId, model);
 	}
+	/*
+	 * (non-Javadoc)
+	 * @see de.mq.archive.web.ComponentFactory#deProxymize(java.lang.Object, java.lang.Class)
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public final <T,S> T deProxymize(final S proxy, final Class<? extends T> target) {
@@ -53,8 +58,17 @@ class SimpleComponentFactoryImpl implements ComponentFactory {
 		}
 
 	}
-
 	
+	@Override
+	@SuppressWarnings("unchecked")
+	public final  <T extends IRequestableComponent>   T componetByPath(final IRequestableComponent parent , final String path, final Class<T> clazz) {
+		Assert.notNull(parent, "ParentComponent should be given");
+		Assert.hasText(path, "Path should be given");
+		final IRequestableComponent result = parent.get(path);
+		Assert.notNull(result, String.format("Component %s not found on parent %s",   path , parent.getId() ));
+		return (T) result;
+		
+	}
 
 	
 }

@@ -9,6 +9,8 @@ interface EditPageModel {
 	static final String DELETE_UPLOAD_ACTION = "deleteUploadAction";
 	
 	static final String SHOW_ATTACHEMENT_ACTION = "showAttachement";
+	
+	static final String DELETE_ACTION = "delete_document";
 
 	Archive getArchive();
 
@@ -16,5 +18,7 @@ interface EditPageModel {
 
 	void add(GridFsInfo<String> attachement);
 	String getSelectedAttachementId();
+	
+	public boolean isPersistent();
 
 }

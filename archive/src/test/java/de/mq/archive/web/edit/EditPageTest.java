@@ -166,12 +166,13 @@ public class EditPageTest {
 
 		page = new EditPage(null);
 		tester.startPage(page);
-
+	
 		final FormTester formTester = tester.newFormTester(EditPage.FORM_NAME);
 		formTester.submit(I18NEditPageModelParts.SaveButton.wicketId());
 		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
 
 		Mockito.verify(actionListener).process(EditPageController.SAVE_ACTION);
+	
 	}
 
 }

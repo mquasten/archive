@@ -75,6 +75,10 @@ class ArchiveMongoRepositoryImpl implements ArchiveRepository {
 		mongoOperations.save(archive);
 		
 	}
+	@Override
+	public void delete(final Archive archive){
+		mongoOperations.remove(forId(archive.id()));
+	}
 	
 	@Override
 	public final Archive forId(final String id){
