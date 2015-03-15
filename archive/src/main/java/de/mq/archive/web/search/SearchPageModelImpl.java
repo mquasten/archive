@@ -1,6 +1,7 @@
 package de.mq.archive.web.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -9,8 +10,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.springframework.util.StringUtils;
-
 import de.mq.archive.domain.Archive;
+import de.mq.archive.domain.support.ArchiveImpl;
+import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
 
@@ -52,9 +54,21 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	}
 	
 	@Override
+	public final List<TwoWayMapping<Archive, Enum<?>>>  getArchivesWeb2() {
+		final List<TwoWayMapping<Archive, Enum<?>>> results = new ArrayList<>();
+		archives.forEach(archive -> { 
+			final TwoWayMapping<Archive, Enum<?>> model =  new BasicEnumModelImpl<>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class); 
+			model.intoWeb(archive);
+			results.add(model);
+		});
+		return results;
+	}
+	
+	@Override
 	public final void setArchives(final List<Archive> archives) {
 		this.archives.clear();
 		this.archives.addAll(archives);
+		
 		unSelectIfNotInResult();
 	}
 	

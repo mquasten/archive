@@ -13,6 +13,8 @@ public interface SearchPageModelWeb {
 	TwoWayMapping<Archive, Enum<?>> getSearchCriteriaWeb();
 
 	IModel<List<Archive>> getArchivesWeb();
+	
+
 
 	IModel<String> getSelectedArchiveWeb();
 
@@ -21,6 +23,10 @@ public interface SearchPageModelWeb {
 	boolean isSelected();
 
 	OneWayMapping<Locale, Enum<?>> getI18NLabels();
+
+
+
+	List<TwoWayMapping<Archive, Enum<?>>> getArchivesWeb2();
 
 
 }

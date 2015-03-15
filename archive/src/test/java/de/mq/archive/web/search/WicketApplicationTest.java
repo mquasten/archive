@@ -30,9 +30,7 @@ public class WicketApplicationTest {
 
 	private final ServletContext ctx = Mockito.mock(ServletContext.class);
 	private final WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
-
-	private final SearchPageController searchPageController = Mockito.mock(SearchPageController.class);
-
+	
 	@SuppressWarnings("unchecked")
 	private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
 
@@ -62,7 +60,7 @@ public class WicketApplicationTest {
 		final ArgumentCaptor<Class> clazzCaptor = ArgumentCaptor.forClass(Class.class);
 
 		beans.put(SearchPageModelWeb.class, searchPageModelWeb);
-		beans.put(SearchPageController.class, searchPageController);
+
 		beans.put(ActionListener.class, actionListener);
 		
 		beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
@@ -81,7 +79,7 @@ public class WicketApplicationTest {
 		
 		
 		Assert.assertEquals(searchPageModelWeb, target(ReflectionTestUtils.getField(page, "searchPageModel")));
-		Assert.assertEquals(searchPageController, target(ReflectionTestUtils.getField(page, "searchPageController")));
+	
 		Assert.assertEquals(actionListener, target(ReflectionTestUtils.getField(page, "actionListener")));
 
 	}

@@ -43,8 +43,6 @@ public class SearchPageTest {
 	private final ServletContext ctx = Mockito.mock(ServletContext.class);
 	private final WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
 
-	private final SearchPageController searchPageController = Mockito.mock(SearchPageController.class);
-
 	@SuppressWarnings("unchecked")
 	private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
 
@@ -82,7 +80,7 @@ public class SearchPageTest {
 		final ArgumentCaptor<Class> clazzCaptor = ArgumentCaptor.forClass(Class.class);
 
 		beans.put(SearchPageModelWeb.class, searchPageModelWeb);
-		beans.put(SearchPageController.class, searchPageController);
+		
 		beans.put(ActionListener.class, actionListener);
 		beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
 		beans.put(EditPageModelWeb.class, editPageModelWeb);
@@ -160,26 +158,33 @@ public class SearchPageTest {
 		formTester.setValue("name", "kylie");
 		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
 
-		final List<Archive> rows = new ArrayList<>();
-		Archive row = Mockito.mock(Archive.class);
-		rows.add(row);
-		Mockito.when(listModel.getObject()).thenReturn(rows);
+		
 
-		final Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
-		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
+		Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
+		Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertFalse(showButton.isEnabled());
 		Assert.assertFalse(changeButton.isEnabled());
 		@SuppressWarnings("unchecked")
 		final TwoWayMapping<Archive,Enum<?>> currentRow = Mockito.mock(TwoWayMapping.class);
-		Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
+	//	Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
+	
+	
+		final List <TwoWayMapping<Archive,Enum<?>>>  rows = new ArrayList<>();
+		rows.add(currentRow);
+		
+		Mockito.when(searchPageModelWeb.getArchivesWeb2()).thenReturn(rows);
+		
 		Arrays.stream(ArchiveModelParts.values()).forEach(part -> Mockito.when(currentRow.part(part)).thenReturn(new Model<>(part.name())));
 
 		formTester.submit("searchButton");
 
-		Mockito.verify(actionListener).process(SearchPageController.SEARCH_ACTION);
+		Mockito.verify(actionListener, Mockito.times(3)).process(SearchPageModel.SEARCH_ACTION);
+		 showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
+		 changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertTrue(showButton.isEnabled());
 		Assert.assertTrue(changeButton.isEnabled());
 
+		//tester.debugComponentTrees();
 		Arrays.stream(new ArchiveModelParts[] { ArchiveModelParts.Id, ArchiveModelParts.ArchiveId, ArchiveModelParts.Name, ArchiveModelParts.Category, ArchiveModelParts.DocumentDate }).forEach(part -> Assert.assertEquals(part.name(), tester.getComponentFromLastRenderedPage(String.format("form:group:documents:0:%s", StringUtils.uncapitalize(part.name()))).getDefaultModel().getObject()));
 
 	}

@@ -35,8 +35,6 @@ public class SearchPage extends WebPage {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
-	private SearchPageController searchPageController;
 
 	@Inject()
 	private SearchPageModelWeb searchPageModel;
@@ -81,13 +79,15 @@ public class SearchPage extends WebPage {
 	
 		final ActionButton<String> searchButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
 
-		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
+		searchButton.addActionListener(SearchPageModel.SEARCH_ACTION, actionListener);
 		
 		
 		
 		
 
 		searchButton.addActionListener(action -> enableButtons());
+		
+		searchButton.addActionListener(action -> setResponsePage(SearchPage.class));
 		searchForm.add((Component) searchButton);
 
 	
@@ -135,21 +135,18 @@ public class SearchPage extends WebPage {
 		group.add(changeButton);
 		group.add(showButton);
 		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchTableHeadline, Label.class));
-
-		final ListView<Archive> persons = new ListView<Archive>("documents", searchPageModel.getArchivesWeb()) {
+		actionListener.process(SearchPageModel.SEARCH_ACTION);
+		final ListView<TwoWayMapping<Archive, Enum<?>>> persons = new ListView<TwoWayMapping<Archive, Enum<?>>>("documents",new ListModel<>(searchPageModel.getArchivesWeb2())) {
 
 			private static final long serialVersionUID = 1L;
 
-			protected void populateItem(final ListItem<Archive> item) {
+			protected void populateItem(final ListItem<TwoWayMapping<Archive, Enum<?>>> item) {
+				item.add(componentFactory.newComponent(item.getModelObject(), ArchiveModelParts.Id, Radio.class));
 
-				final TwoWayMapping<Archive, Enum<?>> currentRow = searchPageController.newWebModel(item.getModelObject());
-
-				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.Id, Radio.class));
-
-				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.Name, Label.class));
-				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.Category, Label.class));
-				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.DocumentDate, Label.class));
-				item.add(componentFactory.newComponent(currentRow, ArchiveModelParts.ArchiveId, Label.class));
+				item.add(componentFactory.newComponent(item.getModelObject(), ArchiveModelParts.Name, Label.class));
+				item.add(componentFactory.newComponent(item.getModelObject(), ArchiveModelParts.Category, Label.class));
+				item.add(componentFactory.newComponent(item.getModelObject(), ArchiveModelParts.DocumentDate, Label.class));
+				item.add(componentFactory.newComponent(item.getModelObject(), ArchiveModelParts.ArchiveId, Label.class));
 
 			}
 
@@ -164,6 +161,8 @@ public class SearchPage extends WebPage {
 		Session.get().setLocale(Locale.GERMAN);
 		enableButtons();
 		searchPageModel.getI18NLabels().intoWeb(getLocale());
+		
+	
 
 	}
 
@@ -181,6 +180,7 @@ public class SearchPage extends WebPage {
 	private void enableButtons() {
 		changeButton.setEnabled(searchPageModel.isSelected());
 		showButton.setEnabled(searchPageModel.isSelected());
+		
 	}
 	
 

@@ -21,5 +21,7 @@ public interface SearchPageModel {
 	
 	static final String NEW_EDIT = "new_edit";
 	
+	static final String SEARCH_ACTION = "search";
+	
 	
 }

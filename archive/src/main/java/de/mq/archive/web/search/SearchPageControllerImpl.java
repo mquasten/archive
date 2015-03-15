@@ -1,15 +1,9 @@
 package de.mq.archive.web.search;
 
-import java.util.Arrays;
-
 import javax.inject.Named;
 
-import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
-import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.domain.support.Paging;
-import de.mq.archive.web.BasicEnumModelImpl;
-import de.mq.archive.web.TwoWayMapping;
 
 class SearchPageControllerImpl implements SearchPageController {
 	
@@ -23,18 +17,13 @@ class SearchPageControllerImpl implements SearchPageController {
 	/* (non-Javadoc)
 	 * @see de.mq.archive.web.search.SerachpageController#archives(de.mq.archive.domain.Archive)
 	 */
-	@Named(SEARCH_ACTION)
+	@Named(SearchPageModel.SEARCH_ACTION)
 	@Override
 	public final void search(final SearchPageModel model) {
 		final Paging paging = archiveService.paging(model.getSearchCriteria(), model.getPageSize().intValue());
 		model.setArchives(archiveService.archives(model.getSearchCriteria(), paging));
 	}
 
-	@Override
-	public TwoWayMapping<Archive, Enum<?>> newWebModel(final Archive archive) {
-			final TwoWayMapping<Archive, Enum<?>> model = new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class);
-			model.intoWeb(archive);
-			return model;
-	}
+	
 
 }
