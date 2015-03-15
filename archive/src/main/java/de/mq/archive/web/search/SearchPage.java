@@ -12,7 +12,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -47,19 +46,18 @@ public class SearchPage extends WebPage {
 	private ActionListener<String> actionListener;
 	
 	@Inject()
-	@Named("initEditActionListener")
-	private ActionListener<String> initEditActionListener;
-	@Inject()
-	@Named("newEditActionListener")
-	private ActionListener<String> newEditActionListener;
+	@Named("editActionListener")
+	private ActionListener<String> editActionListener;
+
 	
 	@Inject()
 	private ComponentFactory componentFactory;
 	
 	private final ActionButton<String> changeButton;
-	private final Button showButton;
+	private final ActionButton<String>  showButton;
 
 	
+	@SuppressWarnings("unchecked")
 	public SearchPage(final PageParameters parameters) {
 		final Form<String> searchForm = new Form<>("searchForm");
 
@@ -71,8 +69,6 @@ public class SearchPage extends WebPage {
 		searchForm.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchNameLabel, Label.class));
 
 		
-	
-		@SuppressWarnings("unchecked")
 		final DropDownChoice<Category> dropDownChoice = componentFactory.newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.Category, DropDownChoice.class, new ListModel<>(Arrays.asList(Category.values())));
 		
 		dropDownChoice.setNullValid(true);
@@ -82,7 +78,7 @@ public class SearchPage extends WebPage {
 		searchForm.add(componentFactory.newComponent(searchPageModel.getSearchCriteriaWeb(), ArchiveModelParts.ArchiveId, TextField.class));
 		searchForm.add(componentFactory.newComponent( searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchArchiveLabel, Label.class	));
 
-		@SuppressWarnings("unchecked")
+	
 		final ActionButton<String> searchButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchButton, ActionButton.class);
 
 		searchButton.addActionListener(SearchPageController.SEARCH_ACTION, actionListener);
@@ -94,7 +90,7 @@ public class SearchPage extends WebPage {
 		searchButton.addActionListener(action -> enableButtons());
 		searchForm.add((Component) searchButton);
 
-		@SuppressWarnings("unchecked")
+	
 		final RadioGroup<String> group = componentFactory.newComponent(WICKET_ID_GROUP, searchPageModel.getSelectedArchiveWeb(), RadioGroup.class);
 				
 				
@@ -117,17 +113,20 @@ public class SearchPage extends WebPage {
 		final Form<Archive> form = new Form<Archive>("form");
 	
 		changeButton = newButton(I18NSearchPageModelParts.ChangeButton);
-		changeButton.addActionListener(SearchPageModel.INIT_EDIT, initEditActionListener );
+		changeButton.addActionListener(SearchPageModel.INIT_EDIT, editActionListener );
 		
 		changeButton.addActionListener( action ->  setResponsePage(EditPage.class));
 		
 		showButton = componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ShowButton,  ActionButton.class);
+		
+		showButton.addActionListener(SearchPageModel.INIT_READONLY,editActionListener);
+		showButton.addActionListener( action ->  setResponsePage(EditPage.class));
 		add(form);
 		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.ApplicationHeadline, Label.class));
 		add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.PageHeadline, Label.class));
 		form.add(group);
 		final ActionButton<String> newButton = newButton(I18NSearchPageModelParts.NewButton);
-		newButton.addActionListener(SearchPageModel.NEW_EDIT, newEditActionListener);		
+		newButton.addActionListener(SearchPageModel.NEW_EDIT, editActionListener);		
 				
 		
 		

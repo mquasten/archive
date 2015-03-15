@@ -27,4 +27,7 @@ interface EditPageController  {
 
 
 	void delete(EditPageModel model);
+
+
+	void initReadOnly(final SearchPageModel searchPageModel, final EditPageModel model);
 }

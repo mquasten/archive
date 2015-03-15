@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
@@ -15,17 +17,17 @@ import de.mq.archive.web.TwoWayMapping;
 class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
 	private final TwoWayMapping<Archive, Enum<?>> searchCriteria; 
-	private final IModel<List<Archive>> archives;
-	private final IModel<String> selectedArchive; 
+	private final List<Archive> archives = new ArrayList<>();
+	private final IModel<String> selectedArchive = new Model<>();; 
 	private final IModel<Number> pageSize; 
 	
 	private final OneWayMapping<Locale, Enum<?>>  labels; 
 	
-	SearchPageModelImpl(final TwoWayMapping<Archive, Enum<?>> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,  final IModel<List<Archive>> archives, final IModel<String> selectedArchive, final  IModel<Number> pageSize) {
+	SearchPageModelImpl(final TwoWayMapping<Archive, Enum<?>> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,   final  IModel<Number> pageSize) {
 		this.searchCriteria = searchCriteria;
 		this.labels=labels;
-		this.archives = archives;
-		this.selectedArchive = selectedArchive;
+	//	this.archives = archives;
+	//	this.selectedArchive = selectedArchive;
 		this.pageSize = pageSize;
 	}
 
@@ -45,15 +47,14 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	}
 	
 	final List<Archive> getArchives() {
-		if( archives.getObject() ==null) {
-			return Collections.unmodifiableList(new ArrayList<>());
-		}
-		return Collections.unmodifiableList(archives.getObject());
+		
+		return Collections.unmodifiableList(archives);
 	}
 	
 	@Override
 	public final void setArchives(final List<Archive> archives) {
-		this.archives.setObject(archives);
+		this.archives.clear();
+		this.archives.addAll(archives);
 		unSelectIfNotInResult();
 	}
 	
@@ -78,8 +79,11 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 
 	@Override
 	public final IModel<List<Archive>> getArchivesWeb() {
-		return archives;
+		return new ListModel<>( archives);
 	}
+	
+	
+	
 
 
 	@Override

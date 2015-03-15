@@ -17,6 +17,8 @@ public interface SearchPageModel {
 	
 	static final String INIT_EDIT = "init_edit";
 	
+	static final String INIT_READONLY = "init_readonly";
+	
 	static final String NEW_EDIT = "new_edit";
 	
 	

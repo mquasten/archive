@@ -26,7 +26,9 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	
 	private final OneWayMapping<Locale, Enum<?>>  attachementLabels; 
 	
-	private final IModel<String> selectedAttachementWeb = new Model<>();; 
+	private final IModel<String> selectedAttachementWeb = new Model<>();
+	
+	private  boolean editable = false;
 	
 	
 	private final List<TwoWayMapping<GridFsInfo<String>, Enum<?>>> attachements= new ArrayList<>(); 
@@ -38,6 +40,12 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 		this.messages=messages;
 		this.attachementLabels=attachementLabels;
 	}
+	
+	@Override
+	public final void setEditable(final boolean editable) {
+		this.editable=editable;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see de.mq.archive.web.edit.EditPageModel#getArchive()
@@ -146,6 +154,15 @@ class EditPageModelImpl implements EditPageModelWeb, EditPageModel {
 	@Override
 	public final boolean isAttachementSelected() {
 		return StringUtils.hasText(getSelectedAttachementId());
+	}
+	
+	@Override
+	public final boolean changeable() {
+		return editable && isPersistent();
+	}
+	@Override
+	public final boolean canBeSaved(){
+		return editable || !isPersistent();
 	}
 
 }

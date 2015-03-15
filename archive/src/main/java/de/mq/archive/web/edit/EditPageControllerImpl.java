@@ -55,8 +55,16 @@ public class EditPageControllerImpl implements EditPageController {
 	@Named(SearchPageModel.INIT_EDIT)
 	@Override
 	public final void init(final SearchPageModel searchPageModel, final EditPageModel model) {
-		final Archive archive = archiveService.archive(searchPageModel.getSelectedArchiveId());
-		assignArchive(archive, model);
+		model.setEditable(true);
+		assignArchive(archiveService.archive(searchPageModel.getSelectedArchiveId()), model);
+		
+	}
+	
+	@Named(SearchPageModel.INIT_READONLY)
+	@Override
+	public final void initReadOnly(final SearchPageModel searchPageModel, final EditPageModel model) {
+		model.setEditable(false);
+		assignArchive(archiveService.archive(searchPageModel.getSelectedArchiveId()), model);
 		
 	}
 	

@@ -21,4 +21,6 @@ interface EditPageModel {
 	
 	public boolean isPersistent();
 
+	void setEditable(final boolean editable);
+
 }

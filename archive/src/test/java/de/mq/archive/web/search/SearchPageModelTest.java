@@ -6,10 +6,11 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.ListModel;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
@@ -22,8 +23,7 @@ public class SearchPageModelTest {
 	private static final String ID = "19680528";
 	@SuppressWarnings("unchecked")
 	private TwoWayMapping<Archive, Enum<?>> archiveWeb = Mockito.mock(TwoWayMapping.class);
-	@SuppressWarnings("unchecked")
-	private final IModel<List<Archive>> listModel = Mockito.mock(ListModel.class);
+	
 	@SuppressWarnings("unchecked")
 	private final IModel<String> selectedArchiveIdWeb = Mockito.mock(IModel.class);
 	@SuppressWarnings("unchecked")
@@ -32,9 +32,15 @@ public class SearchPageModelTest {
 	 @SuppressWarnings("unchecked")
 	final OneWayMapping<Locale, Enum<?>>  labelsModel = Mockito.mock(OneWayMapping.class);
 	
-	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, labelsModel, listModel, selectedArchiveIdWeb, pageSizeWeb);
+	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, labelsModel,  pageSizeWeb);
 	private final SearchPageModelWeb modelWeb = (SearchPageModelWeb) model; 
 	private final Archive archive = Mockito.mock(Archive.class);
+	
+	@Before
+	public final void setup() {
+		ReflectionTestUtils.setField(model, "selectedArchive", selectedArchiveIdWeb);
+		
+	}
 
 	@Test
 	public final void getSearchCriteria() {
@@ -57,7 +63,8 @@ public class SearchPageModelTest {
 		final List<Archive> archives = new ArrayList<>();
 		Mockito.when(archive.id()).thenReturn(ID);
 		archives.add(archive);
-		Mockito.when(listModel.getObject()).thenReturn(archives);
+		model.setArchives(archives);
+		
 		final List<Archive> results = ((SearchPageModelImpl)model).getArchives();
 		Assert.assertEquals(archives, results);
 	}
@@ -75,10 +82,9 @@ public class SearchPageModelTest {
 		Mockito.when(archive.id()).thenReturn(ID);
 		archives.add(archive);
 		Mockito.when(selectedArchiveIdWeb.getObject()).thenReturn(ID);
-		Mockito.when(listModel.getObject()).thenReturn(archives);
+	
 		model.setArchives(archives);
 
-		Mockito.verify(listModel).setObject(archives);
 		Mockito.verify(selectedArchiveIdWeb, Mockito.times(0)).setObject(null);
 		
 		
@@ -90,10 +96,9 @@ public class SearchPageModelTest {
 		Mockito.when(archive.id()).thenReturn(ID);
 		archives.add(archive);
 		Mockito.when(selectedArchiveIdWeb.getObject()).thenReturn(UUID.randomUUID().toString());
-		Mockito.when(listModel.getObject()).thenReturn(archives);
+	
 		model.setArchives(archives);
 		
-		Mockito.verify(listModel).setObject(archives);
 		Mockito.verify(selectedArchiveIdWeb, Mockito.times(1)).setObject(null);
 	}
 	
@@ -112,7 +117,11 @@ public class SearchPageModelTest {
 
 	@Test
 	public final void getArchivesWeb() {
-		Assert.assertEquals(listModel, modelWeb.getArchivesWeb());
+		final List<Archive> archives = new ArrayList<>();
+		archives.add(archive);
+		Mockito.when(archive.id()).thenReturn(ID);
+		model.setArchives(archives);
+		Assert.assertEquals(archives, modelWeb.getArchivesWeb().getObject());
 	}
 
 	@Test

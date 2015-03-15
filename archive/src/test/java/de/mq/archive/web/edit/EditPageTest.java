@@ -85,7 +85,8 @@ public class EditPageTest {
 		final OneWayMapping<Locale, Enum<?>> oneWayMapping = attachementLabels;
 		Mockito.when(editPageModelWeb.getI18NMessages()).thenReturn(messages);
 		Mockito.when(editPageModelWeb.getI18NLabels()).thenReturn(oneWayMapping);
-		
+		Mockito.when(editPageModelWeb.canBeSaved()).thenReturn(true);
+		Mockito.when(editPageModelWeb.changeable()).thenReturn(true);
 		Mockito.when(editPageModelWeb.getI18NAttachementLabels()).thenReturn(attachementLabels);
 		
 		final IModel attachementsListModel = Mockito.mock(IModel.class);
