@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,6 +22,7 @@ import de.mq.archive.domain.Category;
 
 public class ArchiveRepositoryTest {
 
+	private static final String ID_FIELD_NAME = "id";
 	private static final String ID = "19680528";
 	private static final Long COUNTER = Long.valueOf(42);
 	private static final String ARCHIVE_ID_FIELDS = "archiveId";
@@ -129,7 +131,14 @@ public class ArchiveRepositoryTest {
 		Assert.assertEquals(archive, archiveRepository.forId(ID));
 	}
 	
-
+	@Test
+	public final void delete() {
+		final  ArchiveImpl archive = BeanUtils.instantiateClass(ArchiveImpl.class);
+		ReflectionTestUtils.setField(archive, ID_FIELD_NAME, ID);
+		Mockito.when(mongoOperations.findById(ID, ArchiveImpl.class)).thenReturn( archive);
+		archiveRepository.delete(archive);
+		Mockito.verify(mongoOperations).remove(archive);
+	}
 	
 
 }

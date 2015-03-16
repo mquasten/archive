@@ -2,13 +2,6 @@ package de.mq.archive.domain.support;
 
 import java.util.Collection;
 import java.util.Date;
-
-
-
-
-
-
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -138,6 +131,18 @@ public class ArchiveTest {
 	public final void removeFromNullCollection() {
 		final Archive archive = BeanUtils.instantiateClass(ArchiveImpl.class);
 		archive.remove(PERSON_01);
+	}
+	
+	@Test
+	public final void parentId() {
+		Assert.assertEquals(ID, archive.parentId().get());
+		Assert.assertTrue(archive.parentId().isPresent());
+	}
+	
+	@Test
+	public final void parentIdNotPresent() {
+		ReflectionTestUtils.setField(archive,ID_FIELD, null);
+		Assert.assertFalse(archive.parentId().isPresent());
 	}
 
 }

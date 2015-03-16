@@ -29,6 +29,6 @@ public interface ArchiveService {
 
 	Entry<GridFsInfo<String>, byte[]> content(final String fileId);
 
-	void delte(final Archive archive); 
+	void delete(final Archive archive); 
 
 }

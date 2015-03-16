@@ -125,5 +125,16 @@ public class ArchiveRepositoryMockTest {
 		((ArchiveRepositoryMock) archiveRepository).init();
 		Assert.assertEquals(ArchiveRepositoryMock.ARCHIVE_01, archiveRepository.forId(ArchiveRepositoryMock.ARCHIVE_01.id()));
 	}
+	
+	@Test
+	public final void delete() {
+		((ArchiveRepositoryMock) archiveRepository).init();
+		@SuppressWarnings("unchecked")
+		final Map<String, Archive> archives = (Map<String, Archive>) ReflectionTestUtils.getField(archiveRepository, ARCHIVES_FIELD);
+		Assert.assertTrue(archives.containsKey(ArchiveRepositoryMock.ARCHIVE_01.id()));
+		
+		archiveRepository.delete(ArchiveRepositoryMock.ARCHIVE_01);
+		Assert.assertFalse(archives.containsKey(ArchiveRepositoryMock.ARCHIVE_01.id()));
+	}
 
 }

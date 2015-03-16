@@ -56,7 +56,7 @@ public class ArchiveServiceImpl implements ArchiveService {
 	}
 	
 	@Override
-	public void delte(final Archive archive){
+	public void delete(final Archive archive){
 		fileRepository.deleteAll(archive.parentId());
 		archiveRepository.delete(archive);
 		

@@ -48,7 +48,7 @@ public class EditPageControllerImpl implements EditPageController {
 		    return;
 		}
 		
-		archiveService.delte(model.getArchive());
+		archiveService.delete(model.getArchive());
 		
 	}
 	
