@@ -28,8 +28,8 @@ import de.mq.archive.domain.GridFsInfo;
 public class MongoFileRepositoryImpl implements MongoFileRepository {
 	
 	private static final String ID_FIELD = "_id";
-	private static final String ALIASES_FIELD = "aliases";
-	private static final String METADATA_FIELD = "metadata";
+	static final String ALIASES_FIELD = "aliases";
+	static final String METADATA_FIELD = "metadata";
 	private final GridFsOperations gridOperations;
 
 	@Autowired
