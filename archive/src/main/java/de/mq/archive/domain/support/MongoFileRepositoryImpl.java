@@ -27,7 +27,7 @@ import de.mq.archive.domain.GridFsInfo;
 @Named
 public class MongoFileRepositoryImpl implements MongoFileRepository {
 	
-	private static final String ID_FIELD = "_id";
+	static final String ID_FIELD = "_id";
 	static final String ALIASES_FIELD = "aliases";
 	static final String METADATA_FIELD = "metadata";
 	private final GridFsOperations gridOperations;
