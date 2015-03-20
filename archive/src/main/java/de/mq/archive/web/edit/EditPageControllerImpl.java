@@ -25,115 +25,108 @@ import de.mq.archive.web.search.SearchPageModel;
 @Named
 public class EditPageControllerImpl implements EditPageController {
 	private final ArchiveService archiveService;
-	
+
 	@Autowired
 	EditPageControllerImpl(final ArchiveService archiveService) {
-		this.archiveService=archiveService; 
+		this.archiveService = archiveService;
 	}
-	
-	
-	
+
 	@Named(SAVE_ACTION)
 	@Override
 	public final void save(final EditPageModel model) {
 		archiveService.save(model.getArchive());
-		
+
 	}
-	
+
 	@Named(EditPageModel.DELETE_ACTION)
 	@Override
 	public final void delete(final EditPageModel model) {
-		
-		if( ! model.isPersistent() ) {
-		    return;
+
+		if (!model.isPersistent()) {
+			return;
 		}
-		
 		archiveService.delete(model.getArchive());
-		
+
 	}
-	
+
 	@Named(SearchPageModel.INIT_EDIT)
 	@Override
 	public final void init(final SearchPageModel searchPageModel, final EditPageModel model) {
 		model.setEditable(true);
 		assignArchive(archiveService.archive(searchPageModel.getSelectedArchiveId()), model);
-		
+
 	}
-	
+
 	@Named(SearchPageModel.INIT_READONLY)
 	@Override
 	public final void initReadOnly(final SearchPageModel searchPageModel, final EditPageModel model) {
 		model.setEditable(false);
 		assignArchive(archiveService.archive(searchPageModel.getSelectedArchiveId()), model);
-		
+
 	}
-	
+
 	@Named(SearchPageModel.NEW_EDIT)
 	@Override
 	public final void init(final EditPageModel model) {
 		assignArchive(BeanUtils.instantiateClass(ArchiveImpl.class), model);
 	}
-	
+
 	@Named(EditPageModel.UPLOAD_ACTION)
 	@Override
 	public final void uplod(final EditPageModel model, final FileUploadField fileUploadField) {
-		
-		
+
 		final FileUpload fileUpload = fileUploadField.getFileUpload();
-		if(fileUpload == null ){
+		if (fileUpload == null) {
 			return;
 		}
-		
-		try(final InputStream is = fileUpload.getInputStream() ) {
-			
-			archiveService.upload(model.getArchive(), is, fileUpload.getClientFileName(),  fileUpload.getContentType());
+
+		try (final InputStream is = fileUpload.getInputStream()) {
+
+			archiveService.upload(model.getArchive(), is, fileUpload.getClientFileName(), fileUpload.getContentType());
 			assignArchive(model.getArchive(), model);
 		} catch (final IOException ex) {
 			throw new IllegalStateException(ex);
 		}
-	}	
+	}
+
 	@Named(EditPageModel.DELETE_UPLOAD_ACTION)
 	@Override
 	public final void deleteUpload(final EditPageModel model) {
-	
-		if( ! StringUtils.hasText(model.getSelectedAttachementId())){
+
+		if (!StringUtils.hasText(model.getSelectedAttachementId())) {
 			return;
 		}
-		
+
 		archiveService.deleteAttachement(model.getSelectedAttachementId());
 		assignArchive(model.getArchive(), model);
 	}
-	
+
 	@Named(EditPageModel.SHOW_ATTACHEMENT_ACTION)
 	@Override
 	public final void showAttachement(final EditPageModel model) {
-		if( ! StringUtils.hasText(model.getSelectedAttachementId())){
+		if (!StringUtils.hasText(model.getSelectedAttachementId())) {
 			return;
 		}
 		final Entry<GridFsInfo<String>, byte[]> entry = archiveService.content(model.getSelectedAttachementId());
 		final AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
-			 
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-         public void write(OutputStream output) throws IOException {
-             output.write(entry.getValue());
-         }
-     };
+			public void write(OutputStream output) throws IOException {
+				output.write(entry.getValue());
+			}
+		};
 
-     final ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, entry.getKey().filename());        
-   
-     RequestCycle.get().scheduleRequestHandlerAfterCurrent(handler);
+		final ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, entry.getKey().filename());
+
+		RequestCycle.get().scheduleRequestHandlerAfterCurrent(handler);
 	}
-
-
 
 	private void assignArchive(final Archive archive, final EditPageModel model) {
 		model.setArchive(archive);
+
 		archiveService.attachements(archive).forEach(attachement -> model.add(attachement));
 	}
-		
-		
 
 }

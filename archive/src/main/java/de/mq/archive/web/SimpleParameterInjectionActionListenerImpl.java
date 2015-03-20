@@ -22,13 +22,6 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 	
 	private final BeanFactory beanFactory;
 	
-	private final Map<Class<?>,Object> dependencies = new HashMap<>();
-	
-	public final <T>  void addDependency(Class<? extends T > clazz, T dependency) {
-		dependencies.put(clazz, dependency);
-	}
-	
-	
 	final Map<String, Method> methods = new HashMap<>();
 	public SimpleParameterInjectionActionListenerImpl(final BeanFactory beanfactory, final Class<?> controllerClass) {
 		this.controller=beanfactory.getBean(controllerClass);
@@ -54,9 +47,7 @@ public class SimpleParameterInjectionActionListenerImpl implements ActionListene
 	}
 
 	private Object resolveBean(Class<?> clazz) {
-		if( dependencies.containsKey(clazz)) {
-			return dependencies.get(clazz);
-		}
+	
 		return beanFactory.getBean(clazz);
 	}
 
