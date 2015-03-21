@@ -19,4 +19,8 @@
 		<property name="fallbackToSystemLocale" value="false" />
 	</bean>
 
+
+<bean scope="prototype"  class="org.apache.wicket.request.cycle.RequestCycle" factory-method="get"/> 
+	
+
 </beans>

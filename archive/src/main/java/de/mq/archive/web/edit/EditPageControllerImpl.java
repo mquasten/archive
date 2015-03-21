@@ -15,6 +15,7 @@ import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.ResourceAccessException;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
@@ -73,7 +74,7 @@ public class EditPageControllerImpl implements EditPageController {
 
 	@Named(EditPageModel.UPLOAD_ACTION)
 	@Override
-	public final void uplod(final EditPageModel model, final FileUploadField fileUploadField) {
+	public final void uplaod(final EditPageModel model, final FileUploadField fileUploadField) {
 
 		final FileUpload fileUpload = fileUploadField.getFileUpload();
 		if (fileUpload == null) {
@@ -85,7 +86,7 @@ public class EditPageControllerImpl implements EditPageController {
 			archiveService.upload(model.getArchive(), is, fileUpload.getClientFileName(), fileUpload.getContentType());
 			assignArchive(model.getArchive(), model);
 		} catch (final IOException ex) {
-			throw new IllegalStateException(ex);
+			throw new ResourceAccessException("Error uploading file", ex);
 		}
 	}
 
@@ -103,7 +104,7 @@ public class EditPageControllerImpl implements EditPageController {
 
 	@Named(EditPageModel.SHOW_ATTACHEMENT_ACTION)
 	@Override
-	public final void showAttachement(final EditPageModel model) {
+	public final void showAttachement(final EditPageModel model, final RequestCycle requestCycle) {
 		if (!StringUtils.hasText(model.getSelectedAttachementId())) {
 			return;
 		}
@@ -120,7 +121,7 @@ public class EditPageControllerImpl implements EditPageController {
 
 		final ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, entry.getKey().filename());
 
-		RequestCycle.get().scheduleRequestHandlerAfterCurrent(handler);
+		requestCycle.scheduleRequestHandlerAfterCurrent(handler);
 	}
 
 	private void assignArchive(final Archive archive, final EditPageModel model) {

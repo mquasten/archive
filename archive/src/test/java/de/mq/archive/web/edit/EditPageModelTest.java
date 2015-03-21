@@ -52,4 +52,6 @@ public class EditPageModelTest {
 	public final void  getI18NMessages() {
 		Assert.assertEquals(messages, ((EditPageModelWeb)editPageModel).getI18NMessages());
 	}
+	
+	
 }

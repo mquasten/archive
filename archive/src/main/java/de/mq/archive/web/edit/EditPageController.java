@@ -1,6 +1,7 @@
 package de.mq.archive.web.edit;
 
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import de.mq.archive.web.search.SearchPageModel;
 
@@ -17,13 +18,13 @@ interface EditPageController  {
 	void init(final EditPageModel model);
 
 
-	void uplod(final EditPageModel model, final FileUploadField fileUploadField);
+	void uplaod(final EditPageModel model, final FileUploadField fileUploadField);
 
 
 	void deleteUpload(final EditPageModel model);
 
 
-	void showAttachement(EditPageModel model);
+	void showAttachement(EditPageModel model, final RequestCycle requestCycle);
 
 
 	void delete(EditPageModel model);

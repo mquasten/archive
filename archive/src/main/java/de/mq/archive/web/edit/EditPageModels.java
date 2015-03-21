@@ -57,9 +57,7 @@ class EditPageModels {
 	 @Bean(name="fileUpload")
 	 @Scope(value="session")
 	 public   FileUploadField fileUploadField() { 
-	 
 		 return new FileUploadField("fileUpload");
-	
 	 }
 	 
 	 
