@@ -1,12 +1,10 @@
 package de.mq.archive.web.search;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.proxy.ILazyInitProxy;
 import org.apache.wicket.spring.SpringBeanLocator;
 import org.apache.wicket.util.tester.WicketTester;
@@ -38,8 +36,7 @@ public class WicketApplicationTest {
 	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final TwoWayMapping<Archive,Enum<?>> searchCriteriaWeb = Mockito.mock(TwoWayMapping.class);
-	@SuppressWarnings("unchecked")
-	private final IModel<List<Archive>> listModel = Mockito.mock(IModel.class);
+	
 
 	private final SearchPageModelWeb searchPageModelWeb = Mockito.mock(SearchPageModelWeb.class);
 
@@ -54,7 +51,7 @@ public class WicketApplicationTest {
 		Mockito.doAnswer(a -> new String[] { ((Class<?>) a.getArguments()[0]).getName() }).when(webApplicationContext).getBeanNamesForType(Mockito.any());
 		Mockito.when(searchPageModelWeb.getI18NLabels()).thenReturn(labels);
 		Mockito.when(searchPageModelWeb.getSearchCriteriaWeb()).thenReturn(searchCriteriaWeb);
-		Mockito.when(searchPageModelWeb.getArchivesWeb()).thenReturn(listModel);
+		
 		Mockito.when(ctx.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).thenReturn(webApplicationContext);
 		@SuppressWarnings("rawtypes")
 		final ArgumentCaptor<Class> clazzCaptor = ArgumentCaptor.forClass(Class.class);

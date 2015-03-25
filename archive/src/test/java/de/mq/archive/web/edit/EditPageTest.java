@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
@@ -80,7 +79,7 @@ public class EditPageTest {
 		TwoWayMapping<Archive, Enum<?>> criteriaModel = Mockito.mock(TwoWayMapping.class);
 		Mockito.when(searchPageModelWeb.getSearchCriteriaWeb()).thenReturn(criteriaModel);
 
-		Mockito.when(searchPageModelWeb.getArchivesWeb()).thenReturn(new ListModel());
+	
 		final OneWayMapping<Locale, Enum<?>> messages = attachementLabels;
 		final OneWayMapping<Locale, Enum<?>> oneWayMapping = attachementLabels;
 		Mockito.when(editPageModelWeb.getI18NMessages()).thenReturn(messages);

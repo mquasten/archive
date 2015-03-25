@@ -50,9 +50,7 @@ public class SearchPageTest {
 	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
 	private final TwoWayMapping<Archive,Enum<?>> searchCriteriaWeb = Mockito.mock(TwoWayMapping.class);
-	@SuppressWarnings("unchecked")
-	private final IModel<List<Archive>> listModel = Mockito.mock(IModel.class);
-
+	
 	private final SearchPageModelWeb searchPageModelWeb = Mockito.mock(SearchPageModelWeb.class);
 
 	private WicketApplication wicketApplication = new WicketApplication();
@@ -74,7 +72,7 @@ public class SearchPageTest {
 		Mockito.doAnswer(a -> new String[] { ((Class<?>) a.getArguments()[0]).getName() }).when(webApplicationContext).getBeanNamesForType(Mockito.any());
 		Mockito.when(searchPageModelWeb.getI18NLabels()).thenReturn(labels);
 		Mockito.when(searchPageModelWeb.getSearchCriteriaWeb()).thenReturn(searchCriteriaWeb);
-		Mockito.when(searchPageModelWeb.getArchivesWeb()).thenReturn(listModel);
+	
 		Mockito.when(ctx.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).thenReturn(webApplicationContext);
 		@SuppressWarnings("rawtypes")
 		final ArgumentCaptor<Class> clazzCaptor = ArgumentCaptor.forClass(Class.class);

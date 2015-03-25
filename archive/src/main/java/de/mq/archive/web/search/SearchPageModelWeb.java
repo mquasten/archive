@@ -12,7 +12,7 @@ import de.mq.archive.web.TwoWayMapping;
 public interface SearchPageModelWeb {
 	TwoWayMapping<Archive, Enum<?>> getSearchCriteriaWeb();
 
-	IModel<List<Archive>> getArchivesWeb();
+	
 	
 
 

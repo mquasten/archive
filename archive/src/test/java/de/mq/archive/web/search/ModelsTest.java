@@ -3,6 +3,7 @@ package de.mq.archive.web.search;
 
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.util.ListModel;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class ModelsTest {
 		Assert.assertTrue(model instanceof SearchPageModelImpl);;
 		
 		Assert.assertNotNull(model.getSearchCriteriaWeb());
-		Assert.assertTrue(model.getArchivesWeb() instanceof ListModel);
+		Assert.assertTrue(model.getArchivesWeb2() instanceof List);
 		Assert.assertNotNull(model.getSelectedArchiveWeb());
 		Assert.assertNotNull(model.getSelectedArchiveWeb());
 		Assert.assertTrue(model.getSearchCriteriaWeb().toDomain() instanceof ArchiveImpl);

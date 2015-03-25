@@ -115,14 +115,7 @@ public class SearchPageModelTest {
 		Assert.assertEquals(archiveWeb, modelWeb.getSearchCriteriaWeb());
 	}
 
-	@Test
-	public final void getArchivesWeb() {
-		final List<Archive> archives = new ArrayList<>();
-		archives.add(archive);
-		Mockito.when(archive.id()).thenReturn(ID);
-		model.setArchives(archives);
-		Assert.assertEquals(archives, modelWeb.getArchivesWeb().getObject());
-	}
+	
 
 	@Test
 	public final void getSelectedArchiveWeb() {

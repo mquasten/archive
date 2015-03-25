@@ -8,8 +8,8 @@ import java.util.Locale;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
 import org.springframework.util.StringUtils;
+
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.BasicEnumModelImpl;
@@ -28,8 +28,6 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	SearchPageModelImpl(final TwoWayMapping<Archive, Enum<?>> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,   final  IModel<Number> pageSize) {
 		this.searchCriteria = searchCriteria;
 		this.labels=labels;
-	//	this.archives = archives;
-	//	this.selectedArchive = selectedArchive;
 		this.pageSize = pageSize;
 	}
 
@@ -91,10 +89,7 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 		return searchCriteria;
 	}
 
-	@Override
-	public final IModel<List<Archive>> getArchivesWeb() {
-		return new ListModel<>( archives);
-	}
+	
 	
 	
 	
