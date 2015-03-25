@@ -1,10 +1,12 @@
 package de.mq.archive.web.edit;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -15,6 +17,7 @@ import de.mq.archive.domain.GridFsInfo;
 import de.mq.archive.domain.support.Constants;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
+import de.mq.archive.web.search.ArchiveModelParts;
 
 public class EditPageModelTest {
 	private static final String SELECTED_ATTACHEMENT_WEB_FIELD = "selectedAttachementWeb";
@@ -127,6 +130,73 @@ public class EditPageModelTest {
 		ReflectionTestUtils.setField(editPageModel, SELECTED_ATTACHEMENT_WEB_FIELD, selectedAttachmentModel);
 		Mockito.when(selectedAttachmentModel.getObject()).thenReturn(ID);
 		Assert.assertEquals(ID, editPageModel.getSelectedAttachementId());
+	}
+
+	@Test
+	public final void isPersistent() {
+
+		@SuppressWarnings("unchecked")
+		final IModel<Serializable> model = Mockito.mock(Model.class);
+		Mockito.when(model.getObject()).thenReturn(ID);
+		Mockito.when(archiveModel.part(ArchiveModelParts.Id)).thenReturn(model);
+		Assert.assertTrue(editPageModel.isPersistent());
+		Mockito.when(model.getObject()).thenReturn(null);
+		Assert.assertFalse(editPageModel.isPersistent());
+	}
+
+	@Test
+	public final void hasAttachements() {
+		Assert.assertFalse(((EditPageModelWeb) editPageModel).hasAttachements());
+		@SuppressWarnings("unchecked")
+		final TwoWayMapping<GridFsInfo<String>, Enum<?>> attachement = Mockito.mock(TwoWayMapping.class);
+		attachements().add(attachement);
+		Assert.assertTrue(((EditPageModelWeb) editPageModel).hasAttachements());
+	}
+
+	@Test
+	public final void isAttachementSelected() {
+		Assert.assertFalse(((EditPageModelWeb) editPageModel).isAttachementSelected());
+		@SuppressWarnings("unchecked")
+		final IModel<String> selectedAttachmentModel = Mockito.mock(IModel.class);
+		Mockito.when(selectedAttachmentModel.getObject()).thenReturn(ID);
+		ReflectionTestUtils.setField(editPageModel, SELECTED_ATTACHEMENT_WEB_FIELD, selectedAttachmentModel);
+		Assert.assertTrue(((EditPageModelWeb) editPageModel).isAttachementSelected());
+	}
+
+	@Test
+	public final void changeable() {
+		@SuppressWarnings("unchecked")
+		final IModel<Serializable> model = Mockito.mock(Model.class);
+		Mockito.when(model.getObject()).thenReturn(ID);
+		Mockito.when(archiveModel.part(ArchiveModelParts.Id)).thenReturn(model);
+
+		editPageModel.setEditable(true);
+
+		Assert.assertTrue(((EditPageModelWeb) editPageModel).changeable());
+		editPageModel.setEditable(false);
+
+		Assert.assertFalse(((EditPageModelWeb) editPageModel).changeable());
+		editPageModel.setEditable(true);
+		Mockito.when(model.getObject()).thenReturn(null);
+		Assert.assertFalse(((EditPageModelWeb) editPageModel).changeable());
+		editPageModel.setEditable(false);
+		Assert.assertFalse(((EditPageModelWeb) editPageModel).changeable());
+	}
+
+	@Test
+	public final void canBeSaved() {
+		editPageModel.setEditable(true);
+		Assert.assertTrue(((EditPageModelWeb) editPageModel).canBeSaved());
+		@SuppressWarnings("unchecked")
+		final IModel<Serializable> model = Mockito.mock(Model.class);
+		Mockito.when(model.getObject()).thenReturn(ID);
+		Mockito.when(archiveModel.part(ArchiveModelParts.Id)).thenReturn(model);
+		editPageModel.setEditable(false);
+		Assert.assertFalse(((EditPageModelWeb) editPageModel).canBeSaved());
+		Mockito.when(model.getObject()).thenReturn(null);
+		Assert.assertTrue(((EditPageModelWeb) editPageModel).canBeSaved());
+		editPageModel.setEditable(true);
+		Assert.assertTrue(((EditPageModelWeb) editPageModel).canBeSaved());
 	}
 
 }
