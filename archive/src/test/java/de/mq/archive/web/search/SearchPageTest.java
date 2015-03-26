@@ -49,8 +49,8 @@ public class SearchPageTest {
 	@SuppressWarnings("rawtypes")
 	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);
 	@SuppressWarnings("unchecked")
-	private final TwoWayMapping<Archive,Enum<?>> searchCriteriaWeb = Mockito.mock(TwoWayMapping.class);
-	
+	private final TwoWayMapping<Archive, Enum<?>> searchCriteriaWeb = Mockito.mock(TwoWayMapping.class);
+
 	private final SearchPageModelWeb searchPageModelWeb = Mockito.mock(SearchPageModelWeb.class);
 
 	private WicketApplication wicketApplication = new WicketApplication();
@@ -72,17 +72,17 @@ public class SearchPageTest {
 		Mockito.doAnswer(a -> new String[] { ((Class<?>) a.getArguments()[0]).getName() }).when(webApplicationContext).getBeanNamesForType(Mockito.any());
 		Mockito.when(searchPageModelWeb.getI18NLabels()).thenReturn(labels);
 		Mockito.when(searchPageModelWeb.getSearchCriteriaWeb()).thenReturn(searchCriteriaWeb);
-	
+
 		Mockito.when(ctx.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).thenReturn(webApplicationContext);
 		@SuppressWarnings("rawtypes")
 		final ArgumentCaptor<Class> clazzCaptor = ArgumentCaptor.forClass(Class.class);
 
 		beans.put(SearchPageModelWeb.class, searchPageModelWeb);
-		
+
 		beans.put(ActionListener.class, actionListener);
 		beans.put(ComponentFactory.class, TestConstants.COMPONENT_FACTORY);
 		beans.put(EditPageModelWeb.class, editPageModelWeb);
-		
+
 		Mockito.doAnswer(a -> beans.get((Class<?>) a.getArguments()[1])).when(webApplicationContext).getBean(Mockito.anyString(), clazzCaptor.capture());
 
 		Mockito.when(searchPageModelWeb.getSelectedArchiveWeb()).thenReturn(selectedArchive);
@@ -93,7 +93,7 @@ public class SearchPageTest {
 		Mockito.when(searchCriteriaWeb.part(ArchiveModelParts.ArchiveId)).thenReturn(new Model<>());
 
 		tester = new WicketTester(wicketApplication, ctx);
-		
+
 		beans.put(IGenericComponent.class, new FileUploadField("fileUpload"));
 		final SearchPage page = new SearchPage(null);
 		tester.startPage(page);
@@ -111,23 +111,22 @@ public class SearchPageTest {
 		paths.put(I18NSearchPageModelParts.ChangeButton, String.format("form:group:%s", I18NSearchPageModelParts.ChangeButton.wicketId()));
 		paths.put(I18NSearchPageModelParts.ShowButton, String.format("form:group:%s", I18NSearchPageModelParts.ShowButton.wicketId()));
 		paths.put(I18NSearchPageModelParts.SearchTableHeadline, String.format("form:group:%s", I18NSearchPageModelParts.SearchTableHeadline.wicketId()));
-		paths.put(I18NSearchPageModelParts.NameHeader, String.format("form:group:%s",I18NSearchPageModelParts.NameHeader.wicketId()));
+		paths.put(I18NSearchPageModelParts.NameHeader, String.format("form:group:%s", I18NSearchPageModelParts.NameHeader.wicketId()));
 		paths.put(I18NSearchPageModelParts.CategoryHeader, String.format("form:group:%s", I18NSearchPageModelParts.CategoryHeader.wicketId()));
-		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s",I18NSearchPageModelParts.DateHeader.wicketId()));
+		paths.put(I18NSearchPageModelParts.DateHeader, String.format("form:group:%s", I18NSearchPageModelParts.DateHeader.wicketId()));
 		paths.put(I18NSearchPageModelParts.ArchiveIdHeader, String.format("form:group:%s", I18NSearchPageModelParts.ArchiveIdHeader.wicketId()));
-		
-	
-		final OneWayMapping<Locale,Enum<?>> oneWayMapping = Mockito.mock(OneWayMapping.class);
+
+		final OneWayMapping<Locale, Enum<?>> oneWayMapping = Mockito.mock(OneWayMapping.class);
 		Mockito.when(editPageModelWeb.getI18NMessages()).thenReturn(oneWayMapping);
 		Mockito.when(editPageModelWeb.getI18NLabels()).thenReturn(oneWayMapping);
-		
-		final TwoWayMapping<Archive,Enum<?>> mock2 = Mockito.mock(TwoWayMapping.class);
-		
+
+		final TwoWayMapping<Archive, Enum<?>> mock2 = Mockito.mock(TwoWayMapping.class);
+
 		Mockito.when(editPageModelWeb.getArchiveModelWeb()).thenReturn(mock2);
-		
+
 		Mockito.when(editPageModelWeb.getI18NAttachementLabels()).thenReturn(oneWayMapping);
 		Mockito.when(editPageModelWeb.getAttachements()).thenReturn(Mockito.mock(IModel.class));
-		
+
 		final IModel<Serializable> iModel = Mockito.mock(IModel.class);
 		Mockito.when(mock2.part(Mockito.any())).thenReturn(iModel);
 		Mockito.when(oneWayMapping.part(Mockito.any())).thenReturn(iModel);
@@ -137,15 +136,13 @@ public class SearchPageTest {
 	@Test
 	public final void labels() {
 
-		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> { 
-			
-		
+		Arrays.stream(I18NSearchPageModelParts.values()).forEach(part -> {
+
 			Assert.assertEquals(part.key(), tester.getComponentFromLastRenderedPage(paths.get(part)).getDefaultModel().getObject());
-			
-		
+
 		}
-		
-				);
+
+		);
 
 	}
 
@@ -156,39 +153,34 @@ public class SearchPageTest {
 		formTester.setValue("name", "kylie");
 		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
 
-		
-
 		Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
 		Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertFalse(showButton.isEnabled());
 		Assert.assertFalse(changeButton.isEnabled());
 		@SuppressWarnings("unchecked")
-		final TwoWayMapping<Archive,Enum<?>> currentRow = Mockito.mock(TwoWayMapping.class);
-	//	Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
-	
-	
-		final List <TwoWayMapping<Archive,Enum<?>>>  rows = new ArrayList<>();
+		final TwoWayMapping<Archive, Enum<?>> currentRow = Mockito.mock(TwoWayMapping.class);
+		// Mockito.when(searchPageController.newWebModel(row)).thenReturn(currentRow);
+
+		final List<TwoWayMapping<Archive, Enum<?>>> rows = new ArrayList<>();
 		rows.add(currentRow);
-		
+
 		Mockito.when(searchPageModelWeb.getArchivesWeb2()).thenReturn(rows);
-		
+
 		Arrays.stream(ArchiveModelParts.values()).forEach(part -> Mockito.when(currentRow.part(part)).thenReturn(new Model<>(part.name())));
 
 		formTester.submit("searchButton");
 
 		Mockito.verify(actionListener, Mockito.times(3)).process(SearchPageModel.SEARCH_ACTION);
-		 showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
-		 changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
+		showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
+		changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertTrue(showButton.isEnabled());
 		Assert.assertTrue(changeButton.isEnabled());
 
-		//tester.debugComponentTrees();
+		// tester.debugComponentTrees();
 		Arrays.stream(new ArchiveModelParts[] { ArchiveModelParts.Id, ArchiveModelParts.ArchiveId, ArchiveModelParts.Name, ArchiveModelParts.Category, ArchiveModelParts.DocumentDate }).forEach(part -> Assert.assertEquals(part.name(), tester.getComponentFromLastRenderedPage(String.format("form:group:documents:0:%s", StringUtils.uncapitalize(part.name()))).getDefaultModel().getObject()));
 
 	}
 
-
-	
 	@Test
 	public final void ajaxListener() {
 
@@ -207,31 +199,51 @@ public class SearchPageTest {
 		Assert.assertTrue(changeButton.isEnabled());
 		tester.assertComponentOnAjaxResponse(changeButton);
 		tester.assertComponentOnAjaxResponse(showButton);
-		
+
 	}
-	
+
 	@Test
 	public final void newButton() {
-	
-		
+
 		final FormTester formTester = tester.newFormTester("form");
-		
-		formTester.submit("group:" + I18NSearchPageModelParts.NewButton.wicketId() );
-	
+
+		formTester.submit("group:" + I18NSearchPageModelParts.NewButton.wicketId());
+
 		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
-		
+
 	}
-	
+
 	@Test
 	public final void changeButton() {
 		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertFalse(changeButton.isEnabled());
 		changeButton.setEnabled(true);
 		final FormTester formTester = tester.newFormTester("form");
-		
-		formTester.submit("group:" + I18NSearchPageModelParts.ChangeButton.wicketId() );
-	
+
+		formTester.submit("group:" + I18NSearchPageModelParts.ChangeButton.wicketId());
+
 		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
+	}
+
+	@Test
+	public final void searchButton() {
+		final FormTester formTester = tester.newFormTester("searchForm");
+
+		formTester.submit(I18NSearchPageModelParts.SearchButton.wicketId());
+		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
+	}
+
+	@Test
+	public final void showButton() {
+		final Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
+		Assert.assertFalse(showButton.isEnabled());
+		showButton.setEnabled(true);
+		final FormTester formTester = tester.newFormTester("form");
+		Assert.assertTrue(showButton.isEnabled());
+
+		formTester.submit("group:" + I18NSearchPageModelParts.ShowButton.wicketId());
+		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
+
 	}
 
 }

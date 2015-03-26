@@ -1,6 +1,8 @@
 package de.mq.archive.web.search;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -14,11 +16,15 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
+import de.mq.archive.domain.Category;
+import de.mq.archive.domain.support.ArchiveImpl;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
 
 public class SearchPageModelTest {
 
+	private static final Date DATE = new GregorianCalendar(1968, 4, 28).getTime();
+	private static final String NAME = "loveLetter for kylie";
 	private static final int PAGE_SIZE = 10;
 	private static final String ID = "19680528";
 	@SuppressWarnings("unchecked")
@@ -139,6 +145,20 @@ public class SearchPageModelTest {
 	@Test
 	public final void getI18NLabels() {
 		Assert.assertEquals(labelsModel, modelWeb.getI18NLabels());
+	}
+	
+	@Test
+	public final void  getArchivesWeb() {
+		final List<Archive> archives = new ArrayList<>();
+		archives.add(new ArchiveImpl(NAME, Category.Correspondence, DATE, ID));
+		ReflectionTestUtils.setField(model, "archives", archives);
+		final List<TwoWayMapping<Archive, Enum<?>>> results =  modelWeb.getArchivesWeb2();
+		Assert.assertEquals(1, results.size());
+		final TwoWayMapping<Archive, Enum<?>> result = results.iterator().next();
+		Assert.assertEquals(ID,result.part(ArchiveModelParts.ArchiveId).getObject());
+		Assert.assertEquals(NAME,result.part(ArchiveModelParts.Name).getObject());
+		Assert.assertEquals(Category.Correspondence,result.part(ArchiveModelParts.Category).getObject());
+		Assert.assertEquals(DATE,result.part(ArchiveModelParts.DocumentDate).getObject());
 	}
 
 }

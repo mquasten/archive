@@ -83,11 +83,9 @@ public class SearchPage extends WebPage {
 		
 		
 		
+	
 		
-
-		searchButton.addActionListener(action -> enableButtons());
-		
-		searchButton.addActionListener(action -> setResponsePage(SearchPage.class));
+		searchButton.addActionListener(action -> setResponsePage(SearchPage.class ));
 		searchForm.add((Component) searchButton);
 
 	
@@ -178,6 +176,7 @@ public class SearchPage extends WebPage {
 
 	
 	private void enableButtons() {
+		
 		changeButton.setEnabled(searchPageModel.isSelected());
 		showButton.setEnabled(searchPageModel.isSelected());
 		
