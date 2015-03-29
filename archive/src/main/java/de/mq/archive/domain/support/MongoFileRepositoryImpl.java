@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -25,6 +26,7 @@ import com.mongodb.gridfs.GridFSFile;
 import de.mq.archive.domain.GridFsInfo;
 
 @Named
+@Profile("db")
 public class MongoFileRepositoryImpl implements MongoFileRepository {
 	
 	static final String ID_FIELD = "_id";

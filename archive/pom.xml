@@ -244,6 +244,7 @@
 									<excludes>
 										<exclude>mock/**</exclude>
 										<exclude>dev/**</exclude>
+										<exclude>prod/**</exclude>
 									</excludes>
 
 								</resource>
@@ -272,6 +273,28 @@
 			<properties>
 				<propDir>mock</propDir>
 				<webXmlPath>${basedir}/src/main/resources/mock/web.xml</webXmlPath>
+			</properties>
+
+		</profile>
+		
+		<profile>
+
+			<id>prod</id>
+
+			<properties>
+				<propDir>prod</propDir>
+				<webXmlPath>${basedir}/src/main/resources/prod/web.xml</webXmlPath>
+			</properties>
+
+		</profile>
+		
+		
+		<profile>
+
+			<id>dev</id>
+			<properties>
+				<propDir>dev</propDir>
+				<webXmlPath>${basedir}/src/main/resources/dev/web.xml</webXmlPath>
 			</properties>
 
 		</profile>
