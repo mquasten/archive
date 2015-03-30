@@ -1,5 +1,6 @@
 package de.mq.archive.web;
 
+import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
@@ -31,6 +32,12 @@ public class WicketApplication extends WebApplication
 	@Override
 	public void init()
 	{
+		
+		final SecurePackageResourceGuard packageResourceGuard = (SecurePackageResourceGuard) getResourceSettings().getPackageResourceGuard(); 
+		packageResourceGuard.addPattern("+public/*.png");
+		packageResourceGuard.setAllowAccessToRootResources(true);
+
+		
 		super.getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 	}
 }

@@ -25,6 +25,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.web.ActionButton;
+import de.mq.archive.web.ActionImageButton;
 import de.mq.archive.web.ActionListener;
 import de.mq.archive.web.ComponentFactory;
 import de.mq.archive.web.TwoWayMapping;
@@ -107,6 +108,35 @@ public class SearchPage extends WebPage {
 			}
 
 		});
+		
+		if( ! searchPageModel.hasPaging()){
+			  actionListener.process(SearchPageModel.SEARCH_ACTION);
+		}
+		
+		
+		final ActionImageButton<String> firstPageButton = new ActionImageButton<>("firstPageButton",  image("in", searchPageModel.isNotFirstPage()), SearchPageModel.FIRST_PAGE_ACTION, actionListener);
+		firstPageButton.addActionListener( a -> setResponsePage(SearchPage.class));
+		firstPageButton.setEnabled(searchPageModel.isNotFirstPage());
+		
+		group.add(firstPageButton);
+		final ActionImageButton<String> nextPageButton = new ActionImageButton<>("nextPageButton",  image("right", searchPageModel.hasNextPage()), SearchPageModel.NEXT_PAGE_ACTION, actionListener);
+		nextPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
+		nextPageButton.setEnabled(searchPageModel.hasNextPage());
+	
+		
+		group.add(nextPageButton );
+		
+		group.add(componentFactory.newComponent("pagingLabel",searchPageModel.getPagingInfo() ,  Label.class));
+		final ActionImageButton<String> prevoiusPageButton = new ActionImageButton<>("previousPageButton",  image("left", searchPageModel.hasPriviousPage()),SearchPageModel.PREVIOUS_PAGE_ACTION, actionListener);
+		prevoiusPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
+		prevoiusPageButton.setEnabled(searchPageModel.hasPriviousPage());
+		group.add(prevoiusPageButton);
+		
+		final ActionImageButton<String> lastPageButton = new ActionImageButton<>("lastPageButton",  image("out", searchPageModel.isNotLastPage()), SearchPageModel.LAST_PAGE_ACTION, actionListener);
+		lastPageButton.addActionListener(actionListener);
+		lastPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
+		lastPageButton.setEnabled(searchPageModel.isNotLastPage());
+		group.add(lastPageButton);
 
 		final Form<Archive> form = new Form<Archive>("form");
 	
@@ -133,7 +163,7 @@ public class SearchPage extends WebPage {
 		group.add(changeButton);
 		group.add(showButton);
 		group.add(componentFactory.newComponent(searchPageModel.getI18NLabels(), I18NSearchPageModelParts.SearchTableHeadline, Label.class));
-		actionListener.process(SearchPageModel.SEARCH_ACTION);
+		
 		final ListView<TwoWayMapping<Archive, Enum<?>>> persons = new ListView<TwoWayMapping<Archive, Enum<?>>>("documents",new ListModel<>(searchPageModel.getArchivesWeb2())) {
 
 			private static final long serialVersionUID = 1L;
@@ -182,5 +212,13 @@ public class SearchPage extends WebPage {
 		
 	}
 	
+	
+	private String image(String postfix , boolean enabled){
+		String prefix = "arrow";
+		if( ! enabled) {
+			prefix="disabled";
+		}
+		return String.format("%s_%s.png", prefix, postfix);
+	}
 
 }

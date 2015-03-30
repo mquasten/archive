@@ -32,13 +32,13 @@ public class SearchPageModelTest {
 	
 	@SuppressWarnings("unchecked")
 	private final IModel<String> selectedArchiveIdWeb = Mockito.mock(IModel.class);
-	@SuppressWarnings("unchecked")
-	private final IModel<Number> pageSizeWeb = Mockito.mock(IModel.class);
+
+
 	
 	 @SuppressWarnings("unchecked")
 	final OneWayMapping<Locale, Enum<?>>  labelsModel = Mockito.mock(OneWayMapping.class);
 	
-	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, labelsModel,  pageSizeWeb);
+	private final SearchPageModel model = new SearchPageModelImpl(archiveWeb, labelsModel,  PAGE_SIZE);
 	private final SearchPageModelWeb modelWeb = (SearchPageModelWeb) model; 
 	private final Archive archive = Mockito.mock(Archive.class);
 	
@@ -112,7 +112,7 @@ public class SearchPageModelTest {
 
 	@Test
 	public final void getPageSize() {
-		Mockito.when(pageSizeWeb.getObject()).thenReturn(PAGE_SIZE);
+		
 		Assert.assertEquals(PAGE_SIZE, model.getPageSize());
 	}
 
@@ -128,10 +128,7 @@ public class SearchPageModelTest {
 		Assert.assertEquals(selectedArchiveIdWeb, modelWeb.getSelectedArchiveWeb());
 	}
 
-	@Test
-	public final void getPageSizeWeb() {
-		Assert.assertEquals(pageSizeWeb, modelWeb.getPageSizeWeb());
-	}
+	
 	
 	@Test
 	public final void  isSeelected() {

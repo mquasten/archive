@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.wicket.model.Model;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +35,7 @@ class Models {
 		 return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), 
 				 new BasicI18NEnumModelImpl(messageSource,  Arrays.asList(I18NSearchPageModelParts.values()),
 						 Arrays.asList(I18NSearchPageModelParts.values()).stream().map( part -> part.key()).collect(Collectors.toList())),
-						 new Model<>(Integer.MAX_VALUE) );
+						 5 );
 	 }
 	 
 	 @Bean()

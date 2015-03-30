@@ -24,6 +24,7 @@ import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.ArchiveService;
 import de.mq.archive.domain.GridFsInfo;
 import de.mq.archive.domain.support.ArchiveImpl;
+import de.mq.archive.domain.support.ModifyablePaging;
 import de.mq.archive.web.search.SearchPageModel;
 
 public class EditPageControllerTest {
@@ -60,8 +61,9 @@ public class EditPageControllerTest {
 	@Test
 	public final void save() {
 		Mockito.when(editPageModel.getArchive()).thenReturn(archive);
-		editPageController.save(editPageModel);
+		editPageController.save(editPageModel, searchPageModel);
 		Mockito.verify(archiveService).save(archive);
+		Mockito.verify(searchPageModel).setPaging(null);
 	}
 
 	@Test
@@ -87,14 +89,16 @@ public class EditPageControllerTest {
 	public final void delete() {
 		Mockito.when(editPageModel.getArchive()).thenReturn(archive);
 		Mockito.when(editPageModel.isPersistent()).thenReturn(true);
-		editPageController.delete(editPageModel);
+		editPageController.delete(editPageModel, searchPageModel);
 		Mockito.verify(archiveService).delete(archive);
+		Mockito.verify(searchPageModel).setPaging(Mockito.any(ModifyablePaging.class));
 	}
 
 	@Test
 	public final void deleteNotPersistent() {
-		editPageController.delete(editPageModel);
+		editPageController.delete(editPageModel, searchPageModel);
 		Mockito.verify(archiveService, Mockito.never()).delete(Mockito.any(Archive.class));
+		Mockito.verify(searchPageModel, Mockito.never()).setPaging(Mockito.any(ModifyablePaging.class));
 	}
 
 	@Test

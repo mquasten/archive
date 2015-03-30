@@ -9,7 +9,7 @@ interface EditPageController  {
 	static final String SAVE_ACTION = "save";
 	
 
-	void save(final EditPageModel model);
+	void save(final EditPageModel model, final SearchPageModel searchPageModel);
 
 
 	void init(final SearchPageModel searchPageModel, final EditPageModel model);
@@ -27,7 +27,7 @@ interface EditPageController  {
 	void showAttachement(EditPageModel model, final RequestCycle requestCycle);
 
 
-	void delete(EditPageModel model);
+	void delete(EditPageModel model, final SearchPageModel searchPageModel);
 
 
 	void initReadOnly(final SearchPageModel searchPageModel, final EditPageModel model);

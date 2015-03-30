@@ -18,7 +18,6 @@ public interface SearchPageModelWeb {
 
 	IModel<String> getSelectedArchiveWeb();
 
-	IModel<Number> getPageSizeWeb();
 
 	boolean isSelected();
 
@@ -27,6 +26,45 @@ public interface SearchPageModelWeb {
 
 
 	List<TwoWayMapping<Archive, Enum<?>>> getArchivesWeb2();
+
+
+
+
+
+	IModel<String> getPagingInfo();
+
+
+
+
+
+	boolean hasPaging();
+
+
+	boolean isNotFirstPage();
+
+
+
+
+
+	boolean hasNextPage();
+
+
+
+
+
+	boolean hasPriviousPage();
+
+
+
+
+
+	boolean isNotLastPage();
+
+
+
+
+
+	
 
 
 }

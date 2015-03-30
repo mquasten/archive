@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.support.ArchiveImpl;
+import de.mq.archive.domain.support.ModifyablePaging;
 import de.mq.archive.web.BasicEnumModelImpl;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
@@ -21,11 +23,14 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	private final TwoWayMapping<Archive, Enum<?>> searchCriteria; 
 	private final List<Archive> archives = new ArrayList<>();
 	private final IModel<String> selectedArchive = new Model<>();; 
-	private final IModel<Number> pageSize; 
+
 	
-	private final OneWayMapping<Locale, Enum<?>>  labels; 
+	private ModifyablePaging paging ; 
 	
-	SearchPageModelImpl(final TwoWayMapping<Archive, Enum<?>> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,   final  IModel<Number> pageSize) {
+	private final OneWayMapping<Locale, Enum<?>>  labels;
+	private Number pageSize; 
+	
+	SearchPageModelImpl(final TwoWayMapping<Archive, Enum<?>> searchCriteria, final OneWayMapping<Locale, Enum<?>>  labels,   final  Number pageSize) {
 		this.searchCriteria = searchCriteria;
 		this.labels=labels;
 		this.pageSize = pageSize;
@@ -80,7 +85,7 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
 	@Override
 	public final Number getPageSize() {
-		return pageSize.getObject();
+		return pageSize;
 	}
 	
 	
@@ -101,10 +106,7 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	}
 
 
-	@Override
-	public final IModel<Number> getPageSizeWeb() {
-		return pageSize;
-	}
+	
 
 	@Override
 	public final boolean isSelected() {
@@ -116,7 +118,66 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 		return labels;
 	}
 	
+	@Override
+	public final IModel<String> getPagingInfo() {
+		if( paging == null){
+			return new Model<>("/");
+		}
+		return  new Model<>(paging.currentPage() + "/" + paging.maxPages());
+		
+	}
+	
+	@Override
+	public final Optional<ModifyablePaging> getPaging() {
+		if (paging == null) {
+			return Optional.empty();
+		}
+		return Optional.of(paging);
+		
+	}
+	
+	@Override
+	public final void setPaging(final ModifyablePaging paging){
+		this.paging=paging;
+	}
+	
+	@Override
+	public final boolean hasPaging() {
+		return this.paging != null;
+	}
+	
+	@Override
+	public final boolean isNotFirstPage() {
+		if(paging ==null){
+			return false;
+		}
+		return ! paging.isBegin();
+	}
+	
+	@Override
+	public final boolean hasNextPage() {
+		if(paging ==null){
+			return false;
+		}
+		return paging.hasNextPage();
+	}
 	
 	
+	@Override
+	public final boolean hasPriviousPage() {
+		if(paging ==null){
+			return false;
+		}
+		return paging.hasPreviousPage();
+	}
+	
+	@Override
+	public final boolean isNotLastPage() {
+		if(paging ==null){
+			return false;
+		}
+		return ! paging.isEnd();
+	}
+
 
 }

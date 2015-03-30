@@ -34,20 +34,20 @@ public class EditPageControllerImpl implements EditPageController {
 
 	@Named(SAVE_ACTION)
 	@Override
-	public final void save(final EditPageModel model) {
+	public final void save(final EditPageModel model, final SearchPageModel searchPageModel) {
 		archiveService.save(model.getArchive());
-
+		searchPageModel.setPaging(null);
 	}
 
 	@Named(EditPageModel.DELETE_ACTION)
 	@Override
-	public final void delete(final EditPageModel model) {
+	public final void delete(final EditPageModel model, final SearchPageModel searchPageModel) {
 
 		if (!model.isPersistent()) {
 			return;
 		}
 		archiveService.delete(model.getArchive());
-
+		searchPageModel.setPaging(null);
 	}
 
 	@Named(SearchPageModel.INIT_EDIT)
