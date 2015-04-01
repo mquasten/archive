@@ -80,7 +80,7 @@ public class FileRepositoryMock implements MongoFileRepository {
 		}
 		
 		documents.get(parentId.get()).values().stream().map(info -> info.id()).forEach(id -> files.remove(id));
-		documents.remove(parentId);
+		documents.remove(parentId.get());
 	}
 
 	@Override
@@ -91,9 +91,7 @@ public class FileRepositoryMock implements MongoFileRepository {
 		 }
 		 
 		 final Map<String,GridFsInfo<String>> infos = documents.get(entry.get().getKey());
-		 if( infos == null){
-			return;
-		 }
+		 
 		 infos.remove(entry.get().getValue().filename().toLowerCase());
 		 files.remove(entry.get().getValue().id());
 		
