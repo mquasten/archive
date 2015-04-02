@@ -36,5 +36,9 @@ static final String INIT_EDIT = "init_edit";
 
 	void setPaging(ModifyablePaging paging);
 	
+	@FunctionalInterface
+	interface PagingOperation<T>  {
+		T execute(final ModifyablePaging paging);
+	}
 	
 }

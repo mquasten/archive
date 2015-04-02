@@ -94,11 +94,6 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 		return searchCriteria;
 	}
 
-	
-	
-	
-	
-
 
 	@Override
 	public final IModel<String> getSelectedArchiveWeb() {
@@ -121,7 +116,7 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	@Override
 	public final IModel<String> getPagingInfo() {
 		if( paging == null){
-			return new Model<>("/");
+			return new Model<>("");
 		}
 		return  new Model<>(paging.currentPage() + "/" + paging.maxPages());
 		
@@ -148,35 +143,31 @@ class SearchPageModelImpl implements SearchPageModel, SearchPageModelWeb {
 	
 	@Override
 	public final boolean isNotFirstPage() {
-		if(paging ==null){
-			return false;
-		}
-		return ! paging.isBegin();
+		return ! doInPaging(paging -> paging.isBegin());
 	}
 	
 	@Override
 	public final boolean hasNextPage() {
-		if(paging ==null){
-			return false;
-		}
-		return paging.hasNextPage();
+		return doInPaging(paging -> paging.hasNextPage());
 	}
 	
 	
 	@Override
 	public final boolean hasPriviousPage() {
-		if(paging ==null){
-			return false;
-		}
-		return paging.hasPreviousPage();
+		return  doInPaging(paging -> paging.hasPreviousPage());
 	}
 	
 	@Override
 	public final boolean isNotLastPage() {
-		if(paging ==null){
+		return ! doInPaging(paging -> paging.isEnd());
+	}
+	
+	
+	private boolean doInPaging(final SearchPageModel.PagingOperation<Boolean> pagingOperation) {
+		if(paging ==null){ 
 			return false;
 		}
-		return ! paging.isEnd();
+		return pagingOperation.execute(paging);
 	}
 
 

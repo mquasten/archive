@@ -18,11 +18,14 @@ import org.springframework.util.StringUtils;
 import de.mq.archive.domain.Archive;
 import de.mq.archive.domain.Category;
 import de.mq.archive.domain.support.ArchiveImpl;
+import de.mq.archive.domain.support.ModifyablePaging;
+import de.mq.archive.domain.support.Paging;
 import de.mq.archive.web.OneWayMapping;
 import de.mq.archive.web.TwoWayMapping;
 
 public class SearchPageModelTest {
 
+	private static final String PAGING_FIELD = "paging";
 	private static final Date DATE = new GregorianCalendar(1968, 4, 28).getTime();
 	private static final String NAME = "loveLetter for kylie";
 	private static final int PAGE_SIZE = 10;
@@ -157,5 +160,92 @@ public class SearchPageModelTest {
 		Assert.assertEquals(Category.Correspondence,result.part(ArchiveModelParts.Category).getObject());
 		Assert.assertEquals(DATE,result.part(ArchiveModelParts.DocumentDate).getObject());
 	}
+	@Test
+	public final void getPagingInfo() {
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		Mockito.when(paging.currentPage()).thenReturn(1);
+		Mockito.when(paging.maxPages()).thenReturn(42);
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertEquals(String.format("%s/%s", paging.currentPage(), paging.maxPages()), (((SearchPageModelWeb)model).getPagingInfo().getObject()));
+	}
+	
+	@Test
+	public final void getPagingInfoNoPaging() {
+		Assert.assertTrue(((SearchPageModelWeb)model).getPagingInfo().getObject().isEmpty());
+	}
+	
+	@Test
+	public final void getPaging() {
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertTrue( model.getPaging().isPresent());
+		Assert.assertEquals(paging, model.getPaging().get());
+		
+	}
+	
+	@Test
+	public final void getPagingNoPaging() {
+		Assert.assertFalse(model.getPaging().isPresent());
+	}
+	
+	@Test
+	public final void setPaging() {
+		final ModifyablePaging paging = Mockito.mock(ModifyablePaging.class);
+		model.setPaging(paging);
+		Assert.assertEquals(paging, ReflectionTestUtils.getField(model, PAGING_FIELD));
+	}
+	
+	@Test
+	public final void hasPaging() {
+		Assert.assertFalse(((SearchPageModelWeb)model).hasPaging());
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertTrue(((SearchPageModelWeb)model).hasPaging());
+	}
+	
+	@Test
+	public final void isNotFirstPage() {
+		
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		Mockito.when(paging.isBegin()).thenReturn(true);
+		Assert.assertTrue((((SearchPageModelWeb)model).isNotFirstPage()));
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertFalse((((SearchPageModelWeb)model).isNotFirstPage()));
+		
+		
+	}
+	
+	@Test
+	public final void  hasNextPage() {
+		
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		Mockito.when(paging.hasNextPage()).thenReturn(true);
+		Assert.assertFalse((((SearchPageModelWeb)model).hasNextPage()));
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertTrue((((SearchPageModelWeb)model).hasNextPage()));
+	}
+	
+	@Test
+	public final void hasPriviousPage() {
+		
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		Mockito.when(paging.hasPreviousPage()).thenReturn(true);
+		Assert.assertFalse(((((SearchPageModelWeb)model).hasPriviousPage())));
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertTrue(((((SearchPageModelWeb)model).hasPriviousPage())));
+	}
+	
+	@Test
+	public final void isNotLastPage() {
+		Assert.assertFalse(((SearchPageModelWeb)model).hasPaging());
+		final Paging paging = Mockito.mock(ModifyablePaging.class);
+		Assert.assertTrue((((SearchPageModelWeb)model).isNotLastPage()));
+		Mockito.when(paging.isEnd()).thenReturn(true);
+		ReflectionTestUtils.setField(model, PAGING_FIELD, paging);
+		Assert.assertFalse((((SearchPageModelWeb)model).isNotLastPage()));
+		
+		
+	}
+
 
 }

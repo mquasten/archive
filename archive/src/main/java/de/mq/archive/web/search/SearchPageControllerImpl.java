@@ -51,18 +51,15 @@ class SearchPageControllerImpl implements SearchPageController {
 		changePaging(model, p ->  p.last());
 	}
 
-	private void changePaging(final SearchPageModel model, final PagingOperation pagingOperation) {
+	private void changePaging(final SearchPageModel model, final SearchPageModel.PagingOperation<?> pagingOperation) {
 		if (! model.getPaging().isPresent() ) {
 			return;
 		}
-		pagingOperation.change(model.getPaging().get());
+		pagingOperation.execute(model.getPaging().get());
 			
 	   model.setArchives(archiveService.archives(model.getSearchCriteria(),  model.getPaging().get()));
 	}
 	
 }
 
-@FunctionalInterface
-interface PagingOperation  {
-	void change(final ModifyablePaging paging);
-}
+
