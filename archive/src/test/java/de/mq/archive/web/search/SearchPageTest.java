@@ -43,8 +43,7 @@ public class SearchPageTest {
 	private final ServletContext ctx = Mockito.mock(ServletContext.class);
 	private final WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
 
-	@SuppressWarnings("unchecked")
-	private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
+	private final ActionListener actionListener = Mockito.mock(ActionListener.class);
 
 	@SuppressWarnings("rawtypes")
 	private final OneWayMapping labels = Mockito.mock(OneWayMapping.class);

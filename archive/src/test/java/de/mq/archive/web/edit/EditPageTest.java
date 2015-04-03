@@ -50,8 +50,8 @@ public class EditPageTest {
 	private final ServletContext ctx = Mockito.mock(ServletContext.class);
 	private final WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
 
-	@SuppressWarnings("unchecked")
-	private final ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
+	
+	private final ActionListener actionListener = Mockito.mock(ActionListener.class);
 
 	final SearchPageModelWeb searchPageModelWeb = Mockito.mock(SearchPageModelWeb.class);
 

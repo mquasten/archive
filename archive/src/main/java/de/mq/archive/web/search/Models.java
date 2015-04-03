@@ -47,7 +47,7 @@ class Models {
 	 
 	 @Bean(name="searchActionListener")
 	 @Scope("singleton")
-	 public ActionListener<?> searchActionListener() {
+	 public ActionListener searchActionListener() {
 		 return new SimpleParameterInjectionActionListenerImpl(beanFactory, SearchPageController.class);
 	 }
 	 

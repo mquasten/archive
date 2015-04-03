@@ -61,7 +61,7 @@ public class EditPageModelsTest {
 	@Test
 	public final void editActionListener() {
 
-		final ActionListener<?> listener = editPageModels.editActionListener();
+		final ActionListener listener = editPageModels.editActionListener();
 		Assert.assertTrue(listener instanceof SimpleParameterInjectionActionListenerImpl);
 
 		Assert.assertEquals(beanFactory, ReflectionTestUtils.getField(listener, BEAN_FACTORY_FIELD));
@@ -70,7 +70,7 @@ public class EditPageModelsTest {
 
 	@Test
 	public final void initEditActionListener() {
-		final ActionListener<?> listener = editPageModels.initEditActionListener();
+		final ActionListener listener = editPageModels.initEditActionListener();
 		Assert.assertTrue(listener instanceof SimpleParameterInjectionActionListenerImpl);
 
 		Assert.assertEquals(beanFactory, ReflectionTestUtils.getField(listener, BEAN_FACTORY_FIELD));
@@ -79,7 +79,7 @@ public class EditPageModelsTest {
 
 	@Test
 	public final void newEditActionListener() {
-		final ActionListener<?> listener = editPageModels.newEditActionListener();
+		final ActionListener listener = editPageModels.newEditActionListener();
 		Assert.assertTrue(listener instanceof SimpleParameterInjectionActionListenerImpl);
 
 		Assert.assertEquals(beanFactory, ReflectionTestUtils.getField(listener, BEAN_FACTORY_FIELD));

@@ -42,11 +42,11 @@ public class SearchPage extends WebPage {
 
 	@Inject()
 	@Named("searchActionListener")
-	private ActionListener<String> actionListener;
+	private ActionListener actionListener;
 	
 	@Inject()
 	@Named("editActionListener")
-	private ActionListener<String> editActionListener;
+	private ActionListener editActionListener;
 
 	
 	@Inject()
@@ -114,12 +114,12 @@ public class SearchPage extends WebPage {
 		}
 		
 		
-		final ActionImageButton<String> firstPageButton = new ActionImageButton<>("firstPageButton",  image("in", searchPageModel.isNotFirstPage()), SearchPageModel.FIRST_PAGE_ACTION, actionListener);
+		final ActionImageButton firstPageButton = new ActionImageButton("firstPageButton",  image("in", searchPageModel.isNotFirstPage()), SearchPageModel.FIRST_PAGE_ACTION, actionListener);
 		firstPageButton.addActionListener( a -> setResponsePage(SearchPage.class));
 		firstPageButton.setEnabled(searchPageModel.isNotFirstPage());
 		
 		group.add(firstPageButton);
-		final ActionImageButton<String> nextPageButton = new ActionImageButton<>("nextPageButton",  image("right", searchPageModel.hasNextPage()), SearchPageModel.NEXT_PAGE_ACTION, actionListener);
+		final ActionImageButton nextPageButton = new ActionImageButton("nextPageButton",  image("right", searchPageModel.hasNextPage()), SearchPageModel.NEXT_PAGE_ACTION, actionListener);
 		nextPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
 		nextPageButton.setEnabled(searchPageModel.hasNextPage());
 	
@@ -127,12 +127,12 @@ public class SearchPage extends WebPage {
 		group.add(nextPageButton );
 		
 		group.add(componentFactory.newComponent("pagingLabel",searchPageModel.getPagingInfo() ,  Label.class));
-		final ActionImageButton<String> prevoiusPageButton = new ActionImageButton<>("previousPageButton",  image("left", searchPageModel.hasPriviousPage()),SearchPageModel.PREVIOUS_PAGE_ACTION, actionListener);
+		final ActionImageButton prevoiusPageButton = new ActionImageButton("previousPageButton",  image("left", searchPageModel.hasPriviousPage()),SearchPageModel.PREVIOUS_PAGE_ACTION, actionListener);
 		prevoiusPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
 		prevoiusPageButton.setEnabled(searchPageModel.hasPriviousPage());
 		group.add(prevoiusPageButton);
 		
-		final ActionImageButton<String> lastPageButton = new ActionImageButton<>("lastPageButton",  image("out", searchPageModel.isNotLastPage()), SearchPageModel.LAST_PAGE_ACTION, actionListener);
+		final ActionImageButton lastPageButton = new ActionImageButton("lastPageButton",  image("out", searchPageModel.isNotLastPage()), SearchPageModel.LAST_PAGE_ACTION, actionListener);
 		lastPageButton.addActionListener(actionListener);
 		lastPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
 		lastPageButton.setEnabled(searchPageModel.isNotLastPage());

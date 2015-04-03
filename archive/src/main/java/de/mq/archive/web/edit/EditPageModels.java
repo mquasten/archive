@@ -38,19 +38,19 @@ class EditPageModels {
 	
 	 @Bean(name="editActionListener")
 	 @Scope("singleton")
-	 public ActionListener<?> editActionListener() {
+	 public ActionListener editActionListener() {
 		 return new SimpleParameterInjectionActionListenerImpl(beanFactory, EditPageController.class);
 	 }
 	 
 	 @Bean(name="initEditActionListener")
 	 @Scope("singleton")
-	 public ActionListener<?> initEditActionListener() {
+	 public ActionListener initEditActionListener() {
 		 return new SimpleParameterInjectionActionListenerImpl(beanFactory,EditPageController.class);
 	 }
 	 
 	 @Bean(name="newEditActionListener")
 	 @Scope("singleton")
-	 public ActionListener<?> newEditActionListener() {
+	 public ActionListener newEditActionListener() {
 		 return new SimpleParameterInjectionActionListenerImpl(beanFactory,EditPageController.class);
 	 }
 	 

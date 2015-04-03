@@ -90,7 +90,7 @@ public class ModelsTest {
 	@Test
 	public final void searchActionListener() {
 		Mockito.when(beanFactory.getBean(SearchPageController.class)).thenReturn(searchPageController);
-		final ActionListener<?> actionListener = models.searchActionListener();
+		final ActionListener actionListener = models.searchActionListener();
 		Assert.assertEquals(beanFactory, ReflectionTestUtils.getField(actionListener, BEAN_FACTORY_FIELD));
 		Mockito.verify(beanFactory, Mockito.times(1)).getBean(SearchPageController.class);
 	}

@@ -18,8 +18,8 @@ public class ActionButtonTest {
 	private static final String WICKET_ID = "wicketId";
 	private ActionButton<String> actionButton;
 	private WicketTester tester;
-	@SuppressWarnings("unchecked")
-	private ActionListener<String> actionListener = Mockito.mock(ActionListener.class);
+
+	private ActionListener actionListener = Mockito.mock(ActionListener.class);
 	@SuppressWarnings("unchecked")
 	final IModel<String> model = Mockito.mock(IModel.class);
 
@@ -49,22 +49,22 @@ public class ActionButtonTest {
 	@Test
 	public final void addActionListener() {
 		actionButton.addActionListener(KEY, actionListener);
-		final Map<String, ActionListener<String>> listeners = listeners();
+		final Map<String, ActionListener> listeners = listeners();
 		Assert.assertEquals(1, listeners.size());
 		Assert.assertEquals(KEY, listeners.keySet().iterator().next());
 		Assert.assertEquals(actionListener, listeners.values().iterator().next());
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, ActionListener<String>> listeners() {
-		return (Map<String, ActionListener<String>>) ReflectionTestUtils.getField(actionButton, LISTENERS_FIELD);
+	private Map<String, ActionListener> listeners() {
+		return (Map<String, ActionListener>) ReflectionTestUtils.getField(actionButton, LISTENERS_FIELD);
 	}
 
 	@Test
 	public final void addActionListenerDefault() {
 		actionButton.addActionListener(actionListener);
 
-		final Map<String, ActionListener<String>> listeners = listeners();
+		final Map<String, ActionListener> listeners = listeners();
 		Assert.assertEquals(1, listeners.size());
 		Assert.assertEquals(WICKET_ID, listeners.keySet().iterator().next());
 		Assert.assertEquals(actionListener, listeners.values().iterator().next());
@@ -72,7 +72,7 @@ public class ActionButtonTest {
 
 	@Test
 	public final void removeActionListener() {
-		final Map<String, ActionListener<String>> listeners = listeners();
+		final Map<String, ActionListener> listeners = listeners();
 		listeners.put(KEY, actionListener);
 		Assert.assertFalse(listeners.isEmpty());
 		actionButton.removeActionListener(actionListener);
@@ -81,7 +81,7 @@ public class ActionButtonTest {
 
 	@Test
 	public final void removeActionListenerbyKey() {
-		final Map<String, ActionListener<String>> listeners = listeners();
+		final Map<String, ActionListener> listeners = listeners();
 		listeners.put(KEY, actionListener);
 		Assert.assertFalse(listeners.isEmpty());
 		actionButton.removeActionListener(KEY);
@@ -90,14 +90,14 @@ public class ActionButtonTest {
 
 	@Test
 	public final void getActionListeners() {
-		final Map<String, ActionListener<String>> listeners = listeners();
+		final Map<String, ActionListener> listeners = listeners();
 		listeners.put(KEY, actionListener);
 		Assert.assertEquals(listeners, actionButton.getActionListeners());
 	}
 
 	@Test
 	public final void onSubmit() {
-		final Map<String, ActionListener<String>> listeners = listeners();
+		final Map<String, ActionListener> listeners = listeners();
 		listeners.put(KEY, actionListener);
 
 		actionButton.onSubmit();

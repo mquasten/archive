@@ -28,7 +28,7 @@ public class ParameterInjectionActionListenerTest {
 
 	private final TestController testController = Mockito.mock(TestController.class);
 
-	private ActionListener<String> actionListener;
+	private ActionListener actionListener;
 	
 	private final Model model = Mockito.mock(Model.class);
 

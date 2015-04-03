@@ -57,7 +57,7 @@ public class EditPage extends WebPage {
 
 	@Inject()
 	@Named("editActionListener")
-	private ActionListener<String> actionListener;
+	private ActionListener actionListener;
 
 	@Inject()
 	@Named("fileUpload")
@@ -96,7 +96,7 @@ public class EditPage extends WebPage {
 		Arrays.stream(I18NEditPageModelParts.values()).filter(value -> value.isWithInForm() && !value.isButton()).forEach(value -> editForm.add(componentFactory.newComponent(editPageModelWeb.getI18NLabels(), value, Label.class)));
 		Arrays.stream(I18NEditPageModelParts.values()).filter(value -> value.isButton()).forEach(value -> editForm.add(componentFactory.newComponent(editPageModelWeb.getI18NLabels(), value, ActionButton.class)));
 
-		componentFactory.componetByPath(editForm, I18NEditPageModelParts.SaveButton.wicketId(), ActionButton.class).addActionListener(EditPageController.SAVE_ACTION, (ActionListener<String>) actionListener);
+		componentFactory.componetByPath(editForm, I18NEditPageModelParts.SaveButton.wicketId(), ActionButton.class).addActionListener(EditPageController.SAVE_ACTION,  actionListener);
 		componentFactory.componetByPath(editForm, I18NEditPageModelParts.DeleteButton.wicketId(), ActionButton.class).addActionListener(EditPageModel.DELETE_ACTION, actionListener);
 
 		componentFactory.componetByPath(editForm, I18NEditPageModelParts.DeleteButton.wicketId(), ActionButton.class).setVisible(editPageModelWeb.changeable());

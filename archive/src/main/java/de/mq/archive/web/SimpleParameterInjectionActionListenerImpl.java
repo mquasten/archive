@@ -13,7 +13,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
-public class SimpleParameterInjectionActionListenerImpl implements ActionListener<String>{
+public class SimpleParameterInjectionActionListenerImpl implements ActionListener {
 
 	
 	private static final long serialVersionUID = 1L;
