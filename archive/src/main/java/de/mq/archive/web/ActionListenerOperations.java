@@ -4,8 +4,9 @@ package de.mq.archive.web;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public interface ActionListenerOperations {
-	
+
+
+public interface ActionListenerOperations  {
 	
 	default  void addActionListener(final String  key, final ActionListener actionListener) {
 		getActionListeners().put(key, actionListener);
@@ -25,10 +26,10 @@ public interface ActionListenerOperations {
 	}
 	
 	
-	
-	Map<String, ActionListener> getActionListeners();
-	
 	String getId();
 	
-	
+	 Map<String, ActionListener>  getActionListeners();
+
 }
+
+
