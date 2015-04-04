@@ -10,6 +10,7 @@ public class ActionButton<T> extends Button  implements ActionListenerOperations
 
 	private static final long serialVersionUID = 1L;
 	
+	@ActionListeners
 	private final Map<String,ActionListener> listeners = new HashMap<>();
 	
 	public ActionButton(final String id) {
@@ -21,10 +22,6 @@ public class ActionButton<T> extends Button  implements ActionListenerOperations
 	}
 
 	
-	public final Map<String, ActionListener> getActionListeners() {
-		return listeners;
-	}
-
 
 	/*
 	 * (non-Javadoc)

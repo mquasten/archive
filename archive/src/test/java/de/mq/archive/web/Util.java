@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ActionButtonTest.class, I18NEnumModelTest.class, EnumModelTest.class, ParameterInjectionActionListenerTest.class, ComponentFactoryTest.class })
+@SuiteClasses({ ActionButtonTest.class, I18NEnumModelTest.class, EnumModelTest.class, ParameterInjectionActionListenerTest.class, ComponentFactoryTest.class, ReflectionUtilTest.class })
 public class Util {
 
 }

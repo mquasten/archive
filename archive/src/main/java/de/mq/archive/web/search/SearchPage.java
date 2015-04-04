@@ -120,8 +120,6 @@ public class SearchPage extends WebPage {
 		firstPageButton.setEnabled(searchPageModel.isNotFirstPage());
 		
 		
-		firstPageButton.getActionListeners().put("fuck", null);
-		
 		group.add(firstPageButton);
 		final ActionImageButton nextPageButton = new ActionImageButton("nextPageButton",  image("right", searchPageModel.hasNextPage()), SearchPageModel.NEXT_PAGE_ACTION, actionListener);
 		nextPageButton.addActionListener(a -> setResponsePage(SearchPage.class));

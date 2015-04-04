@@ -11,7 +11,7 @@ public interface ComponentFactory {
 
 	<T> T newComponent(final String wicketId, final IModel<?> model, Class<T> clazz);
 
-	<T,S> T deProxymize(final S fileUploadField, Class<? extends T> class1);
+	<T,S> T deProxymize(final S source, Class<? extends T> clazz);
 
 	
 

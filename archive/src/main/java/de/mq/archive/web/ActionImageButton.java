@@ -10,6 +10,7 @@ public class ActionImageButton extends ImageButton implements ActionListenerOper
 
 	private static final long serialVersionUID = 1L;
 	
+	@ActionListeners
 	private final Map<String, ActionListener> listeners = new HashMap<>();
 	
 	public ActionImageButton(final String id, final String resource) {
@@ -32,14 +33,9 @@ public class ActionImageButton extends ImageButton implements ActionListenerOper
 	 */
 	@Override
 	public void onSubmit() {
-		listeners.entrySet().forEach(e -> getActionListeners().get(e.getKey()).process( e.getKey()));
+		listeners.entrySet().forEach(e -> listeners.get(e.getKey()).process( e.getKey()));
 		super.onSubmit();
 		
-	}
-
-	@Override
-	public Map<String, ActionListener> getActionListeners() {
-	return listeners;
 	}
 
 	

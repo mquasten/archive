@@ -88,12 +88,6 @@ public class ActionButtonTest {
 		Assert.assertTrue(listeners.isEmpty());
 	}
 
-	@Test
-	public final void getActionListeners() {
-		final Map<String, ActionListener> listeners = listeners();
-		listeners.put(KEY, actionListener);
-		Assert.assertEquals(listeners, actionButton.getActionListeners());
-	}
 
 	@Test
 	public final void onSubmit() {

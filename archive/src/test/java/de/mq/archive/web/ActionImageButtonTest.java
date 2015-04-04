@@ -62,14 +62,7 @@ public class ActionImageButtonTest {
 		Assert.assertEquals(model, button.getModel());
 	}
 	
-	@Test
-	public final void  getActionListeners(){
-		final ActionListenerOperations button = new ActionImageButton(WICKET_ID , RESOURCE );
-		final Map<String,ActionListener> results = listeners(button);
-		results.put(ACTION, actionListener);
-		Assert.assertEquals(1, results.size());
-		Assert.assertEquals(results,  button.getActionListeners());
-	}
+	
 	
 	@Test
 	public final void  submit(){

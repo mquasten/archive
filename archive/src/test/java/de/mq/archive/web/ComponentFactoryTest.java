@@ -1,8 +1,14 @@
 package de.mq.archive.web;
 
+
 import java.io.Serializable;
 
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.proxy.ILazyInitProxy;
+import org.apache.wicket.proxy.IProxyTargetLocator;
+import org.apache.wicket.request.component.IRequestableComponent;
+import org.apache.wicket.util.upload.FileUpload;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,6 +78,24 @@ public class ComponentFactoryTest {
 	public final void withException() {
 	
 		componentFactory.newComponent(TestComponent.WICKET_ID_EXCEPTION,partModel,TestComponentInvalid.class);
+	}
+	
+	@Test
+	public final void deProxymize() {
+		final FileUpload fileUplaod = Mockito.mock(FileUpload.class);
+		final ILazyInitProxy proxy = Mockito.mock(ILazyInitProxy.class);
+		final IProxyTargetLocator targetLocator = Mockito.mock(IProxyTargetLocator.class);
+		Mockito.when(proxy.getObjectLocator()).thenReturn(targetLocator);
+		Mockito.when(targetLocator.locateProxyTarget()).thenReturn(fileUplaod);
+		Assert.assertEquals(fileUplaod, componentFactory.deProxymize(proxy, FileUpload.class));
+	}
+	
+	@Test
+	public final void  componetByPath() {
+		final IRequestableComponent parent = Mockito.mock(IRequestableComponent.class);
+		final Button button = Mockito.mock(Button.class); 
+		Mockito.when(parent.get(WICKET_ID)).thenReturn(button);
+		Assert.assertEquals(button, componentFactory.componetByPath(parent, WICKET_ID , Button.class));
 	}
 
 	
