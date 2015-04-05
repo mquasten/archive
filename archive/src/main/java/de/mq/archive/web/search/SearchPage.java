@@ -32,7 +32,23 @@ import de.mq.archive.web.TwoWayMapping;
 import de.mq.archive.web.edit.EditPage;
 
 public class SearchPage extends WebPage {
-	private static final String WICKET_ID_GROUP = "group";
+	private static final String OUT_IMAGE_POSTFIX = "out";
+
+	private static final String LEFT_IMAGE_POST_FIX = "left";
+
+	private static final String RIGHT_IMAGE_POSTFIX = "right";
+
+	static final String IN_IMAGE_POSTFIX = "in";
+
+	static final String SEARCH_FORM = "searchForm";
+
+	static final String FORM = "form";
+
+	static final String DISABLED_IMAGE_PREPIX = "disabled";
+
+	static final String ENABLED_IMAGE_PREFIX = "arrow";
+
+	static final String WICKET_ID_GROUP = "group";
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,7 +74,7 @@ public class SearchPage extends WebPage {
 	
 	@SuppressWarnings("unchecked")
 	public SearchPage(final PageParameters parameters) {
-		final Form<String> searchForm = new Form<>("searchForm");
+		final Form<String> searchForm = new Form<>(SEARCH_FORM);
 
 		add(searchForm);
 
@@ -109,38 +125,39 @@ public class SearchPage extends WebPage {
 
 		});
 		
+		
 		if( ! searchPageModel.hasPaging()){
 			  actionListener.process(SearchPageModel.SEARCH_ACTION);
 		}
 		
 		
 		
-		final ActionImageButton firstPageButton = new ActionImageButton("firstPageButton",  image("in", searchPageModel.isNotFirstPage()), SearchPageModel.FIRST_PAGE_ACTION, actionListener);
+		final ActionImageButton firstPageButton = new ActionImageButton(PagingWicketIds.FirstPageButton.wicketId(),  image(IN_IMAGE_POSTFIX, searchPageModel.isNotFirstPage()), SearchPageModel.FIRST_PAGE_ACTION, actionListener);
 		firstPageButton.addActionListener( a -> setResponsePage(SearchPage.class));
 		firstPageButton.setEnabled(searchPageModel.isNotFirstPage());
 		
 		
 		group.add(firstPageButton);
-		final ActionImageButton nextPageButton = new ActionImageButton("nextPageButton",  image("right", searchPageModel.hasNextPage()), SearchPageModel.NEXT_PAGE_ACTION, actionListener);
+		final ActionImageButton nextPageButton = new ActionImageButton(PagingWicketIds.NextPageButton.wicketId(),  image(RIGHT_IMAGE_POSTFIX, searchPageModel.hasNextPage()), SearchPageModel.NEXT_PAGE_ACTION, actionListener);
 		nextPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
 		nextPageButton.setEnabled(searchPageModel.hasNextPage());
 	
 		
 		group.add(nextPageButton );
 		
-		group.add(componentFactory.newComponent("pagingLabel",searchPageModel.getPagingInfo() ,  Label.class));
-		final ActionImageButton prevoiusPageButton = new ActionImageButton("previousPageButton",  image("left", searchPageModel.hasPriviousPage()),SearchPageModel.PREVIOUS_PAGE_ACTION, actionListener);
+		group.add(componentFactory.newComponent(PagingWicketIds.PagingLabel.wicketId(), searchPageModel.getPagingInfo() ,  Label.class));
+		final ActionImageButton prevoiusPageButton = new ActionImageButton(PagingWicketIds.PreviousPageButton.wicketId(),  image(LEFT_IMAGE_POST_FIX, searchPageModel.hasPriviousPage()),SearchPageModel.PREVIOUS_PAGE_ACTION, actionListener);
 		prevoiusPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
 		prevoiusPageButton.setEnabled(searchPageModel.hasPriviousPage());
 		group.add(prevoiusPageButton);
 		
-		final ActionImageButton lastPageButton = new ActionImageButton("lastPageButton",  image("out", searchPageModel.isNotLastPage()), SearchPageModel.LAST_PAGE_ACTION, actionListener);
+		final ActionImageButton lastPageButton = new ActionImageButton(PagingWicketIds.LastPageButton.wicketId(),  image(OUT_IMAGE_POSTFIX, searchPageModel.isNotLastPage()), SearchPageModel.LAST_PAGE_ACTION, actionListener);
 		lastPageButton.addActionListener(actionListener);
 		lastPageButton.addActionListener(a -> setResponsePage(SearchPage.class));
 		lastPageButton.setEnabled(searchPageModel.isNotLastPage());
 		group.add(lastPageButton);
 
-		final Form<Archive> form = new Form<Archive>("form");
+		final Form<Archive> form = new Form<Archive>(FORM);
 	
 		changeButton = newButton(I18NSearchPageModelParts.ChangeButton);
 		changeButton.addActionListener(SearchPageModel.INIT_EDIT, editActionListener );
@@ -215,10 +232,10 @@ public class SearchPage extends WebPage {
 	}
 	
 	
-	private String image(String postfix , boolean enabled){
-		String prefix = "arrow";
+	private String image(final String postfix , final boolean enabled){
+		String prefix = ENABLED_IMAGE_PREFIX;
 		if( ! enabled) {
-			prefix="disabled";
+			prefix=DISABLED_IMAGE_PREPIX;
 		}
 		return String.format("%s_%s.png", prefix, postfix);
 	}

@@ -10,10 +10,12 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.IGenericComponent;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.ImageButton;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
@@ -39,6 +41,7 @@ import de.mq.archive.web.edit.EditPage;
 import de.mq.archive.web.edit.EditPageModelWeb;
 
 public class SearchPageTest {
+
 
 	private final ServletContext ctx = Mockito.mock(ServletContext.class);
 	private final WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
@@ -97,7 +100,7 @@ public class SearchPageTest {
 		final SearchPage page = new SearchPage(null);
 		tester.startPage(page);
 
-		paths.put(I18NSearchPageModelParts.SearchNameLabel, String.format("searchForm:%s", I18NSearchPageModelParts.SearchNameLabel.wicketId()));
+		paths.put(I18NSearchPageModelParts.SearchNameLabel, String.format("%s:%s", SearchPage.SEARCH_FORM, I18NSearchPageModelParts.SearchNameLabel.wicketId()));
 
 		paths.put(I18NSearchPageModelParts.SearchCategoryLabel, String.format("searchForm:%s", I18NSearchPageModelParts.SearchCategoryLabel.wicketId()));
 		paths.put(I18NSearchPageModelParts.SearchArchiveLabel, String.format("searchForm:%s", StringUtils.uncapitalize(I18NSearchPageModelParts.SearchArchiveLabel.name())));
@@ -188,7 +191,7 @@ public class SearchPageTest {
 		Assert.assertFalse(showButton.isEnabled());
 		Assert.assertFalse(changeButton.isEnabled());
 		@SuppressWarnings("unchecked")
-		final RadioGroup<String> radio = (RadioGroup<String>) tester.getComponentFromLastRenderedPage("form:group");
+		final RadioGroup<String> radio = (RadioGroup<String>) tester.getComponentFromLastRenderedPage(String.format("%s:group", SearchPage.FORM, SearchPage.WICKET_ID_GROUP));
 		final Behavior behavior = radio.getBehaviors().iterator().next();
 
 		Mockito.when(searchPageModelWeb.isSelected()).thenReturn(true);
@@ -204,7 +207,7 @@ public class SearchPageTest {
 	@Test
 	public final void newButton() {
 
-		final FormTester formTester = tester.newFormTester("form");
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
 
 		formTester.submit("group:" + I18NSearchPageModelParts.NewButton.wicketId());
 
@@ -217,16 +220,16 @@ public class SearchPageTest {
 		final Button changeButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ChangeButton));
 		Assert.assertFalse(changeButton.isEnabled());
 		changeButton.setEnabled(true);
-		final FormTester formTester = tester.newFormTester("form");
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
 
-		formTester.submit("group:" + I18NSearchPageModelParts.ChangeButton.wicketId());
+		formTester.submit(SearchPage.WICKET_ID_GROUP +":" + I18NSearchPageModelParts.ChangeButton.wicketId());
 
 		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
 	}
 
 	@Test
 	public final void searchButton() {
-		final FormTester formTester = tester.newFormTester("searchForm");
+		final FormTester formTester = tester.newFormTester(SearchPage.SEARCH_FORM);
 
 		formTester.submit(I18NSearchPageModelParts.SearchButton.wicketId());
 		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
@@ -237,12 +240,92 @@ public class SearchPageTest {
 		final Button showButton = (Button) tester.getComponentFromLastRenderedPage(paths.get(I18NSearchPageModelParts.ShowButton));
 		Assert.assertFalse(showButton.isEnabled());
 		showButton.setEnabled(true);
-		final FormTester formTester = tester.newFormTester("form");
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
 		Assert.assertTrue(showButton.isEnabled());
 
-		formTester.submit("group:" + I18NSearchPageModelParts.ShowButton.wicketId());
+		formTester.submit(SearchPage.WICKET_ID_GROUP +":" + I18NSearchPageModelParts.ShowButton.wicketId());
 		Assert.assertEquals(EditPage.class, tester.getLastRenderedPage().getClass());
 
 	}
+	
+	@Test
+	public final void callSearch() {
+		
+		
+		Mockito.verify(actionListener, Mockito.times(1)).process(SearchPageModel.SEARCH_ACTION);
+		
+		Mockito.reset(actionListener);
+		
+		Mockito.when(((SearchPageModelWeb) searchPageModelWeb).hasPaging()).thenReturn(true);
+		tester.startPage(new SearchPage(null));
+		Mockito.verify(actionListener, Mockito.never()).process(SearchPageModel.SEARCH_ACTION);
+		
+	}
+	
+	@Test
+	public final void firstPage() {
+		final ImageButton button =  (ImageButton) tester.getComponentFromLastRenderedPage(String.format("%s:%s:%s", SearchPage.FORM, SearchPage.WICKET_ID_GROUP, PagingWicketIds.FirstPageButton.wicketId()));
+		button.setEnabled(true);
+		
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
+		formTester.submit(String.format("%s:%s", SearchPage.WICKET_ID_GROUP, PagingWicketIds.FirstPageButton.wicketId()));
+		
+		Mockito.verify(actionListener).process(SearchPageModel.FIRST_PAGE_ACTION);
+		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
+		
+	}
+	
+	@Test
+	public final void nextPage() {
+		final ImageButton button =  (ImageButton) tester.getComponentFromLastRenderedPage(String.format("%s:%s:%s", SearchPage.FORM, SearchPage.WICKET_ID_GROUP, PagingWicketIds.NextPageButton.wicketId()));
+		button.setEnabled(true);
+		
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
+		formTester.submit(String.format("%s:%s", SearchPage.WICKET_ID_GROUP, PagingWicketIds.NextPageButton.wicketId()));
+		
+		Mockito.verify(actionListener).process(SearchPageModel.NEXT_PAGE_ACTION);
+		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
+		
+	}
+	
+	@Test
+	public final void previousPage() {
+		final ImageButton button =  (ImageButton) tester.getComponentFromLastRenderedPage(String.format("%s:%s:%s", SearchPage.FORM, SearchPage.WICKET_ID_GROUP, PagingWicketIds.PreviousPageButton.wicketId()));
+		button.setEnabled(true);
+		
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
+		formTester.submit(String.format("%s:%s", SearchPage.WICKET_ID_GROUP, PagingWicketIds.PreviousPageButton.wicketId()));
+		
+		Mockito.verify(actionListener).process(SearchPageModel.PREVIOUS_PAGE_ACTION);
+		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
+		
+	}
+	
+	@Test
+	public final void lastPage() {
+		final ImageButton button =  (ImageButton) tester.getComponentFromLastRenderedPage(String.format("%s:%s:%s", SearchPage.FORM, SearchPage.WICKET_ID_GROUP, PagingWicketIds.LastPageButton.wicketId()));
+		button.setEnabled(true);
+		
+		final FormTester formTester = tester.newFormTester(SearchPage.FORM);
+		formTester.submit(String.format("%s:%s", SearchPage.WICKET_ID_GROUP, PagingWicketIds.LastPageButton.wicketId()));
+		
+		Mockito.verify(actionListener).process(SearchPageModel.LAST_PAGE_ACTION);
+		Assert.assertEquals(SearchPage.class, tester.getLastRenderedPage().getClass());
+		
+	}
+	
+	@Test
+	public final void image()  {
+		Component button = tester.getComponentFromLastRenderedPage(String.format("%s:%s:%s", SearchPage.FORM, SearchPage.WICKET_ID_GROUP, PagingWicketIds.FirstPageButton.wicketId()));
+		Assert.assertFalse( button.isEnabled());
+		Assert.assertEquals(String.format("%s_%s.png", SearchPage.DISABLED_IMAGE_PREPIX, SearchPage.IN_IMAGE_POSTFIX ), button.getDefaultModelObject());
+		Mockito.when(((SearchPageModelWeb) searchPageModelWeb).hasPaging()).thenReturn(false);
+		Mockito.when(((SearchPageModelWeb)searchPageModelWeb).isNotFirstPage()).thenReturn(true);
+		tester.startPage(new SearchPage(null));
+		button =tester.getComponentFromLastRenderedPage(String.format("%s:%s:%s", SearchPage.FORM, SearchPage.WICKET_ID_GROUP, PagingWicketIds.FirstPageButton.wicketId()));
+		Assert.assertTrue(button.isEnabled());
+		Assert.assertEquals(String.format("arrow_in.png", SearchPage.ENABLED_IMAGE_PREFIX, SearchPage.IN_IMAGE_POSTFIX), button.getDefaultModelObject());
+	}
+	
 
 }

@@ -17,7 +17,7 @@ import de.mq.archive.web.edit.I18NEditPageModelPartsTest;
 @RunWith(Suite.class)
 @SuiteClasses({ ArchiveModelPartsTest.class, I18NSearchPageModelPartsTest.class, ModelsTest.class, SearchPageControllerTest.class, SearchPageModelTest.class, WicketApplicationTest.class, SearchPageTest.class,
 	EditPageControllerTest.class, EditPageModelTest.class, EditPageModelsTest.class, I18NEditPageMessagesPartsTest.class, I18NEditPageModelPartsTest.class , 
-	EditPageTest.class, I18NAttachementsModelPartsTest.class, GridFsInfoPartsTest.class, SearchPageControllerTest.class, ActionImageButtonTest.class })
+	EditPageTest.class, I18NAttachementsModelPartsTest.class, GridFsInfoPartsTest.class, SearchPageControllerTest.class, ActionImageButtonTest.class, PagingWicketIdsTest.class })
 public class Web {
 
 }
