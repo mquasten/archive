@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,13 +30,16 @@ class Models {
 	@Inject
 	private BeanFactory beanFactory;
 	
+	@Value( "${paging.size:5}" )
+	private int pageSize ; 
+	
 	 @Bean()
 	 @Scope("session")
 	 SearchPageModelImpl searchPageModel() {
 		 return new SearchPageModelImpl(new BasicEnumModelImpl<Archive>(Arrays.asList(ArchiveModelParts.values()), ArchiveImpl.class), 
 				 new BasicI18NEnumModelImpl(messageSource,  Arrays.asList(I18NSearchPageModelParts.values()),
 						 Arrays.asList(I18NSearchPageModelParts.values()).stream().map( part -> part.key()).collect(Collectors.toList())),
-						 5 );
+						 pageSize );
 	 }
 	 
 	 @Bean()
